@@ -64,7 +64,7 @@ define('forum/topic/postTools', [
     PostTools.toggle = function (pid, isDeleted) {
         const postEl = components.get('post', 'pid', pid);
 
-        postEl.find('[component="post/quote"], [component="post/bookmark"], [component="post/reply"], [component="post/flag"], [component="user/chat"]')
+        postEl.find('[component="post/quote"], [component="post/bookmark"], [component="post/reply"], [component="post/endorse"], [component="post/flag"], [component="user/chat"]')
             .toggleClass('hidden', isDeleted);
 
         postEl.find('[component="post/delete"]').toggleClass('hidden', isDeleted).parent().attr('hidden', isDeleted ? '' : null);
@@ -96,6 +96,10 @@ define('forum/topic/postTools', [
 
         postContainer.on('click', '[component="post/reply"]', function () {
             onReplyClicked($(this), tid);
+        });
+
+        postContainer.on('click', '[component="post/endorse"]', function () {
+            onEndorseClicked($(this), tid);
         });
 
         $('.topic').on('click', '[component="topic/reply"]', function (e) {
@@ -286,6 +290,34 @@ define('forum/topic/postTools', [
                 });
             }
         });
+    }
+
+    async function onEndorseClicked(button, tid) {
+        // INSERT BACKEND FOR ENDORSE BUTTON HERE!
+        
+        // const selectedNode = await getSelectedNode();
+
+        // showStaleWarning(async function () {
+        //     let username = await getUserSlug(button);
+        //     if (getData(button, 'data-uid') === '0' || !getData(button, 'data-userslug')) {
+        //         username = '';
+        //     }
+
+        //     const toPid = button.is('[component="post/reply"]') ? getData(button, 'data-pid') : null;
+        //     const isQuoteToPid = !toPid || !selectedNode.pid || toPid === selectedNode.pid;
+
+        //     if (selectedNode.text && isQuoteToPid) {
+        //         username = username || selectedNode.username;
+        //         hooks.fire('action:composer.addQuote', {
+        //             tid: tid,
+        //             pid: toPid,
+        //             topicName: ajaxify.data.titleRaw,
+        //             username: username,
+        //             text: selectedNode.text,
+        //             selectedPid: selectedNode.pid,
+        //         });
+        //     }
+        // });
     }
 
     async function onQuoteClicked(button, tid) {
