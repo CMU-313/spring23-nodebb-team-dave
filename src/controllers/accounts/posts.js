@@ -144,7 +144,7 @@ postsController.getBookmarks = async function (req, res, next) {
 
 //getEndorsement?
 postsController.getEndorsement = async function (req, res, next) {
-    await getPostsFromUserSet('account/endorsement', req, res, next);
+    await getPostsFromUserSet('account/endorse', req, res, next);
 };
 
 postsController.getPosts = async function (req, res, next) {

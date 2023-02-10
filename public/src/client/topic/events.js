@@ -222,7 +222,7 @@ define('forum/topic/events', [
     }
 
     function toggleEndorsement(data){
-        const el = $('[data-pid="' + data.post.pid + '"] [component="post/endorsement"]').filter(function (index, el) {
+        const el = $('[data-pid="' + data.post.pid + '"] [component="post/endorse"]').filter(function (index, el) {
             return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
         });
         if (!el.length) {
