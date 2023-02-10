@@ -99,7 +99,7 @@ define('forum/topic/postTools', [
         });
 
         postContainer.on('click', '[component="post/endorse"]', function () {
-            onEndorseClicked($(this), tid);
+            return endorsePost($(this), getData($(this), 'data-pid'));
         });
 
         $('.topic').on('click', '[component="topic/reply"]', function (e) {
@@ -318,6 +318,19 @@ define('forum/topic/postTools', [
         //         });
         //     }
         // });
+    }
+
+    function endorsePost(button, pid) {
+        const method = button.attr('data-endorsed') === 'false' ? 'put' : 'del';
+
+        api[method](`/posts/${pid}/endorsement`, undefined, function (err) {
+            if (err) {
+                return alerts.error(err);
+            }
+            const type = method === 'put' ? 'endorse' : 'unendorse';
+            hooks.fire(`action:post.${type}`, { pid: pid });
+        });
+        return false;
     }
 
     async function onQuoteClicked(button, tid) {
