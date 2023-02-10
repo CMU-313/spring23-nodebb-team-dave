@@ -231,8 +231,8 @@ define('forum/topic/events', [
 
         el.attr('data-bookmarked', data.isEndorsed);
 
-        el.find('[component="post/endorsement/on"]').toggleClass('hidden', !data.isEndorsed);
-        el.find('[component="post/endorsement/off"]').toggleClass('hidden', data.isEndorsed);
+        el.find('[component="post/endorse/on"]').toggleClass('hidden', !data.isEndorsed);
+        el.find('[component="post/endorse/off"]').toggleClass('hidden', data.isEndorsed);
     }
 
     function togglePostVote(data) {
