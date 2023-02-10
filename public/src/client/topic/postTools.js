@@ -7,11 +7,12 @@ define('forum/topic/postTools', [
     'components',
     'translator',
     'forum/topic/votes',
+    'forum/topic/endorsement',
     'api',
     'bootbox',
     'alerts',
     'hooks',
-], function (share, navigator, components, translator, votes, api, bootbox, alerts, hooks) {
+], function (share, navigator, components, translator, endorsement, votes, api, bootbox, alerts, hooks) {
     const PostTools = {};
 
     let staleReplyAnyway = false;
@@ -24,6 +25,8 @@ define('forum/topic/postTools', [
         addPostHandlers(tid);
 
         share.addShareHandlers(ajaxify.data.titleRaw);
+
+        endorsement.addEndorsementHandler();
 
         votes.addVoteHandler();
 
@@ -99,7 +102,7 @@ define('forum/topic/postTools', [
         });
 
         postContainer.on('click', '[component="post/endorse"]', function () {
-            onEndorseClicked($(this), tid);
+            return endorsement.toggleEndorsement(getData($(this), 'data-pid'));
         });
 
         $('.topic').on('click', '[component="topic/reply"]', function (e) {
@@ -292,33 +295,33 @@ define('forum/topic/postTools', [
         });
     }
 
-    async function onEndorseClicked(button, tid) {
-        // INSERT BACKEND FOR ENDORSE BUTTON HERE!
+    // async function onEndorseClicked(button, tid) {
+    //     // INSERT BACKEND FOR ENDORSE BUTTON HERE!
         
-        // const selectedNode = await getSelectedNode();
+    //     const selectedNode = await getSelectedNode();
 
-        // showStaleWarning(async function () {
-        //     let username = await getUserSlug(button);
-        //     if (getData(button, 'data-uid') === '0' || !getData(button, 'data-userslug')) {
-        //         username = '';
-        //     }
+    //     showStaleWarning(async function () {
+    //         let username = await getUserSlug(button);
+    //         if (getData(button, 'data-uid') === '0' || !getData(button, 'data-userslug')) {
+    //             username = '';
+    //         }
 
-        //     const toPid = button.is('[component="post/reply"]') ? getData(button, 'data-pid') : null;
-        //     const isQuoteToPid = !toPid || !selectedNode.pid || toPid === selectedNode.pid;
+    //         const toPid = button.is('[component="post/reply"]') ? getData(button, 'data-pid') : null;
+    //         const isQuoteToPid = !toPid || !selectedNode.pid || toPid === selectedNode.pid;
 
-        //     if (selectedNode.text && isQuoteToPid) {
-        //         username = username || selectedNode.username;
-        //         hooks.fire('action:composer.addQuote', {
-        //             tid: tid,
-        //             pid: toPid,
-        //             topicName: ajaxify.data.titleRaw,
-        //             username: username,
-        //             text: selectedNode.text,
-        //             selectedPid: selectedNode.pid,
-        //         });
-        //     }
-        // });
-    }
+    //         if (selectedNode.text && isQuoteToPid) {
+    //             username = username || selectedNode.username;
+    //             hooks.fire('action:composer.addQuote', {
+    //                 tid: tid,
+    //                 pid: toPid,
+    //                 topicName: ajaxify.data.titleRaw,
+    //                 username: username,
+    //                 text: selectedNode.text,
+    //                 selectedPid: selectedNode.pid,
+    //             });
+    //         }
+    //     });
+    // }
 
     async function onQuoteClicked(button, tid) {
         const selectedNode = await getSelectedNode();
