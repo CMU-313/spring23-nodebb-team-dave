@@ -28,7 +28,7 @@ module.exports = function (Posts) {
             throw new Error('[[error:already-unendorsed]]');
         }
 
-        postData.endorsements = postData.endorsements ? postData.endorsements + 1 : 1;
+        postData.endorsements = postData.endorsements ? 0 : 1;
         await Posts.setPostField(pid, 'endorsements', postData.endorsements);
 
         plugins.hooks.fire(`action:post.${type}`, {
