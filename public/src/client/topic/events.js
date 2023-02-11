@@ -40,6 +40,10 @@ define('forum/topic/events', [
         'posts.bookmark': togglePostBookmark,
         'posts.unbookmark': togglePostBookmark,
 
+        //Add 
+        'posts.endorse': toggleEndorsement,
+        'posts.unendorse': toggleEndorsement,
+
         'posts.upvote': togglePostVote,
         'posts.downvote': togglePostVote,
         'posts.unvote': togglePostVote,
@@ -221,6 +225,7 @@ define('forum/topic/events', [
         el.find('[component="post/bookmark/off"]').toggleClass('hidden', data.isBookmarked);
     }
 
+    //toggle endorsement
     function toggleEndorsement(data){
         const el = $('[data-pid="' + data.post.pid + '"] [component="post/endorse"]').filter(function (index, el) {
             return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
@@ -229,7 +234,7 @@ define('forum/topic/events', [
             return;
         }
 
-        el.attr('data-bookmarked', data.isEndorsed);
+        el.attr('data-endorsed', data.isEndorsed);
 
         el.find('[component="post/endorse/on"]').toggleClass('hidden', !data.isEndorsed);
         el.find('[component="post/endorse/off"]').toggleClass('hidden', data.isEndorsed);
