@@ -295,7 +295,7 @@ define('forum/topic/postTools', [
 // Below is the function that leads to backend of endorse
 
     function endorsePost(button, pid) {
-        const method = button.attr('data-endorsed') === 'false' ? 'put' : 'del';
+        const method = button.attr('data-endorsed') === 'true' ? 'del' : 'put';
 
         api[method](`/posts/${pid}/endorse`, undefined, function (err) {
             if (err) {
