@@ -16,7 +16,7 @@ module.exports = function (Posts) {
         const isEndorsing = type === 'endorse';
 
         const [postData, hasEndorsed] = await Promise.all([
-            Posts.getPostFields(pid, ['pid', 'endorsements']),
+            Posts.getPostFields(pid, ['pid', 'endorsed']),
             Posts.hasEndorsed(pid),
         ]);
 
@@ -28,8 +28,8 @@ module.exports = function (Posts) {
             throw new Error('[[error:already-unendorsed]]');
         }
 
-        postData.endorsements = postData.endorsements ? 0 : 1;
-        await Posts.setPostField(pid, 'endorsements', postData.endorsements);
+        postData.endorsed = (postData.endorsed === "true") ? "false" : "true";
+        await Posts.setPostField(pid, 'endorsed', postData.endorsed);
 
         plugins.hooks.fire(`action:post.${type}`, {
             pid: pid,
@@ -43,6 +43,6 @@ module.exports = function (Posts) {
     }
 
     Posts.hasEndorsed = async function (pid) {
-        return await db.getObjectField(`post:${pid}`, 'endorsements');
+        return ((await db.getObjectField(`post:${pid}`, 'endorsed')) === 'true');
     };
 };
