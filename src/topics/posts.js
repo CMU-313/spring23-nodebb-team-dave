@@ -11,6 +11,7 @@ const posts = require('../posts');
 const meta = require('../meta');
 const plugins = require('../plugins');
 const utils = require('../utils');
+const endorsement = require('../posts/endorsement');
 
 const backlinkRegex = new RegExp(`(?:${nconf.get('url').replace('/', '\\/')}|\b|\\s)\\/topic\\/(\\d+)(?:\\/\\w+)?`, 'g');
 
@@ -116,12 +117,14 @@ module.exports = function (Topics) {
         }
         const [
             bookmarks,
+            endorsement,
             voteData,
             userData,
             editors,
             replies,
         ] = await Promise.all([
             posts.hasBookmarked(pids, uid),
+            posts.hasEndorsed(pids),
             posts.getVoteStatusByPostIDs(pids, uid),
             getPostUserData('uid', async uids => await posts.getUserInfoForPosts(uids, uid)),
             getPostUserData('editor', async uids => await user.getUsersFields(uids, ['uid', 'username', 'userslug'])),
