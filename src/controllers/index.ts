@@ -1,5 +1,3 @@
-'use strict';
-
 import nconf = require('nconf');
 import validator = require('validator');
 
@@ -10,34 +8,34 @@ import privileges = require('../privileges');
 import helpers = require('./helpers');
 
 // import Controllers = module.exports;
-import * as ping from './ping'
-import * as home from './home'
-import * as topics from './topics'
-import * as posts from './posts'
-import * as career from './career'
-import * as categories from './categories'
-import * as category from './category'
-import * as unread from './unread'
-import * as recent from './recent'
-import * as popular from './popular'
-import * as top from './top'
-import * as tags from './tags'
-import * as search from './search'
-import * as users from './users'
-import * as groups from './groups'
-import * as accounts from './accounts'
-import * as authentication from './authentication'
-import * as api from './api'
-import * as admin from './admin'
-import * as globalMods from './globalmods'
-import * as mods from './mods'
-import * as sitemap from './sitemap'
-import * as osd from './osd'
-import * as error404 from './404'
-import * as errors from './errors'
-import * as composer from './composer'
-import * as write from './write'
-import { Breadcrumbs } from '../types/';
+import * as ping from './ping';
+import * as home from './home';
+import * as topics from './topics';
+import * as posts from './posts';
+import * as career from './career';
+import * as categories from './categories';
+import * as category from './category';
+import * as unread from './unread';
+import * as recent from './recent';
+import * as popular from './popular';
+import * as top from './top';
+import * as tags from './tags';
+import * as search from './search';
+import * as users from './users';
+import * as groups from './groups';
+import * as accounts from './accounts';
+import * as authentication from './authentication';
+import * as api from './api';
+import * as admin from './admin';
+import * as globalMods from './globalmods';
+import * as mods from './mods';
+import * as sitemap from './sitemap';
+import * as osd from './osd';
+import * as error404 from './404';
+import * as errors from './errors';
+import * as composer from './composer';
+import * as write from './write';
+import { Breadcrumbs } from '../types';
 
 interface LoginObject {
   label: string,
@@ -93,11 +91,11 @@ export const Controllers = {
     mods,
     sitemap,
     osd,
-    "404": error404,
+    404: error404,
     errors,
     composer,
-    write
-}
+    write,
+};
 
 export async function reset(req, res) {
     if (meta.config['password:disableEdit']) {
@@ -149,7 +147,7 @@ export async function reset(req, res) {
             title: '[[pages:reset]]',
         });
     }
-};
+}
 
 export async function login(req, res) {
     let data: Login;
@@ -197,7 +195,7 @@ export async function login(req, res) {
         data.alternate_logins = false;
     }
     res.render('login', data);
-};
+}
 
 export async function register(req, res, next) {
     const registrationType = meta.config.registrationType || 'normal';
@@ -258,7 +256,7 @@ export async function register(req, res, next) {
     } catch (err) {
         next(err);
     }
-};
+}
 
 export async function registerInterstitial(req, res, next) {
     if (!req.session.hasOwnProperty('registration')) {
@@ -293,7 +291,7 @@ export async function registerInterstitial(req, res, next) {
     } catch (err) {
         next(err);
     }
-};
+}
 
 export async function confirmEmail(req, res, next) {
     try {
@@ -309,7 +307,7 @@ export async function confirmEmail(req, res, next) {
     res.render('confirm', {
         title: '[[pages:confirm]]',
     });
-};
+}
 
 export function robots(req, res) {
     res.set('Content-Type', 'text/plain');
@@ -323,7 +321,7 @@ export function robots(req, res) {
             `Disallow: ${nconf.get('relative_path')}/compose\n` +
             `Sitemap: ${nconf.get('url')}/sitemap.xml`);
     }
-};
+}
 
 export async function manifest(req, res) {
     const manifest = {
@@ -397,7 +395,7 @@ export async function manifest(req, res) {
         manifest: manifest,
     });
     res.status(200).json(data.manifest);
-};
+}
 
 export function outgoing(req, res, next) {
     const url = req.query.url || '';
@@ -418,7 +416,7 @@ export function outgoing(req, res, next) {
             text: '[[notifications:outgoing_link]]',
         }]),
     });
-};
+}
 
 export async function termsOfUse(req, res, next) {
     if (!meta.config.termsOfUse) {
@@ -432,4 +430,4 @@ export async function termsOfUse(req, res, next) {
     res.render('tos', {
         termsOfUse: termsOfUse.postData.content,
     });
-};
+}

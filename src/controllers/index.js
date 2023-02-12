@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -93,10 +93,10 @@ exports.Controllers = {
     mods,
     sitemap,
     osd,
-    "404": error404,
+    '404': error404,
     errors,
     composer,
-    write
+    write,
 };
 function reset(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -145,7 +145,6 @@ function reset(req, res) {
     });
 }
 exports.reset = reset;
-;
 function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let data;
@@ -190,7 +189,6 @@ function login(req, res) {
     });
 }
 exports.login = login;
-;
 function register(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const registrationType = meta.config.registrationType || 'normal';
@@ -251,7 +249,6 @@ function register(req, res, next) {
     });
 }
 exports.register = register;
-;
 function registerInterstitial(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!req.session.hasOwnProperty('registration')) {
@@ -285,7 +282,6 @@ function registerInterstitial(req, res, next) {
     });
 }
 exports.registerInterstitial = registerInterstitial;
-;
 function confirmEmail(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -303,7 +299,6 @@ function confirmEmail(req, res, next) {
     });
 }
 exports.confirmEmail = confirmEmail;
-;
 function robots(req, res) {
     res.set('Content-Type', 'text/plain');
     if (meta.config['robots:txt']) {
@@ -318,7 +313,6 @@ function robots(req, res) {
     }
 }
 exports.robots = robots;
-;
 function manifest(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const manifest = {
@@ -392,7 +386,6 @@ function manifest(req, res) {
     });
 }
 exports.manifest = manifest;
-;
 function outgoing(req, res, next) {
     const url = req.query.url || '';
     const allowedProtocols = [
@@ -412,7 +405,6 @@ function outgoing(req, res, next) {
     });
 }
 exports.outgoing = outgoing;
-;
 function termsOfUse(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!meta.config.termsOfUse) {
@@ -429,4 +421,3 @@ function termsOfUse(req, res, next) {
     });
 }
 exports.termsOfUse = termsOfUse;
-;
