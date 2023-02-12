@@ -22,7 +22,7 @@ import * as languages from './languages';
 
 const reloadRequired = false;
 
-var config : unknown; // change this
+var config: {[key: string]: any}; // change this
 export { config };
 
 export const Meta = {
@@ -80,8 +80,8 @@ function restart_help() {
 }
 
 export function getSessionTTLSeconds() {
-    const ttlDays = 60 * 60 * 24 * Meta.config.loginDays;
-    const ttlSeconds = Meta.config.loginSeconds;
+    const ttlDays = 60 * 60 * 24 * config.loginDays;
+    const ttlSeconds = config.loginSeconds;
     const ttl = ttlSeconds || ttlDays || 1209600; // Default to 14 days
     return ttl;
 }
