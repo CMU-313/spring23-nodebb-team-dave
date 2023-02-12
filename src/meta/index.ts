@@ -1,30 +1,48 @@
-const winston = require('winston');
-const os = require('os');
-const nconf = require('nconf');
+// Referenced @vasteymnathan’s TypeScript translation from P1: [https://github.com/CMU-313/NodeBB/pull/160]
+import winston = require('winston');
+import os = require('os');
+import nconf = require('nconf');
 
-const pubsub = require('../pubsub');
-const slugify = require('../slugify');
+import pubsub = require('../pubsub');
+import slugify = require('../slugify');
 
-const Meta = module.exports;
 
-Meta.reloadRequired = false;
+import * as configs from './configs';
+import * as themes from './themes';
+import * as js from './js';
+import * as css from './css';
+import * as settings from './settings';
+import * as logs from './logs';
+import * as errors from './errors';
+import * as tags from './tags';
+import * as dependencies from './dependencies';
+import * as templates from './templates';
+import * as blacklist from './blacklist';
+import * as languages from './languages';
 
-Meta.configs = require('./configs');
-Meta.themes = require('./themes');
-Meta.js = require('./js');
-Meta.css = require('./css');
-Meta.settings = require('./settings');
-Meta.logs = require('./logs');
-Meta.errors = require('./errors');
-Meta.tags = require('./tags');
-Meta.dependencies = require('./dependencies');
-Meta.templates = require('./templates');
-Meta.blacklist = require('./blacklist');
-Meta.languages = require('./languages');
+const reloadRequired = false;
 
+var config : unknown; // change this
+export { config };
+
+export const Meta = {
+  configs,
+  themes,
+  js,
+  css,
+  settings,
+  logs,
+  errors,
+  tags,
+  dependencies,
+  templates,
+  blacklist,
+  languages,
+  reloadRequired,
+}
 
 /* Assorted */
-Meta.userOrGroupExists = async function (slug) {
+export async function userOrGroupExists(slug) {
     if (!slug) {
         throw new Error('[[error:invalid-data]]');
     }
@@ -46,12 +64,12 @@ if (nconf.get('isPrimary')) {
     });
 }
 
-Meta.restart = function () {
+export function restart() {
     pubsub.publish('meta:restart', { hostname: os.hostname() });
-    restart();
+    restart_help();
 }
 
-function restart() {
+function restart_help() {
     if (process.send) {
         process.send({
             action: 'restart',
@@ -61,11 +79,9 @@ function restart() {
     }
 }
 
-Meta.getSessionTTLSeconds = function () {
+export function getSessionTTLSeconds() {
     const ttlDays = 60 * 60 * 24 * Meta.config.loginDays;
     const ttlSeconds = Meta.config.loginSeconds;
     const ttl = ttlSeconds || ttlDays || 1209600; // Default to 14 days
     return ttl;
 }
-
-require('../promisify')(Meta);
