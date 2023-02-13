@@ -15,10 +15,11 @@ import slugify = require('../slugify');
 import helpers = require('./helpers');
 import privileges = require('../privileges');
 import sockets = require('../socket.io');
+import { Request, Response } from 'express';
 
 // const authenticationController = module.exports;
 
-export async function registerAndLoginUser(req, res, userData): Promise<> {
+export async function registerAndLoginUser(req: Request, res: Response, userData): Promise<unknown> {
     if (!userData.hasOwnProperty('email')) {
         userData.updateEmail = true;
     }
@@ -30,7 +31,7 @@ export async function registerAndLoginUser(req, res, userData): Promise<> {
     });
 
     // If interstitials are found, save registration attempt into session and abort
-    const deferRegistration = data.interstitials.length;
+    const deferRegistration: number = data.interstitials.length;
 
     if (deferRegistration) {
         userData.register = true;
