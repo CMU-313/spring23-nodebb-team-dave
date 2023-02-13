@@ -105,7 +105,8 @@ authenticationController.register = async function (req, res) {
         }
 
         if (!userData['account-type'] ||
-            (userData['account-type'] !== 'student' && userData['account-type'] !== 'instructor')) {
+            (userData['account-type'] !== 'student' && userData['account-type'] !== 'instructor'
+            && userData['account-type'] !== 'teaching_assistant')) {
             throw new Error('Invalid account type');
         }
 
