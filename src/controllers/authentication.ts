@@ -16,8 +16,28 @@ import helpers = require('./helpers');
 import privileges = require('../privileges');
 import sockets = require('../socket.io');
 import { Request, Response } from 'express';
+import { UserObject } from '../types';
 
-// const authenticationController = module.exports;
+declare module 'express-session' {
+  interface SessionData {
+    registration: object,
+    returnTo: string,
+  }
+}
+
+interface BanInfo {
+  uid: number,
+  timestamp: number, //idk
+  banned_until: number,
+  expiry: number, 
+  banned_until_readable: string,
+  expiry_readable: string, 
+  reason: string,
+}
+
+interface BanError extends Error {
+  data?: BanInfo,
+}
 
 export async function registerAndLoginUser(req: Request, res: Response, userData): Promise<unknown> {
     if (!userData.hasOwnProperty('email')) {
@@ -70,7 +90,7 @@ export async function registerAndLoginUser(req: Request, res: Response, userData
     return complete;
 }
 
-export async function register(req, res) {
+export async function register(req: Request, res: Response): Promise<object> {
     const registrationType = meta.config.registrationType || 'normal';
 
     if (registrationType === 'disabled') {
@@ -126,7 +146,7 @@ export async function register(req, res) {
     }
 };
 
-async function addToApprovalQueue(req, userData) {
+async function addToApprovalQueue(req: Request, userData: UserObject): Promise<{ message: string }> {
     userData.ip = req.ip;
     await user.addToApprovalQueue(userData);
     let message = '[[register:registration-added-to-queue]]';
@@ -489,20 +509,22 @@ export async function logout(req, res, next) {
     }
 };
 
-async function getBanError(uid) {
+async function getBanError(uid: number): Promise<Error> {
     try {
-        const banInfo = await user.getLatestBanInfo(uid);
+        const banInfo: BanInfo = await user.getLatestBanInfo(uid);
 
         if (!banInfo.reason) {
             banInfo.reason = '[[user:info.banned-no-reason]]';
         }
-        const err = new Error(banInfo.reason);
+        const err: BanError = new Error(banInfo.reason);
         err.data = banInfo;
         return err;
-    } catch (err) {
-        if (err.message === 'no-ban-info') {
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+          if (err.message === 'no-ban-info') {
             return new Error('[[error:user-banned]]');
         }
         throw err;
+        }
     }
 }
