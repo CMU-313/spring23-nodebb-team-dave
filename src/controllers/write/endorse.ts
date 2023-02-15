@@ -20,14 +20,20 @@ type Post = {
     uid: string,
     cid: string,
     pid: string,
-}ß
+}
 
 // The next line calls a function in a module that has not been updated to TS yet
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 export async function post(req: RequestWithEndorse, res: Response): Promise<void>
 {
-    const postData: Post = await api.posts.get(req, {pid: req.params.pid});
-    helpers.formatApiResponse(200, res, postData);
+    
+    try {
+        const postData: Post = await api.posts.get(req, {pid: req.params.pid});
+        helpers.formatApiResponse(200, res, postData)  
+    }
+    catch (err){
+        console.log("error");
+    }
 }
 
 // The next line calls a function in a module that has not been updated to TS yet
@@ -41,7 +47,7 @@ async function mock(req: Request) {
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 export async function endorse(req: RequestWithEndorse, res: Response) {
     const data = await mock(req);
-    await api.posts.endorse(req, data);ß
+    await api.posts.endorse(req, data);
     helpers.formatApiResponse(200, res);
 
     const cid = await posts.getCidByPid(req.params.pid);

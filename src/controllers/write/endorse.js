@@ -21,8 +21,13 @@ const helpers_1 = __importDefault(require("../helpers"));
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const postData = yield api_1.default.posts.get(req, { pid: req.params.pid });
-        helpers_1.default.formatApiResponse(200, res, postData);
+        try {
+            const postData = yield api_1.default.posts.get(req, { pid: req.params.pid });
+            helpers_1.default.formatApiResponse(200, res, postData);
+        }
+        catch (err) {
+            console.log("error");
+        }
     });
 }
 exports.post = post;
