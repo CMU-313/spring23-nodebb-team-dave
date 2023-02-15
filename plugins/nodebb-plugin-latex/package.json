@@ -1,5 +1,5 @@
 {
-  "name": "nodebb-plugin-latex",
+  "name": "nodebb-plugin-latex-modified",
   "version": "0.0.4",
   "description": "A Markdown extension to parse LaTeX",
   "main": "library.js",
