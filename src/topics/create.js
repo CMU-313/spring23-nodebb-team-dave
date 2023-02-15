@@ -33,6 +33,7 @@ module.exports = function (Topics) {
             lastposttime: 0,
             postcount: 0,
             viewcount: 0,
+            isClosed: 0,
         };
 
         if (Array.isArray(data.tags) && data.tags.length) {
