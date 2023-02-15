@@ -122,7 +122,6 @@ module.exports = function (Topics) {
             replies,
         ] = await Promise.all([
             posts.hasBookmarked(pids, uid),
-            posts.hasEndorsed(pids),
             posts.getVoteStatusByPostIDs(pids, uid),
             getPostUserData('uid', async uids => await posts.getUserInfoForPosts(uids, uid)),
             getPostUserData('editor', async uids => await user.getUsersFields(uids, ['uid', 'username', 'userslug'])),
