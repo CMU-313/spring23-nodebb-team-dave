@@ -152,6 +152,8 @@ TopicObject:
                 type: string
               score:
                 type: number
+        isClosed:
+          type: boolean
         isOwner:
           type: boolean
         ignored:
