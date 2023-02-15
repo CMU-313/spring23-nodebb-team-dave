@@ -38,7 +38,7 @@ module.exports = function (SocketPosts) {
         const postData = results.posts;
         postData.absolute_url = `${nconf.get('url')}/post/${data.pid}`;
         postData.bookmarked = results.bookmarked;
-        postData.endorsed = results.endorsed
+        postData.endorsed = results.endorsed;
         postData.selfPost = socket.uid && socket.uid === postData.uid;
         postData.display_edit_tools = results.canEdit.flag;
         postData.display_delete_tools = results.canDelete.flag;

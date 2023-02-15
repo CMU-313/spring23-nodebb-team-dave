@@ -292,8 +292,7 @@ define('forum/topic/postTools', [
         });
     }
 
-// Below is the function that leads to backend of endorse
-
+    // Below is the function that leads to backend of endorse
     function endorsePost(button, pid) {
         const method = button.attr('data-endorsed') === 'true' ? 'del' : 'put';
 
