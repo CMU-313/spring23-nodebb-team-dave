@@ -3,7 +3,7 @@
     "name": "NodeBB LaTeX Plugin",
     "description": "Adds LaTeX Support to markdown. use $\\LaTeX$ for inline and $$\\LaTeX$$ for blocklevel",
     "url": "http://github.com/belstgut/nodebb-plugin-latex",
-    "library": "./library.js",
+    "library": "./library.ts",
     "hooks": [
         {
             "hook": "filter:parse.post",
