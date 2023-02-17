@@ -8,11 +8,9 @@ import helpers from '../helpers';
 
 interface RequestWithEndorse extends Request {
     uid: string,
-    params: any
-}
-
-type params = {
-    pid: any,
+    params: {
+        pid: string,
+    }
 }
 
 type Post = {
@@ -22,36 +20,46 @@ type Post = {
     pid: string,
 }
 
-// The next line calls a function in a module that has not been updated to TS yet
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-export async function post(req: RequestWithEndorse, res: Response): Promise<void>
-{
-    
+type Mock = {
+    pid: string;
+    room_id: string;
+}
+
+interface PostField {
+    tid: string,
+}
+
+
+
+export async function post(req: RequestWithEndorse, res: Response): Promise<void> {
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const postData: Post = await api.posts.get<Post>(req, { pid: req.params.pid });
     try {
-        const postData: Post = await api.posts.get(req, {pid: req.params.pid});
-        helpers.formatApiResponse(200, res, postData)  
-    }
-    catch (err){
-        console.log("error");
+        await helpers.formatApiResponse(200, res, postData);
+    } catch (err) {
+        console.log('error');
     }
 }
 
-// The next line calls a function in a module that has not been updated to TS yet
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-async function mock(req: Request) {
-    const tid = await posts.getPostField(req.params.pid, 'tid');
+async function mock(req: RequestWithEndorse): Promise<Mock> {
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    const { tid }: PostField = await posts.getPostField(req.params.pid, 'tid') as PostField;
     return { pid: req.params.pid, room_id: `topic_${tid}` };
 }
 
-// The next line calls a function in a module that has not been updated to TS yet
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+
 export async function endorse(req: RequestWithEndorse, res: Response) {
     const data = await mock(req);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     await api.posts.endorse(req, data);
-    helpers.formatApiResponse(200, res);
-
-    const cid = await posts.getCidByPid(req.params.pid);
-    const [isAdmin, isModerator] = await Promise.all([
+    await helpers.formatApiResponse(200, res);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    const cid: string = await posts.getCidByPid(req.params.pid) as string;
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const [isAdmin, isModerator]: [boolean, boolean] = await Promise.all([
         privileges.users.isAdministrator(req.uid),
         privileges.users.isModerator(req.uid, cid),
     ]);
