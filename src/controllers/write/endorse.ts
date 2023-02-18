@@ -7,16 +7,16 @@ import helpers from '../helpers';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 
 interface RequestWithEndorse extends Request {
-    uid: string,
+    uid: number,
     params: {
-        pid: string,
+        pid: string;
     }
 }
 
 type Post = {
     timestamp: number,
-    uid: string,
-    cid: string,
+    uid: number,
+    cid: number,
     pid: string,
 }
 
@@ -26,7 +26,7 @@ type Mock = {
 }
 
 interface PostField {
-    tid: string,
+    tid: number,
 }
 
 
@@ -56,7 +56,7 @@ export async function endorse(req: RequestWithEndorse, res: Response) {
     await api.posts.endorse(req, data);
     await helpers.formatApiResponse(200, res);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    const cid: string = await posts.getCidByPid(req.params.pid) as string;
+    const cid: number = await posts.getCidByPid(req.params.pid) as number;
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const [isAdmin, isModerator]: [boolean, boolean] = await Promise.all([
