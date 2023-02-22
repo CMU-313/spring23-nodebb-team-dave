@@ -129,6 +129,18 @@ topicsAPI.unpin = async function (caller, data) {
     });
 };
 
+topicsAPI.close = async function (caller, data) {
+    await doTopicAction('close', 'event:topic_closed', caller, {
+        tids: data.tids,
+    });
+};
+
+topicsAPI.unclose = async function (caller, data) {
+    await doTopicAction('unclose', 'event:topic_unclosed', caller, {
+        tids: data.tids,
+    });
+};
+
 topicsAPI.lock = async function (caller, data) {
     await doTopicAction('lock', 'event:topic_locked', caller, {
         tids: data.tids,

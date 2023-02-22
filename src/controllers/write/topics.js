@@ -81,6 +81,16 @@ Topics.unpin = async (req, res) => {
     helpers.formatApiResponse(200, res);
 };
 
+Topics.close = async (req, res) => {
+    await api.topics.close(req, { tids: [req.params.tid] });
+    helpers.formatApiResponse(200, res);
+};
+
+Topics.unclose = async (req, res) => {
+    await api.topics.unclose(req, { tids: [req.params.tid] });
+    helpers.formatApiResponse(200, res);
+};
+
 Topics.lock = async (req, res) => {
     await api.topics.lock(req, { tids: [req.params.tid] });
     helpers.formatApiResponse(200, res);

@@ -27,7 +27,7 @@ module.exports = function (Posts) {
             deleterUid: isDeleting ? uid : 0,
         });
         const postData = await Posts.getPostFields(pid, ['pid', 'tid', 'uid', 'content', 'timestamp']);
-        const topicData = await topics.getTopicFields(postData.tid, ['tid', 'cid', 'pinned']);
+        const topicData = await topics.getTopicFields(postData.tid, ['tid', 'cid', 'pinned', 'closed']);
         postData.cid = topicData.cid;
         await Promise.all([
             topics.updateLastPostTimeFromLastPid(postData.tid),
