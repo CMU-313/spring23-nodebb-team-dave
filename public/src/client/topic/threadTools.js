@@ -52,6 +52,16 @@ define('forum/topic/threadTools', [
             return false;
         });
 
+        topicContainer.on('click', '[component="topic/close"]', function () {
+            topicCommand('put', '/close', 'close');
+            return false;
+        });
+
+        topicContainer.on('click', '[component="topic/unclose"]', function () {
+            topicCommand('del', '/close', 'unclose');
+            return false;
+        });
+
         topicContainer.on('click', '[component="topic/event/delete"]', function () {
             const eventId = $(this).attr('data-topic-event-id');
             const eventEl = $(this).parents('[component="topic/event"]');
@@ -348,6 +358,30 @@ define('forum/topic/threadTools', [
             ));
         }
         ajaxify.data.pinned = data.pinned;
+
+        posts.addTopicEvents(data.events);
+    };
+
+    ThreadTools.setClosedState = function (data) {
+        const threadEl = components.get('topic');
+        if (parseInt(data.tid, 10) !== parseInt(threadEl.attr('data-tid'), 10)) {
+            return;
+        }
+
+        components.get('topic/close').toggleClass('hidden', data.pinned).parent().attr('hidden', data.pinned ? '' : null);
+        components.get('topic/unclose').toggleClass('hidden', !data.pinned).parent().attr('hidden', !data.pinned ? '' : null);
+        const icon = $('[component="topic/labels"] [component="topic/closed"]');
+        icon.toggleClass('hidden', !data.closed);
+        /*
+        if (data.pinned) {
+            icon.translateAttr('title', (
+                data.pinExpiry && data.pinExpiryISO ?
+                    '[[topic:pinned-with-expiry, ' + data.pinExpiryISO + ']]' :
+                    '[[topic:pinned]]'
+            ));
+        }
+        */
+        ajaxify.data.closed = data.closed;
 
         posts.addTopicEvents(data.events);
     };
