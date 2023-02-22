@@ -81,7 +81,8 @@
         <span class="post-tools">
             <a component="post/reply" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:reply]]</a>
             <a component="post/quote" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:quote]]</a>
-            <a component="post/endorse" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->" data-endorsed = "{posts.endorsed}"> [[topic:endorse]]</a>
+            <a component="post/endorse" href="#" id="endorseID" onclick="checkIfOther({posts.endorsed})" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:endorse]]</a>
+            <a component="post/unendorse" href="#" id="unendorseID" onclick="checkIfOther({posts.endorsed})" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:unendorse]]</a>
         </span>
 
         <!-- IF !reputation:disabled -->
@@ -105,3 +106,16 @@
     </div>
     <div component="post/replies/container"></div>
 </div>
+
+<script>
+    function checkIfOther(data){
+        console.log(data)
+        if(data) {           
+            document.getElementById("endorseID").style.visibility = "hidden";
+            document.getElementById("unendorseID").style.visibility = "visible";
+        } else{
+            document.getElementById("endorseID").style.visibility = "visible";
+            document.getElementById("unendorseID").style.visibility = "hidden";
+        }
+    }
+</script>
