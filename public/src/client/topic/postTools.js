@@ -293,31 +293,7 @@ define('forum/topic/postTools', [
     }
 
     async function onEndorseClicked(button, tid) {
-        // INSERT BACKEND FOR ENDORSE BUTTON HERE!
-        
-        // const selectedNode = await getSelectedNode();
 
-        // showStaleWarning(async function () {
-        //     let username = await getUserSlug(button);
-        //     if (getData(button, 'data-uid') === '0' || !getData(button, 'data-userslug')) {
-        //         username = '';
-        //     }
-
-        //     const toPid = button.is('[component="post/reply"]') ? getData(button, 'data-pid') : null;
-        //     const isQuoteToPid = !toPid || !selectedNode.pid || toPid === selectedNode.pid;
-
-        //     if (selectedNode.text && isQuoteToPid) {
-        //         username = username || selectedNode.username;
-        //         hooks.fire('action:composer.addQuote', {
-        //             tid: tid,
-        //             pid: toPid,
-        //             topicName: ajaxify.data.titleRaw,
-        //             username: username,
-        //             text: selectedNode.text,
-        //             selectedPid: selectedNode.pid,
-        //         });
-        //     }
-        // });
     }
 
     async function onQuoteClicked(button, tid) {
