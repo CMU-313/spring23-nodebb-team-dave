@@ -33,13 +33,13 @@ module.exports = function (Posts: PostsModel) {
             Posts.hasEndorsed(pid),
         ]);
 
-        if (isEndorsing && hasEndorsed) {
-            throw new Error('[[error:already-endorsed]]');
-        }
+        // if (isEndorsing && hasEndorsed) {
+        //     throw new Error('[[error:already-endorsed]]');
+        // }
 
-        if (!isEndorsing && !hasEndorsed) {
-            throw new Error('[[error:already-unendorsed]]');
-        }
+        // if (!isEndorsing && !hasEndorsed) {
+        //     throw new Error('[[error:already-unendorsed]]');
+        // }
 
         postData.endorsed = (postData.endorsed === 'true') ? 'false' : 'true';
         await Posts.setPostField(pid, 'endorsed', postData.endorsed);

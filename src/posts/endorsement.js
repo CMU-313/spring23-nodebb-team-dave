@@ -25,12 +25,12 @@ module.exports = function (Posts) {
                 Posts.getPostFields(pid, ['pid', 'endorsed']),
                 Posts.hasEndorsed(pid),
             ]);
-            if (isEndorsing && hasEndorsed) {
-                throw new Error('[[error:already-endorsed]]');
-            }
-            if (!isEndorsing && !hasEndorsed) {
-                throw new Error('[[error:already-unendorsed]]');
-            }
+            // if (isEndorsing && hasEndorsed) {
+            //     throw new Error('[[error:already-endorsed]]');
+            // }
+            // if (!isEndorsing && !hasEndorsed) {
+            //     throw new Error('[[error:already-unendorsed]]');
+            // }
             postData.endorsed = (postData.endorsed === 'true') ? 'false' : 'true';
             yield Posts.setPostField(pid, 'endorsed', postData.endorsed);
             plugins.hooks.fire(`action:post.${type}`, {
