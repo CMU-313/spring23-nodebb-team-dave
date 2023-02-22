@@ -52,6 +52,16 @@ define('forum/category/tools', [
             return false;
         });
 
+        components.get('topic/close').on('click', function () {
+            categoryCommand('put', '/close', 'close', onCommandComplete);
+            return false;
+        });
+
+        components.get('topic/unclose').on('click', function () {
+            categoryCommand('del', '/close', 'unclose', onCommandComplete);
+            return false;
+        });
+
         // todo: should also use categoryCommand, but no write api call exists for this yet
         components.get('topic/mark-unread-for-all').on('click', function () {
             const tids = topicSelect.getSelectedTids();
@@ -121,6 +131,8 @@ define('forum/category/tools', [
         socket.on('event:topic_unlocked', setLockedState);
         socket.on('event:topic_pinned', setPinnedState);
         socket.on('event:topic_unpinned', setPinnedState);
+        socket.on('event:topic_closed', setClosedState);
+        socket.on('event:topic_unclosed', setClosedState);
         socket.on('event:topic_moved', onTopicMoved);
     };
 
@@ -189,6 +201,7 @@ define('forum/category/tools', [
         const isAnyDeleted = isAny(isTopicDeleted, tids);
         const areAllDeleted = areAll(isTopicDeleted, tids);
         const isAnyPinned = isAny(isTopicPinned, tids);
+        const isAnyClosed= isAny(isTopicClosed, tids);
         const isAnyLocked = isAny(isTopicLocked, tids);
         const isAnyScheduled = isAny(isTopicScheduled, tids);
         const areAllScheduled = areAll(isTopicScheduled, tids);
@@ -202,6 +215,10 @@ define('forum/category/tools', [
 
         components.get('topic/pin').toggleClass('hidden', areAllScheduled || isAnyPinned);
         components.get('topic/unpin').toggleClass('hidden', areAllScheduled || !isAnyPinned);
+
+        //Maybe i adapted this wrong? check later
+        components.get('topic/close').toggleClass('hidden', areAllScheduled || isAnyClosed);
+        components.get('topic/unclose').toggleClass('hidden', areAllScheduled || !isAnyClosed);
 
         components.get('topic/merge').toggleClass('hidden', isAnyScheduled);
     }
@@ -236,6 +253,10 @@ define('forum/category/tools', [
         return getTopicEl(tid).hasClass('pinned');
     }
 
+    function isTopicClosed(tid) {
+        return getTopicEl(tid).hasClass('closed');
+    }
+
     function isTopicScheduled(tid) {
         return getTopicEl(tid).hasClass('scheduled');
     }
@@ -254,6 +275,13 @@ define('forum/category/tools', [
         const topic = getTopicEl(data.tid);
         topic.toggleClass('pinned', data.isPinned);
         topic.find('[component="topic/pinned"]').toggleClass('hide', !data.isPinned);
+        ajaxify.refresh();
+    }
+
+    function setClosedState(data) {
+        const topic = getTopicEl(data.tid);
+        topic.toggleClass('closed', data.isClosed);
+        topic.find('[component="topic/closed"]').toggleClass('hide', !data.isClosed);
         ajaxify.refresh();
     }
 
