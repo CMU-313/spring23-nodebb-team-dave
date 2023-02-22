@@ -230,6 +230,61 @@ module.exports = function (Topics) {
         );
     };
 
+    topicTools.close = async function (tid, uid) {
+        return await toggleClose(tid, uid, true);
+    };
+
+    topicTools.unclose = async function (tid, uid) {
+        return await toggleClose(tid, uid, false);
+    };
+
+    async function toggleClose(tid, uid, pin) {
+        const topicData = await Topics.getTopicData(tid);
+        if (!topicData) {
+            throw new Error('[[error:no-topic]]');
+        }
+
+        if (topicData.scheduled) {
+            throw new Error('[[error:cant-pin-scheduled]]');
+        }
+
+        if (uid !== 'system' && !await privileges.topics.isAdminOrMod(tid, uid)) {
+            throw new Error('[[error:no-privileges]]');
+        }
+
+        const promises = [
+            Topics.setTopicField(tid, 'closed', closed ? 1 : 0),
+            Topics.events.log(tid, { type: closed ? 'closed' : 'closed', uid }),
+        ];
+        if (closed) {
+            promises.push(db.sortedSetAdd(`cid:${topicData.cid}:tids:pinned`, Date.now(), tid));
+            promises.push(db.sortedSetsRemove([
+                `cid:${topicData.cid}:tids`,
+                `cid:${topicData.cid}:tids:posts`,
+                `cid:${topicData.cid}:tids:votes`,
+                `cid:${topicData.cid}:tids:views`,
+            ], tid));
+        } else {
+            promises.push(db.sortedSetRemove(`cid:${topicData.cid}:tids:pinned`, tid));
+            promises.push(db.sortedSetAddBulk([
+                [`cid:${topicData.cid}:tids`, topicData.lastposttime, tid],
+                [`cid:${topicData.cid}:tids:posts`, topicData.postcount, tid],
+                [`cid:${topicData.cid}:tids:votes`, parseInt(topicData.votes, 10) || 0, tid],
+                [`cid:${topicData.cid}:tids:views`, topicData.viewcount, tid],
+            ]));
+        }
+
+        const results = await Promise.all(promises);
+
+        topicData.isClosed = closed;
+        topicData.closed = closed;
+        topicData.events = results[1];
+
+        plugins.hooks.fire('action:topic.closed', { topic: _.clone(topicData), uid });
+
+        return topicData;
+    }
+
     topicTools.move = async function (tid, data) {
         const cid = parseInt(data.cid, 10);
         const topicData = await Topics.getTopicData(tid);
