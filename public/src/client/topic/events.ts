@@ -1,31 +1,19 @@
+import Benchpress from 'benchpressjs/build/benchpress';
 import postTools from './postTools';
 import threadTools from './threadTools';
 import posts from './posts';
-import images from'./images';
+import images from './images';
 import components from '../../modules/components';
 import translator from '../../modules/translator';
-import Benchpress from 'benchpressjs/build/benchpress';
 import hooks from '../../modules/hooks';
 import socket from '../../sockets';
 import app from '../../app';
 import ajaxify from '../../ajaxify';
 import utils from '../../utils.common';
 import replies from './replies';
-import config from '../../../../src/controllers/api'
+import config from '../../../../src/controllers/api';
 
 declare var $;
-
-interface AjaxifyData {
-    category?: {
-        slug: string;
-    };
-    tid: string;
-    postcount: number;
-    title: string;
-    privileges: {
-        isAdminOrMod: boolean;
-    };
-}
 
 interface Topic {
     tid: string;
@@ -44,8 +32,8 @@ interface Post {
     content: string;
     changed?: boolean;
     edited?: string;
-    bookmarks: any;
-    votes: any;
+    bookmarks: unknown;
+    votes: unknown;
 }
 
 interface Data {
@@ -56,7 +44,7 @@ interface Data {
     topic: Topic;
     editor: unknown;
     slug: unknown;
-    user: {reputation: any};
+    user: {reputation: unknown};
 }
 
 interface IEventObject {
@@ -68,72 +56,74 @@ interface IEvents {
   removeListeners: () => void;
 }
 
+/* eslint-disable*/
+
 const Events: IEvents = {
-  init: function (): void {
-    Events.removeListeners();
-    for (const eventName in events) {
-      if (events.hasOwnProperty(eventName)) {
-        socket.on(eventName, events[eventName]);
-      }
-    }
-  },
-  removeListeners: function (): void {
-    for (const eventName in events) {
-      if (events.hasOwnProperty(eventName)) {
-        socket.removeListener(eventName, events[eventName]);
-      }
-    }
-  },
+    init: function (): void {
+        Events.removeListeners();
+        for (const eventName in events) {
+            if (events.hasOwnProperty(eventName)) {
+                socket.on(eventName, events[eventName]);
+            }
+        }
+    },
+    removeListeners: function (): void {
+        for (const eventName in events) {
+            if (events.hasOwnProperty(eventName)) {
+                socket.removeListener(eventName, events[eventName]);
+            }
+        }
+    },
 };
 
 const events: IEventObject = {
-  'event:user_status_change': onUserStatusChange,
-  'event:voted': updatePostVotesAndUserReputation,
-  'event:bookmarked': updateBookmarkCount,
+    'event:user_status_change': onUserStatusChange,
+    'event:voted': updatePostVotesAndUserReputation,
+    'event:bookmarked': updateBookmarkCount,
 
-  'event:topic_deleted': threadTools.setDeleteState,
-  'event:topic_restored': threadTools.setDeleteState,
-  'event:topic_purged': onTopicPurged,
+    'event:topic_deleted': threadTools.setDeleteState,
+    'event:topic_restored': threadTools.setDeleteState,
+    'event:topic_purged': onTopicPurged,
 
-  'event:topic_locked': threadTools.setLockedState,
-  'event:topic_unlocked': threadTools.setLockedState,
+    'event:topic_locked': threadTools.setLockedState,
+    'event:topic_unlocked': threadTools.setLockedState,
 
-  'event:topic_pinned': threadTools.setPinnedState,
-  'event:topic_unpinned': threadTools.setPinnedState,
+    'event:topic_pinned': threadTools.setPinnedState,
+    'event:topic_unpinned': threadTools.setPinnedState,
 
-  'event:topic_moved': onTopicMoved,
+    'event:topic_moved': onTopicMoved,
 
-  'event:post_edited': onPostEdited,
-  'event:post_purged': onPostPurged,
+    'event:post_edited': onPostEdited,
+    'event:post_purged': onPostPurged,
 
-  'event:post_deleted': togglePostDeleteState,
-  'event:post_restored': togglePostDeleteState,
+    'event:post_deleted': togglePostDeleteState,
+    'event:post_restored': togglePostDeleteState,
 
-  'posts.bookmark': togglePostBookmark,
-  'posts.unbookmark': togglePostBookmark,
+    'posts.bookmark': togglePostBookmark,
+    'posts.unbookmark': togglePostBookmark,
 
-  'posts.endorse': toggleEndorsement,
-  'posts.unendorse': toggleEndorsement,
+    'posts.endorse': toggleEndorsement,
+    'posts.unendorse': toggleEndorsement,
 
-  'posts.upvote': togglePostVote,
-  'posts.downvote': togglePostVote,
-  'posts.unvote': togglePostVote,
+    'posts.upvote': togglePostVote,
+    'posts.downvote': togglePostVote,
+    'posts.unvote': togglePostVote,
 
-  'event:new_notification': onNewNotification,
-  'event:new_post': posts.onNewPost,
+    'event:new_notification': onNewNotification,
+    'event:new_post': posts.onNewPost,
 };
 
 function onUserStatusChange(data: Data): void {
-  app.updateUserStatus($('[data-uid="' + data.uid + '"] [component="user/status"]'), data.status);
+    app.updateUserStatus($('[data-uid="' + data.uid + '"] [component="user/status"]'), data.status);
 }
 
 function updatePostVotesAndUserReputation(data: Data): void {
-  const votes = $('[data-pid="' + data.post.pid + '"] [component="post/vote-count"]').filter(function (index, el) {
-    return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
-  });
-  const reputationElements = $('.reputation[data-uid="' + data.post.uid + '"]');
-  votes.html(data.post.votes).attr('data-votes', data.post.votes);
-  reputationElements.html(data.user.reputation).attr('data-reputation', data.user.reputation);
+    const votes = $('[data-pid="' + data.post.pid + '"] [component="post/vote-count"]').filter(function (index, el) {
+        return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10);
+    });
+    const reputationElements = $('.reputation[data-uid="' + data.post.uid + '"]');
+    votes.html(data.post.votes).attr('data-votes', data.post.votes);
+    reputationElements.html(data.user.reputation).attr('data-reputation', data.user.reputation);
 }
 
 function updateBookmarkCount(data: Data): void {
@@ -196,27 +186,27 @@ function onPostEdited(data: Data): void {
 
     if (data.post.changed) {
         editedPostEl.fadeOut(250, function () {
-          editedPostEl.html(translator.unescape(data.post.content));
-          editedPostEl.find('img:not(.not-responsive)').addClass('img-responsive');
-          images.wrapImagesInLinks(editedPostEl.parent());
-          posts.addBlockquoteEllipses(editedPostEl.parent());
-          editedPostEl.fadeIn(250);
-      
-          const editData: Record<string, any> = {
-            editor: data.editor,
-            editedISO: utils.toISOString(data.post.edited),
-          };
-      
-          app.parseAndTranslate('partials/topic/post-editor', editData, function (html: string) {
-            editorEl.replaceWith(html);
-            const timeagoEL = $('[data-pid="' + data.post.pid + '"] [component="post/editor"] .timeago');
-            timeagoEL.timeago();
-            hooks.fire('action:posts.edited', data);
-          });
+            editedPostEl.html(translator.unescape(data.post.content));
+            editedPostEl.find('img:not(.not-responsive)').addClass('img-responsive');
+            images.wrapImagesInLinks(editedPostEl.parent());
+            posts.addBlockquoteEllipses(editedPostEl.parent());
+            editedPostEl.fadeIn(250);
+
+            const editData: Record<string, any> = {
+                editor: data.editor,
+                editedISO: utils.toISOString(data.post.edited),
+            };
+
+            app.parseAndTranslate('partials/topic/post-editor', editData, function (html: string) {
+                editorEl.replaceWith(html);
+                const timeagoEL = $('[data-pid="' + data.post.pid + '"] [component="post/editor"] .timeago');
+                timeagoEL.timeago();
+                hooks.fire('action:posts.edited', data);
+            });
         });
-      } else {
+    } else {
         hooks.fire('action:posts.edited', data);
-      }
+    }
 
     if (data.topic.tags && data.topic.tagsupdated) {
         Benchpress.render('partials/topic/tags', { tags: data.topic.tags }).then(function (html) {
@@ -231,9 +221,6 @@ function onPostEdited(data: Data): void {
     postTools.removeMenu(components.get('post', 'pid', data.post.pid));
 }
 
-
-
-
 function onPostPurged(postData: Post) {
     if (!postData || parseInt(postData.tid, 10) !== parseInt(ajaxify.data.tid, 10)) {
         return;
@@ -244,7 +231,7 @@ function onPostPurged(postData: Post) {
     });
     ajaxify.data.postcount -= 1;
     postTools.updatePostCount(ajaxify.data.postcount);
-        replies.onPostPurged(postData);
+    replies.onPostPurged(postData);
 }
 
 function togglePostDeleteState(data: Post) {
