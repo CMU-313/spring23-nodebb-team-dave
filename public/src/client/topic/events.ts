@@ -1,29 +1,19 @@
-import postTools = require('./postTools');
-import threadTools = require( './threadTools');
-import posts = require( './posts');
-import images = require('./images');
-import components = require('../../modules/components');
-import translator = require('../../modules/translator');
-import Benchpress = require('../../../../node_modules/benchpressjs/build/benchpress');
-import hooks = require('../../modules/hooks');
-import socket = require('../../sockets');
-import app = require('../../app');
-import ajaxify = require('../../ajaxify');
-import utils = require('../../utils.common');
-import replies = require('./replies');
-import 'jQuery-timeago/jQuery.timeago';
+import postTools from './postTools';
+import threadTools from './threadTools';
+import posts from './posts';
+import images from'./images';
+import components from '../../modules/components';
+import translator from '../../modules/translator';
+import Benchpress from 'benchpressjs/build/benchpress';
+import hooks from '../../modules/hooks';
+import socket from '../../sockets';
+import app from '../../app';
+import ajaxify from '../../ajaxify';
+import utils from '../../utils.common';
+import replies from './replies';
+import config from '../../../../src/controllers/api'
 
-declare global {
-    interface JQuery {
-      timeago(options?: unknown): JQuery;
-    }
-}
-
-declare global {
-    const config: { relative_path: string; }, {
-        relative_path,
-    }
-}
+declare var $;
 
 interface AjaxifyData {
     category?: {
