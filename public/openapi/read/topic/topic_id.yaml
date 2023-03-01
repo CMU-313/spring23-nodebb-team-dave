@@ -173,6 +173,9 @@ get:
                           nullable: true
                         bookmarked:
                           type: boolean
+                        # Not sure about the name
+                        endorsed: 
+                          type: string
                         upvoted:
                           type: boolean
                         downvoted:
