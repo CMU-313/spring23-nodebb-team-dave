@@ -9,10 +9,12 @@ import social = require ('../../social');
 import user = require ('../../user');
 import utils = require ('../../utils');
 
-/* eslint-disable*/
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call,
+@typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return,
+@typescript-eslint/restrict-template-expressions */
 
-module.exports = function (SocketPosts: any) {
-    SocketPosts.loadPostTools = async function (socket: any, data: any) {
+module.exports = function (SocketPosts) {
+    SocketPosts.loadPostTools = async function (socket, data) {
         if (!data || !data.pid || !data.cid) {
             throw new Error('[[error:invalid-data]]');
         }
@@ -68,7 +70,7 @@ module.exports = function (SocketPosts: any) {
         return results;
     };
 
-    SocketPosts.changeOwner = async function (socket: any, data: any) {
+    SocketPosts.changeOwner = async function (socket, data) {
         if (!data || !Array.isArray(data.pids) || !data.toUid) {
             throw new Error('[[error:invalid-data]]');
         }

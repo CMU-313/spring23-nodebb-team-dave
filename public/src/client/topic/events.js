@@ -17,50 +17,8 @@ const ajaxify_1 = __importDefault(require("../../ajaxify"));
 const utils_common_1 = __importDefault(require("../../utils.common"));
 const replies_1 = __importDefault(require("./replies"));
 const api_1 = __importDefault(require("../../../../src/controllers/api"));
-/* eslint-disable*/
-const Events = {
-    init: function () {
-        Events.removeListeners();
-        for (const eventName in events) {
-            if (events.hasOwnProperty(eventName)) {
-                sockets_1.default.on(eventName, events[eventName]);
-            }
-        }
-    },
-    removeListeners: function () {
-        for (const eventName in events) {
-            if (events.hasOwnProperty(eventName)) {
-                sockets_1.default.removeListener(eventName, events[eventName]);
-            }
-        }
-    },
-};
-const events = {
-    'event:user_status_change': onUserStatusChange,
-    'event:voted': updatePostVotesAndUserReputation,
-    'event:bookmarked': updateBookmarkCount,
-    'event:topic_deleted': threadTools_1.default.setDeleteState,
-    'event:topic_restored': threadTools_1.default.setDeleteState,
-    'event:topic_purged': onTopicPurged,
-    'event:topic_locked': threadTools_1.default.setLockedState,
-    'event:topic_unlocked': threadTools_1.default.setLockedState,
-    'event:topic_pinned': threadTools_1.default.setPinnedState,
-    'event:topic_unpinned': threadTools_1.default.setPinnedState,
-    'event:topic_moved': onTopicMoved,
-    'event:post_edited': onPostEdited,
-    'event:post_purged': onPostPurged,
-    'event:post_deleted': togglePostDeleteState,
-    'event:post_restored': togglePostDeleteState,
-    'posts.bookmark': togglePostBookmark,
-    'posts.unbookmark': togglePostBookmark,
-    'posts.endorse': toggleEndorsement,
-    'posts.unendorse': toggleEndorsement,
-    'posts.upvote': togglePostVote,
-    'posts.downvote': togglePostVote,
-    'posts.unvote': togglePostVote,
-    'event:new_notification': onNewNotification,
-    'event:new_post': posts_1.default.onNewPost,
-};
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call,
+@typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
 function onUserStatusChange(data) {
     app_1.default.updateUserStatus($('[data-uid="' + data.uid + '"] [component="user/status"]'), data.status);
 }
@@ -81,7 +39,7 @@ function onTopicPurged(data) {
     if (ajaxify_1.default.data.category &&
         ajaxify_1.default.data.category.slug &&
         parseInt(data.tid, 10) === parseInt(ajaxify_1.default.data.tid, 10)) {
-        ajaxify_1.default.go(`category/${ajaxify_1.default.data.category.slug}`, null, true);
+        ajaxify_1.default.go('category/' + ajaxify_1.default.data.category.slug, null, true);
     }
 }
 function onTopicMoved(data) {
@@ -218,3 +176,46 @@ function onNewNotification(data) {
         sockets_1.default.emit('topics.markTopicNotificationsRead', [tid]);
     }
 }
+const events = {
+    'event:user_status_change': onUserStatusChange,
+    'event:voted': updatePostVotesAndUserReputation,
+    'event:bookmarked': updateBookmarkCount,
+    'event:topic_deleted': threadTools_1.default.setDeleteState,
+    'event:topic_restored': threadTools_1.default.setDeleteState,
+    'event:topic_purged': onTopicPurged,
+    'event:topic_locked': threadTools_1.default.setLockedState,
+    'event:topic_unlocked': threadTools_1.default.setLockedState,
+    'event:topic_pinned': threadTools_1.default.setPinnedState,
+    'event:topic_unpinned': threadTools_1.default.setPinnedState,
+    'event:topic_moved': onTopicMoved,
+    'event:post_edited': onPostEdited,
+    'event:post_purged': onPostPurged,
+    'event:post_deleted': togglePostDeleteState,
+    'event:post_restored': togglePostDeleteState,
+    'posts.bookmark': togglePostBookmark,
+    'posts.unbookmark': togglePostBookmark,
+    'posts.endorse': toggleEndorsement,
+    'posts.unendorse': toggleEndorsement,
+    'posts.upvote': togglePostVote,
+    'posts.downvote': togglePostVote,
+    'posts.unvote': togglePostVote,
+    'event:new_notification': onNewNotification,
+    'event:new_post': posts_1.default.onNewPost,
+};
+const Events = {
+    init: function () {
+        Events.removeListeners();
+        for (const eventName in events) {
+            if (events.hasOwnProperty(eventName)) {
+                sockets_1.default.on(eventName, events[eventName]);
+            }
+        }
+    },
+    removeListeners: function () {
+        for (const eventName in events) {
+            if (events.hasOwnProperty(eventName)) {
+                sockets_1.default.removeListener(eventName, events[eventName]);
+            }
+        }
+    },
+};

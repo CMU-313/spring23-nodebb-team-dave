@@ -19,7 +19,9 @@ const plugins = require("../../plugins");
 const social = require("../../social");
 const user = require("../../user");
 const utils = require("../../utils");
-/* eslint-disable*/
+/* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call,
+@typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return,
+@typescript-eslint/restrict-template-expressions */
 module.exports = function (SocketPosts) {
     SocketPosts.loadPostTools = function (socket, data) {
         return __awaiter(this, void 0, void 0, function* () {

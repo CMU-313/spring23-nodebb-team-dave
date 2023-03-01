@@ -1,28 +1,33 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const helpers = require("./helpers");
+import helpers = require('./helpers');
+
 const { setupPageRoute } = helpers;
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call,
 @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return */
-module.exports = function (app, name, middleware, controllers) {
-    const middlewares = [middleware.exposeUid, middleware.canViewUsers];
-    const accountMiddlewares = [
+module.exports = function (app, name: string, middleware, controllers) {
+    const middlewares:
+    ((req: Express.Request, res: Express.Response, next) => void)[] = [middleware.exposeUid, middleware.canViewUsers];
+    const accountMiddlewares: ((req: Express.Request, res: Express.Response, next) => void)[] = [
         middleware.exposeUid,
         middleware.ensureLoggedIn,
         middleware.canViewUsers,
         middleware.checkAccountPermissions,
     ];
+
     setupPageRoute(app, '/me', [], middleware.redirectMeToUserslug);
     setupPageRoute(app, '/me/*', [], middleware.redirectMeToUserslug);
     setupPageRoute(app, '/uid/:uid*', [], middleware.redirectUidToUserslug);
+
     setupPageRoute(app, `/${name}/:userslug`, middlewares, controllers.accounts.profile.get);
     setupPageRoute(app, `/${name}/:userslug/following`, middlewares, controllers.accounts.follow.getFollowing);
     setupPageRoute(app, `/${name}/:userslug/followers`, middlewares, controllers.accounts.follow.getFollowers);
+
     setupPageRoute(app, `/${name}/:userslug/posts`, middlewares, controllers.accounts.posts.getPosts);
     setupPageRoute(app, `/${name}/:userslug/topics`, middlewares, controllers.accounts.posts.getTopics);
     setupPageRoute(app, `/${name}/:userslug/best`, middlewares, controllers.accounts.posts.getBestPosts);
     setupPageRoute(app, `/${name}/:userslug/controversial`, middlewares, controllers.accounts.posts.getControversialPosts);
     setupPageRoute(app, `/${name}/:userslug/groups`, middlewares, controllers.accounts.groups.get);
+
     setupPageRoute(app, `/${name}/:userslug/categories`, accountMiddlewares, controllers.accounts.categories.get);
     setupPageRoute(app, `/${name}/:userslug/bookmarks`, accountMiddlewares, controllers.accounts.posts.getBookmarks);
     setupPageRoute(app, `/${name}/:userslug/watched`, accountMiddlewares, controllers.accounts.posts.getWatchedTopics);
@@ -42,6 +47,7 @@ module.exports = function (app, name, middleware, controllers) {
     setupPageRoute(app, `/${name}/:userslug/consent`, accountMiddlewares, controllers.accounts.consent.get);
     setupPageRoute(app, `/${name}/:userslug/blocks`, accountMiddlewares, controllers.accounts.blocks.getBlocks);
     setupPageRoute(app, `/${name}/:userslug/sessions`, accountMiddlewares, controllers.accounts.sessions.get);
+
     setupPageRoute(app, '/notifications', [middleware.ensureLoggedIn], controllers.accounts.notifications.get);
     setupPageRoute(app, `/${name}/:userslug/chats/:roomid?`, middlewares, controllers.accounts.chats.get);
     setupPageRoute(app, '/chats/:roomid?', [middleware.ensureLoggedIn], controllers.accounts.chats.redirectToChat);

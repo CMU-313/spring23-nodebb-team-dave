@@ -109,7 +109,7 @@
 <script>
     function checkIfOther(data){
         console.log(data)
-        if(data == "true") {           
+        if(data == "false") {           
             document.getElementById("endorseID").innerHTML = "unendorse";
         } else{
             document.getElementById("endorseID").innerHTML = "endorse";
