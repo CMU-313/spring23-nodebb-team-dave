@@ -6,7 +6,7 @@ import routeHelpers = require('../helpers');
 const router: Router = express.Router();
 const { setupApiRoute } = routeHelpers;
 
-export default function (): Router {
+export = function (): Router {
     const middlewares = [middleware.ensureLoggedIn];
 
     setupApiRoute(router, 'get', '/:pid', [], controllers.write.posts.get);

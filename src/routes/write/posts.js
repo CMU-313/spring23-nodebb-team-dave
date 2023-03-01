@@ -2,14 +2,13 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const middleware = require("../../middleware");
 const controllers = require("../../controllers");
 const routeHelpers = require("../helpers");
 const router = express_1.default.Router();
 const { setupApiRoute } = routeHelpers;
-function default_1() {
+module.exports = function () {
     const middlewares = [middleware.ensureLoggedIn];
     setupApiRoute(router, 'get', '/:pid', [], controllers.write.posts.get);
     // There is no POST route because you POST to a topic to create a new post. Intuitive, no?
@@ -30,5 +29,4 @@ function default_1() {
     setupApiRoute(router, 'put', '/:pid/diffs/:since', [...middlewares, middleware.assert.post], controllers.write.posts.restoreDiff);
     setupApiRoute(router, 'delete', '/:pid/diffs/:timestamp', [...middlewares, middleware.assert.post], controllers.write.posts.deleteDiff);
     return router;
-}
-exports.default = default_1;
+};
