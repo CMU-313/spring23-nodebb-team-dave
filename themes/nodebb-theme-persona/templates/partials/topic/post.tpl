@@ -1,3 +1,35 @@
+<script>
+    function checkIfOther(id,data){
+        console.log(data)
+        console.log(id)
+        if(data == "true") {
+            document.getElementById(id).innerHTML = "Endorse";
+        } else{
+            document.getElementById(id).innerHTML = "Unendorse";
+        }
+        if (data == "true") {
+            document.getElementById("indicator" + id).style.display = 'none'
+        } else {
+            document.getElementById("indicator" + id).style.display = 'block'
+        }
+    }
+
+    function init(id,data){
+        console.log(data)
+        console.log(id)
+        if(data == "true") {           
+            document.getElementById(id).innerHTML = "Unendorse";
+        } else{
+            document.getElementById(id).innerHTML = "Endorse"; 
+        }
+        if (data == "true") {
+            document.getElementById("indicator" + id).style.display = 'block'
+        } else {
+            document.getElementById("indicator" + id).style.display = 'none'
+        }
+    }
+</script>
+
 <div class="clearfix post-header">
     <div class="icon pull-left">
         <a href="<!-- IF posts.user.userslug -->{config.relative_path}/user/{posts.user.userslug}<!-- ELSE -->#<!-- ENDIF posts.user.userslug -->">
@@ -86,8 +118,16 @@
         <span class="endorse">
             <a component="post/endorse" href="#" id="{posts.pid}" data-endorsed = "{posts.endorsed}" onclick="checkIfOther(getAttribute('id'),getAttribute('data-endorsed'))" 
                 class='<!-- IF (posts.endorsed == "true") -->endorsed<!-- ENDIF (posts.endorsed == "true") -->' >
-                [[topic:endorse]]
             </a> 
+
+            <div id="indicator{posts.pid}">
+                This Post is Endorsed!!!
+            </div>
+
+            <script>
+                init("{posts.pid}","{posts.endorsed}")
+            </script>
+
         </span>
 
         <!-- IF !reputation:disabled -->
@@ -112,14 +152,3 @@
     <div component="post/replies/container"></div>
 </div>
 
-<script>
-    function checkIfOther(id,data){
-        console.log(data)
-        console.log(id)
-        if(data == "false") {           
-            document.getElementById(id).innerHTML = "unendorse";
-        } else{
-            document.getElementById(id).innerHTML = "endorse";
-        }
-    }
-</script>
