@@ -75,8 +75,20 @@ describe('authentication', () => {
             password: '123456',
         }, (err, jar, response, body) => {
             assert.ifError(err);
-            assert.equal(response.statusCode, 400);
+            assert.strictEqual(response.statusCode, 400);
             assert.equal(body, '[[error:username-too-short]]');
+            done();
+        });
+    });
+
+    it('shouldn\'t fail to create user if their account type is teaching assistant', (done) => {
+        helpers.registerUser({
+            username: 'username',
+            password: '123456',
+            'account-type': 'teaching_assistant',
+        }, (err, jar, response, body) => {
+            assert.ifError(err);
+            assert.equal(response.statusCode, 200);
             done();
         });
     });
