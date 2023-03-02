@@ -81,7 +81,13 @@
         <span class="post-tools">
             <a component="post/reply" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:reply]]</a>
             <a component="post/quote" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->">[[topic:quote]]</a>
-            <a component="post/endorse" href="#" class="no-select <!-- IF !privileges.topics:reply -->hidden<!-- ENDIF !privileges.topics:reply -->" data-endorsed = "{posts.endorsed}"> [[topic:endorse]]</a>
+        </span>
+
+        <span class="endorse">
+            <a component="post/endorse" href="#" id="{posts.pid}" data-endorsed = "{posts.endorsed}" onclick="checkIfOther(getAttribute('id'),getAttribute('data-endorsed'))" 
+                class='<!-- IF (posts.endorsed == "true") -->endorsed<!-- ENDIF (posts.endorsed == "true") -->' >
+                [[topic:endorse]]
+            </a> 
         </span>
 
         <!-- IF !reputation:disabled -->
@@ -105,3 +111,15 @@
     </div>
     <div component="post/replies/container"></div>
 </div>
+
+<script>
+    function checkIfOther(id,data){
+        console.log(data)
+        console.log(id)
+        if(data == "false") {           
+            document.getElementById(id).innerHTML = "unendorse";
+        } else{
+            document.getElementById(id).innerHTML = "endorse";
+        }
+    }
+</script>
