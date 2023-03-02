@@ -1,68 +1,26 @@
-'use strict';
-
-const posts = require('../../posts');
-const privileges = require('../../privileges');
-
-const api = require('../../api');
-const helpers = require('../helpers');
-const apiHelpers = require('../../api/helpers');
-
-const Posts = module.exports;
-
-Posts.get = async (req, res) => {
-    helpers.formatApiResponse(200, res, await api.posts.get(req, { pid: req.params.pid }));
-};
-
-Posts.edit = async (req, res) => {
-    const editResult = await api.posts.edit(req, {
-        ...req.body,
-        pid: req.params.pid,
-        uid: req.uid,
-        req: apiHelpers.buildReqObject(req),
-    });
-
-    helpers.formatApiResponse(200, res, editResult);
-};
-
-Posts.purge = async (req, res) => {
-    await api.posts.purge(req, { pid: req.params.pid });
-    helpers.formatApiResponse(200, res);
-};
-
-Posts.restore = async (req, res) => {
-    await api.posts.restore(req, { pid: req.params.pid });
-    helpers.formatApiResponse(200, res);
-};
-
-Posts.delete = async (req, res) => {
-    await api.posts.delete(req, { pid: req.params.pid });
-    helpers.formatApiResponse(200, res);
-};
-
-Posts.move = async (req, res) => {
-    await api.posts.move(req, {
-        pid: req.params.pid,
-        tid: req.body.tid,
-    });
-    helpers.formatApiResponse(200, res);
-};
-
-async function mock(req) {
-    const tid = await posts.getPostField(req.params.pid, 'tid');
-    return { pid: req.params.pid, room_id: `topic_${tid}` };
-}
-
-Posts.vote = async (req, res) => {
-    const data = await mock(req);
-    if (req.body.delta > 0) {
-        await api.posts.upvote(req, data);
-    } else if (req.body.delta < 0) {
-        await api.posts.downvote(req, data);
-    } else {
-        await api.posts.unvote(req, data);
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-
-    helpers.formatApiResponse(200, res);
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 
 Posts.unvote = async (req, res) => {
