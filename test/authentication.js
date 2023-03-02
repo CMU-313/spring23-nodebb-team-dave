@@ -93,6 +93,18 @@ describe('authentication', () => {
         });
     });
 
+    it('shouldn\'t fail to create user if their account type is teaching assistant', (done) => {
+        helpers.registerUser({
+            username: 'username',
+            password: '123456',
+            'account-type': 'teaching_assistant',
+        }, (err, jar, response, body) => {
+            assert.ifError(err);
+            assert.equal(response.statusCode, 200);
+            done();
+        });
+    });
+
     it('should register and login a user', (done) => {
         request({
             url: `${nconf.get('url')}/api/config`,
