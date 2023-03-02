@@ -116,6 +116,8 @@ paths:
     $ref: 'write/topics/tid/lock.yaml'
   /topics/{tid}/pin:
     $ref: 'write/topics/tid/pin.yaml'
+  /topics/{tid}/close:
+    $ref: 'write/topics/tid/close.yaml'
   /topics/{tid}/follow:
     $ref: 'write/topics/tid/follow.yaml'
   /topics/{tid}/ignore:
