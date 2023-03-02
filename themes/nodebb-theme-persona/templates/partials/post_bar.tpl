@@ -16,5 +16,10 @@
     <div class="inline-block">
     <!-- IMPORT partials/thread_tools.tpl -->
     </div>
+
+    <!-- IF privileges.closeable -->
+        <button class="btn btn-sm btn-default" type="button" component="topic/close" > Close </button>
+    <!-- ENDIF privileges.closeable -->
+
     <!-- IMPORT partials/topic/reply-button.tpl -->
 </div>
