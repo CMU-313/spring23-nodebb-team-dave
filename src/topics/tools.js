@@ -238,7 +238,7 @@ module.exports = function (Topics) {
         return await toggleClose(tid, uid, false);
     };
 
-    async function toggleClose(tid, uid, pin) {
+    async function toggleClose(tid, uid, closed) {
         const topicData = await Topics.getTopicData(tid);
         if (!topicData) {
             throw new Error('[[error:no-topic]]');
@@ -257,7 +257,7 @@ module.exports = function (Topics) {
             Topics.events.log(tid, { type: closed ? 'closed' : 'closed', uid }),
         ];
         if (closed) {
-            promises.push(db.sortedSetAdd(`cid:${topicData.cid}:tids:pinned`, Date.now(), tid));
+            promises.push(db.sortedSetAdd(`cid:${topicData.cid}:tids:closed`, Date.now(), tid));
             promises.push(db.sortedSetsRemove([
                 `cid:${topicData.cid}:tids`,
                 `cid:${topicData.cid}:tids:posts`,
@@ -265,7 +265,7 @@ module.exports = function (Topics) {
                 `cid:${topicData.cid}:tids:views`,
             ], tid));
         } else {
-            promises.push(db.sortedSetRemove(`cid:${topicData.cid}:tids:pinned`, tid));
+            promises.push(db.sortedSetRemove(`cid:${topicData.cid}:tids:closed`, tid));
             promises.push(db.sortedSetAddBulk([
                 [`cid:${topicData.cid}:tids`, topicData.lastposttime, tid],
                 [`cid:${topicData.cid}:tids:posts`, topicData.postcount, tid],

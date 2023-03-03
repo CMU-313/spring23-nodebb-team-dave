@@ -184,6 +184,7 @@ module.exports = function (Categories) {
         if (!pinned) {
             promises.push(db.sortedSetIncrBy(`cid:${cid}:tids:posts`, 1, postData.tid));
         }
+        promises.push(db.sortedSetRemove(`cid:${cid}:tids:closed`, postData.tid));
         await Promise.all(promises);
         await Categories.updateRecentTidForCid(cid);
     };

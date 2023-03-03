@@ -368,8 +368,8 @@ define('forum/topic/threadTools', [
             return;
         }
 
-        components.get('topic/close').toggleClass('hidden', data.pinned).parent().attr('hidden', data.pinned ? '' : null);
-        components.get('topic/unclose').toggleClass('hidden', !data.pinned).parent().attr('hidden', !data.pinned ? '' : null);
+        components.get('topic/close').toggleClass('hidden', data.closed).parent().attr('hidden', data.closed ? 1 : null);
+        components.get('topic/unclose').toggleClass('hidden', !data.closed).parent().attr('hidden', !data.closed ? 0 : null);
         const icon = $('[component="topic/labels"] [component="topic/closed"]');
         icon.toggleClass('hidden', !data.closed);
         /*

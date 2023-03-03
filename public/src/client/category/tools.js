@@ -179,6 +179,8 @@ define('forum/category/tools', [
         socket.removeListener('event:topic_unlocked', setLockedState);
         socket.removeListener('event:topic_pinned', setPinnedState);
         socket.removeListener('event:topic_unpinned', setPinnedState);
+        socket.removeListener('event:topic_closed', setClosedState);
+        socket.removeListener('event:topic_unclosed', setClosedState);
         socket.removeListener('event:topic_moved', onTopicMoved);
     };
 

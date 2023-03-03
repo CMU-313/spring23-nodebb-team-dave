@@ -1,7 +1,7 @@
 put:
   tags:
     - topics
-  summary: close a topic
+  summary: Close a topic
   description: This operation closes an existing topic.
   parameters:
     - in: path

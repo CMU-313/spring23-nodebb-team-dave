@@ -64,6 +64,7 @@ define('forum/topic', [
         addPostsPreviewHandler();
 
         handleBookmark(tid);
+        handleClose(tid);
 
         $(window).on('scroll', utils.debounce(updateTopicTitle, 250));
 
@@ -157,6 +158,19 @@ define('forum/topic', [
             }, 10000);
         }
     }
+
+    function handleClose(tid) {
+        $('[component="topic/close"]')[0].addEventListener('click', function () {
+            api.put(`/topics/${tid}/close`);
+        });
+    }
+/*
+    function handleClose(tid) {
+        $('[component="topic/close"]')[0].addEventListener('click', function () {
+            api.put('topic/' + tid + '/close'); 
+        });
+    }
+*/
 
     function addBlockQuoteHandler() {
         components.get('topic').on('click', 'blockquote .toggle', function () {
