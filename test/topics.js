@@ -383,6 +383,7 @@ describe('Topic\'s', () => {
                 assert.strictEqual(topicData.deleted, 0);
                 assert.strictEqual(topicData.locked, 0);
                 assert.strictEqual(topicData.pinned, 0);
+                assert.strictEqual(topicData.closed, 0);
                 done();
             });
         });
@@ -432,6 +433,7 @@ describe('Topic\'s', () => {
                 assert.equal(data.deleted, false);
                 assert.equal(data.locked, false);
                 assert.equal(data.pinned, false);
+                assert.equal(data.closed, false);
             });
 
             it('should return first 3 posts including main post', async () => {
@@ -688,6 +690,18 @@ describe('Topic\'s', () => {
             await apiTopics.unpin({ uid: adminUid }, { tids: [newTopic.tid], cid: categoryObj.cid });
             const pinned = await topics.getTopicField(newTopic.tid, 'pinned');
             assert.strictEqual(pinned, 0);
+        });
+
+        it('should close topic', async () => {
+            await apiTopics.close({ uid: adminUid }, { tids: [newTopic.tid], cid: categoryObj.cid });
+            const closed = await topics.getTopicField(newTopic.tid, 'closed');
+            assert.strictEqual(closed, 1);
+        });
+
+        it('should unclose/reopen topic', async () => {
+            await apiTopics.unclose({ uid: adminUid }, { tids: [newTopic.tid], cid: categoryObj.cid });
+            const closed = await topics.getTopicField(newTopic.tid, 'closed');
+            assert.strictEqual(closed, 0);
         });
 
         it('should move all topics', (done) => {
