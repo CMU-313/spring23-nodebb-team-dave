@@ -25,10 +25,10 @@ Allows instructors and Teaching Assistants to endorse posts for the content they
 - Register instructor account;
 - Go to a certain Post or Create one;
 - There would be an “Endorse” or “Unendorse” button located on the right corner of each post
-![image]https://i.imgur.com/kjsJYad.png
+![image](https://i.imgur.com/kjsJYad.png)
 
 - Click on the button and see the name of the button changes as well as prompts about endorsement;
-![image]https://i.imgur.com/zxa9FDO.png
+![image](https://i.imgur.com/zxa9FDO.png)
 
 - Click on the button should reverse the state, i.e. clicking “Unendorse” gives “Endorse” with no prompts back;
 - Refreshing the page or Using another account should see the same endorsement information for each post;
