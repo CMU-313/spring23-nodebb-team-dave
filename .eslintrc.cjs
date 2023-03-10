@@ -7,6 +7,7 @@ const tsDirs = [
     "public/src",
     "src", 
     "test",
+    "plugins",
 ];
 
 // Helper walk function to check all directories

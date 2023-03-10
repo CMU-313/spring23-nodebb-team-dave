@@ -1,0 +1,24 @@
+{
+  "name": "nodebb-plugin-latex-modified",
+  "version": "0.0.4",
+  "description": "A Markdown extension to parse LaTeX",
+  "main": "library.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/belstgut/nodebb-plugin-latex"
+  },
+  "keywords": [
+    "latex",
+    "katex",
+    "markdown",
+    "nodebb"
+  ],
+  "dependencies": {
+    "katex": ""
+  },
+  "author": "belstgut",
+  "license": "MIT"
+}
