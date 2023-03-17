@@ -44,7 +44,6 @@
         "html-to-text": "9.0.3",
         "ioredis": "5.2.4",
         "ipaddr.js": "2.0.1",
-        "iroh": "^0.3.0",
         "jquery": "3.6.3",
         "jquery-deserialize": "2.0.0",
         "jquery-form": "4.3.0",
@@ -161,7 +160,8 @@
         "lint": "npx tsc && eslint --cache ./nodebb .",
         "test": "npx tsc && nyc --reporter=html --reporter=text-summary mocha",
         "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
-        "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage"
+        "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage",
+        "iroh": "node irohtest.js"
     },
     "nyc": {
         "exclude": [
