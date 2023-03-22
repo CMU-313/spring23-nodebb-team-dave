@@ -12,5 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Installing dependencies
         run: npm install
+      - name: Installing prettier
+        run: npm install --silent --save-dev --save-exact prettier 
       - name: Checking if code is pretty
-        run: npm prettier --check *.[ts,js]
+        run: npx prettier --check *.[ts,js]
