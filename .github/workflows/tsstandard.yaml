@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Runing ts-standard on files  
-        run: npx install --save-dev ts-standard
+        run: npm install --save-dev ts-standard
       - name: run standard
         run: standard      
 
