@@ -20,7 +20,6 @@ const api_1 = __importDefault(require("../../api"));
 const helpers_1 = __importDefault(require("../helpers"));
 function post(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        // The next line calls a function in a module that has not been updated to TS yet
         const postData = yield api_1.default.posts.get(req, { pid: req.params.pid });
         try {
             yield helpers_1.default.formatApiResponse(200, res, postData);

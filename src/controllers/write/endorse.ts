@@ -33,7 +33,6 @@ interface PostField {
 
 
 export async function post(req: RequestWithEndorse, res: Response): Promise<void> {
-    // The next line calls a function in a module that has not been updated to TS yet
     
     const postData: Post = await api.posts.get<Post>(req, { pid: req.params.pid });
     try {
