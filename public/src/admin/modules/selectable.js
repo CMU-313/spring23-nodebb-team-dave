@@ -1,8 +1,7 @@
-'use strict';
+"use strict";
 
-
-define('admin/modules/selectable', [
-    'jquery-ui/widgets/selectable',
+define("admin/modules/selectable", [
+    "jquery-ui/widgets/selectable",
 ], function () {
     const selectable = {};
 

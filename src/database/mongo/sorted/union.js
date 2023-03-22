@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
     module.sortedSetUnionCard = async function (keys) {
@@ -6,11 +6,14 @@ module.exports = function (module) {
             return 0;
         }
 
-        const data = await module.client.collection('objects').aggregate([
-            { $match: { _key: { $in: keys } } },
-            { $group: { _id: { value: '$value' } } },
-            { $group: { _id: null, count: { $sum: 1 } } },
-        ]).toArray();
+        const data = await module.client
+            .collection("objects")
+            .aggregate([
+                { $match: { _key: { $in: keys } } },
+                { $group: { _id: { value: "$value" } } },
+                { $group: { _id: null, count: { $sum: 1 } } },
+            ])
+            .toArray();
         return Array.isArray(data) && data.length ? data[0].count : 0;
     };
 
@@ -35,14 +38,14 @@ module.exports = function (module) {
 
         const aggregate = {};
         if (params.aggregate) {
-            aggregate[`$${params.aggregate.toLowerCase()}`] = '$score';
+            aggregate[`$${params.aggregate.toLowerCase()}`] = "$score";
         } else {
-            aggregate.$sum = '$score';
+            aggregate.$sum = "$score";
         }
 
         const pipeline = [
             { $match: { _key: { $in: params.sets } } },
-            { $group: { _id: { value: '$value' }, totalScore: aggregate } },
+            { $group: { _id: { value: "$value" }, totalScore: aggregate } },
             { $sort: { totalScore: params.sort } },
         ];
 
@@ -54,15 +57,18 @@ module.exports = function (module) {
             pipeline.push({ $limit: limit });
         }
 
-        const project = { _id: 0, value: '$_id.value' };
+        const project = { _id: 0, value: "$_id.value" };
         if (params.withScores) {
-            project.score = '$totalScore';
+            project.score = "$totalScore";
         }
         pipeline.push({ $project: project });
 
-        let data = await module.client.collection('objects').aggregate(pipeline).toArray();
+        let data = await module.client
+            .collection("objects")
+            .aggregate(pipeline)
+            .toArray();
         if (!params.withScores) {
-            data = data.map(item => item.value);
+            data = data.map((item) => item.value);
         }
         return data;
     }

@@ -12,7 +12,7 @@ get:
       description: a valid category id
       example: 2
   responses:
-    '200':
+    "200":
       description: Category successfully retrieved
       content:
         application/json:
@@ -45,7 +45,7 @@ put:
           properties: {}
           additionalProperties: {}
   responses:
-    '200':
+    "200":
       description: category successfully updated
       content:
         application/json:
@@ -79,7 +79,7 @@ delete:
       description: a valid category id
       example: 2
   responses:
-    '200':
+    "200":
       description: Category successfully deleted
       content:
         application/json:

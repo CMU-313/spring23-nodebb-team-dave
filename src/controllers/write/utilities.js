@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const user = require('../../user');
-const authenticationController = require('../authentication');
-const helpers = require('../helpers');
+const user = require("../../user");
+const authenticationController = require("../authentication");
+const helpers = require("../helpers");
 
 const Utilities = module.exports;
 

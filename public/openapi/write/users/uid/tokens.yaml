@@ -12,7 +12,7 @@ post:
       description: uid of the user to generate a token for
       example: 1
   responses:
-    '200':
+    "200":
       description: successfully generated a user token
       content:
         application/json:

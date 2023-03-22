@@ -11,9 +11,9 @@ head:
       description: uid of the user to check
       example: 3
   responses:
-    '200':
+    "200":
       description: user found
-    '404':
+    "404":
       description: user not found
 get:
   tags:
@@ -28,7 +28,7 @@ get:
       description: uid of the user to check
       example: 3
   responses:
-    '200':
+    "200":
       description: successfully retrieved user profile
       content:
         application/json:
@@ -52,7 +52,7 @@ delete:
       description: uid of the user to delete
       example: 3
   responses:
-    '200':
+    "200":
       description: user account deleted
       content:
         application/json:
@@ -87,10 +87,10 @@ put:
               example: Mr. Dragon Fruit Jr.
             website:
               type: string
-              example: 'https://example.org'
+              example: "https://example.org"
             location:
               type: string
-              example: 'Toronto, Canada'
+              example: "Toronto, Canada"
             groupTitle:
               type: string
               example: '["administrators","Staff"]'
@@ -110,7 +110,7 @@ put:
                 and I'd like to take a minute and sit right here,
                 to tell you all about how I because the administrator of NodeBB
   responses:
-    '200':
+    "200":
       description: user profile updated
       content:
         application/json:
@@ -121,11 +121,11 @@ put:
                 $ref: ../../components/schemas/Status.yaml#/Status
               response:
                 $ref: ../../components/schemas/UserObj.yaml#/UserObj
-    '401':
+    "401":
       $ref: ../../components/responses/401.yaml#/401
-    '403':
+    "403":
       $ref: ../../components/responses/403.yaml#/403
-    '426':
+    "426":
       $ref: ../../components/responses/426.yaml#/426
-    '500':
+    "500":
       $ref: ../../components/responses/500.yaml#/500

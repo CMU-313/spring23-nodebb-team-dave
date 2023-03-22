@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-const meta = require('../../meta');
-const plugins = require('../../plugins');
-const logger = require('../../logger');
-const events = require('../../events');
-const index = require('../index');
+const meta = require("../../meta");
+const plugins = require("../../plugins");
+const logger = require("../../logger");
+const events = require("../../events");
+const index = require("../index");
 
 const Config = module.exports;
 
 Config.set = async function (socket, data) {
     if (!data) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
     const _data = {};
     _data[data.key] = data.value;
@@ -19,7 +19,7 @@ Config.set = async function (socket, data) {
 
 Config.setMultiple = async function (socket, data) {
     if (!data) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
 
     const changes = {};
@@ -34,11 +34,11 @@ Config.setMultiple = async function (socket, data) {
     await meta.configs.setMultiple(data);
     for (const [key, value] of Object.entries(data)) {
         const setting = { key, value };
-        plugins.hooks.fire('action:config.set', setting);
+        plugins.hooks.fire("action:config.set", setting);
         logger.monitorConfig({ io: index.server }, setting);
     }
     if (Object.keys(changes).length) {
-        changes.type = 'config-change';
+        changes.type = "config-change";
         changes.uid = socket.uid;
         changes.ip = socket.ip;
         await events.log(changes);

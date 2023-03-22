@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
-    const helpers = require('./helpers');
+    const helpers = require("./helpers");
 
     module.flushdb = async function () {
-        await module.client.send_command('flushdb', []);
+        await module.client.send_command("flushdb", []);
     };
 
     module.emptydb = async function () {
@@ -15,21 +15,27 @@ module.exports = function (module) {
     module.exists = async function (key) {
         if (Array.isArray(key)) {
             const batch = module.client.batch();
-            key.forEach(key => batch.exists(key));
+            key.forEach((key) => batch.exists(key));
             const data = await helpers.execBatch(batch);
-            return data.map(exists => exists === 1);
+            return data.map((exists) => exists === 1);
         }
         const exists = await module.client.exists(key);
         return exists === 1;
     };
 
     module.scan = async function (params) {
-        let cursor = '0';
+        let cursor = "0";
         let returnData = [];
         const seen = {};
         do {
             /* eslint-disable no-await-in-loop */
-            const res = await module.client.scan(cursor, 'MATCH', params.match, 'COUNT', 10000);
+            const res = await module.client.scan(
+                cursor,
+                "MATCH",
+                params.match,
+                "COUNT",
+                10000
+            );
             cursor = res[0];
             const values = res[1].filter((value) => {
                 const isSeen = !!seen[value];
@@ -39,7 +45,7 @@ module.exports = function (module) {
                 return !isSeen;
             });
             returnData = returnData.concat(values);
-        } while (cursor !== '0');
+        } while (cursor !== "0");
         return returnData;
     };
 
@@ -72,7 +78,7 @@ module.exports = function (module) {
         try {
             await module.client.rename(oldKey, newKey);
         } catch (err) {
-            if (err && err.message !== 'ERR no such key') {
+            if (err && err.message !== "ERR no such key") {
                 throw err;
             }
         }
@@ -82,7 +88,7 @@ module.exports = function (module) {
 
     module.type = async function (key) {
         const type = await module.client.type(key);
-        return type !== 'none' ? type : null;
+        return type !== "none" ? type : null;
     };
 
     module.expire = async function (key, seconds) {

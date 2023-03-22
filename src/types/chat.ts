@@ -1,4 +1,4 @@
-import { UserObjectSlim } from './user';
+import { UserObjectSlim } from "./user";
 
 export type MessageObject = {
   content: string;
@@ -38,4 +38,5 @@ export type RoomObjectFull = {
   maximumChatMessageLength: number;
   showUserInput: boolean;
   isAdminOrGlobalMod: boolean;
-} & RoomObject & MessageObject;
+} & RoomObject &
+  MessageObject;

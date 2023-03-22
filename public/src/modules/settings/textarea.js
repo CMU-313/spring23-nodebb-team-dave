@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 
-define('settings/textarea', function () {
+define("settings/textarea", function () {
     let Settings = null;
 
     const SettingsArea = {
-        types: ['textarea'],
+        types: ["textarea"],
         use: function () {
             Settings = this;
         },
         create: function () {
-            return Settings.helper.createElement('textarea');
+            return Settings.helper.createElement("textarea");
         },
         set: function (element, value, trim) {
-            if (trim && value != null && typeof value.trim === 'function') {
+            if (trim && value != null && typeof value.trim === "function") {
                 value = value.trim();
             }
-            element.val(value || '');
+            element.val(value || "");
         },
         get: function (element, trim, empty) {
             let value = element.val();

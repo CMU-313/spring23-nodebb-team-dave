@@ -29,7 +29,7 @@ post:
             - title
             - content
   responses:
-    '200':
+    "200":
       description: topic successfully created
       content:
         application/json:

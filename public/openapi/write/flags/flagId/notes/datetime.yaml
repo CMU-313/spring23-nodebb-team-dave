@@ -19,7 +19,7 @@ delete:
       description: A valid UNIX timestamp
       example: 1626446956652
   responses:
-    '200':
+    "200":
       description: Flag note deleted
       content:
         application/json:

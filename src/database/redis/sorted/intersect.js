@@ -1,8 +1,7 @@
-
-'use strict';
+"use strict";
 
 module.exports = function (module) {
-    const helpers = require('../helpers');
+    const helpers = require("../helpers");
     module.sortedSetIntersectCard = async function (keys) {
         if (!Array.isArray(keys) || !keys.length) {
             return 0;
@@ -20,35 +19,35 @@ module.exports = function (module) {
     };
 
     module.getSortedSetIntersect = async function (params) {
-        params.method = 'zrange';
+        params.method = "zrange";
         return await getSortedSetRevIntersect(params);
     };
 
     module.getSortedSetRevIntersect = async function (params) {
-        params.method = 'zrevrange';
+        params.method = "zrevrange";
         return await getSortedSetRevIntersect(params);
     };
 
     async function getSortedSetRevIntersect(params) {
         const { sets } = params;
-        const start = params.hasOwnProperty('start') ? params.start : 0;
-        const stop = params.hasOwnProperty('stop') ? params.stop : -1;
+        const start = params.hasOwnProperty("start") ? params.start : 0;
+        const stop = params.hasOwnProperty("stop") ? params.stop : -1;
         const weights = params.weights || [];
 
         const tempSetName = `temp_${Date.now()}`;
 
         let interParams = [tempSetName, sets.length].concat(sets);
         if (weights.length) {
-            interParams = interParams.concat(['WEIGHTS'].concat(weights));
+            interParams = interParams.concat(["WEIGHTS"].concat(weights));
         }
 
         if (params.aggregate) {
-            interParams = interParams.concat(['AGGREGATE', params.aggregate]);
+            interParams = interParams.concat(["AGGREGATE", params.aggregate]);
         }
 
         const rangeParams = [tempSetName, start, stop];
         if (params.withScores) {
-            rangeParams.push('WITHSCORES');
+            rangeParams.push("WITHSCORES");
         }
 
         const multi = module.client.multi();

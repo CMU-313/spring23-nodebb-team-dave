@@ -12,7 +12,7 @@ UserObj:
     email:
       type: string
       example: dragonfruit@example.org
-    'email:confirmed':
+    "email:confirmed":
       type: number
       example: 1
     joindate:
@@ -23,7 +23,7 @@ UserObj:
       example: 1585337827953
     picture:
       type: string
-      example: 'https://images.unsplash.com/photo-1560070094-e1f2ddec4337?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&h=256&q=80'
+      example: "https://images.unsplash.com/photo-1560070094-e1f2ddec4337?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&h=256&q=80"
     fullname:
       type: string
       example: Mr. Dragon Fruit Jr.
@@ -33,14 +33,14 @@ UserObj:
       example: Dragon Fruit
     location:
       type: string
-      example: 'Toronto, Canada'
+      example: "Toronto, Canada"
     birthday:
       type: string
       description: A birthdate given in an ISO format parseable by the Date object
       example: 03/27/2020
     website:
       type: string
-      example: 'https://example.org'
+      example: "https://example.org"
     aboutme:
       type: string
       example: |
@@ -74,7 +74,7 @@ UserObj:
     banned:
       type: number
       example: 0
-    'banned:expire':
+    "banned:expire":
       type: number
       example: 1585337827953
     status:
@@ -89,10 +89,10 @@ UserObj:
     followingcount:
       type: number
       example: 5
-    'cover:url':
+    "cover:url":
       type: string
       example: /assets/profile/1-cover.png
-    'cover:position':
+    "cover:position":
       type: string
       example: 50.0301% 19.2464%
     groupTitle:
@@ -103,18 +103,18 @@ UserObj:
       example:
         - administrators
         - Staff
-    'icon:text':
+    "icon:text":
       type: string
       example: D
-    'icon:bgColor':
+    "icon:bgColor":
       type: string
-      example: '#9c27b0'
+      example: "#9c27b0"
     joindateISO:
       type: string
-      example: '2020-03-27T20:30:36.590Z'
+      example: "2020-03-27T20:30:36.590Z"
     lastonlineISO:
       type: string
-      example: '2020-03-27T20:30:36.590Z'
+      example: "2020-03-27T20:30:36.590Z"
     banned_until:
       type: number
       example: 0

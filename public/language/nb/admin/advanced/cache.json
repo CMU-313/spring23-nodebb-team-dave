@@ -1,9 +1,9 @@
 {
-	"post-cache": "Post-buffer",
-	"group-cache": "Group Cache",
-	"local-cache": "Local Cache",
-	"object-cache": "Object Cache",
-	"percent-full": "%1%full ",
-	"post-cache-size": "Post-buffer størrelse",
-	"items-in-cache": "Element i buffer"
+  "post-cache": "Post-buffer",
+  "group-cache": "Group Cache",
+  "local-cache": "Local Cache",
+  "object-cache": "Object Cache",
+  "percent-full": "%1%full ",
+  "post-cache-size": "Post-buffer størrelse",
+  "items-in-cache": "Element i buffer"
 }

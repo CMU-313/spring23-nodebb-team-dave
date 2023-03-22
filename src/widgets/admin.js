@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const webserver = require('../webserver');
-const plugins = require('../plugins');
-const groups = require('../groups');
-const index = require('./index');
+const webserver = require("../webserver");
+const plugins = require("../plugins");
+const groups = require("../groups");
+const index = require("./index");
 
 const admin = module.exports;
 
@@ -22,18 +22,31 @@ admin.get = async function () {
 
 admin.getAreas = async function () {
     const defaultAreas = [
-        { name: 'Global Sidebar', template: 'global', location: 'sidebar' },
-        { name: 'Global Header', template: 'global', location: 'header' },
-        { name: 'Global Footer', template: 'global', location: 'footer' },
+        { name: "Global Sidebar", template: "global", location: "sidebar" },
+        { name: "Global Header", template: "global", location: "header" },
+        { name: "Global Footer", template: "global", location: "footer" },
 
-        { name: 'Group Page (Left)', template: 'groups/details.tpl', location: 'left' },
-        { name: 'Group Page (Right)', template: 'groups/details.tpl', location: 'right' },
+        {
+            name: "Group Page (Left)",
+            template: "groups/details.tpl",
+            location: "left",
+        },
+        {
+            name: "Group Page (Right)",
+            template: "groups/details.tpl",
+            location: "right",
+        },
     ];
 
-    const areas = await plugins.hooks.fire('filter:widgets.getAreas', defaultAreas);
+    const areas = await plugins.hooks.fire(
+        "filter:widgets.getAreas",
+        defaultAreas
+    );
 
-    areas.push({ name: 'Draft Zone', template: 'global', location: 'drafts' });
-    const areaData = await Promise.all(areas.map(area => index.getArea(area.template, area.location)));
+    areas.push({ name: "Draft Zone", template: "global", location: "drafts" });
+    const areaData = await Promise.all(
+        areas.map((area) => index.getArea(area.template, area.location))
+    );
     areas.forEach((area, i) => {
         area.data = areaData[i];
     });
@@ -42,7 +55,7 @@ admin.getAreas = async function () {
 
 async function getAvailableWidgets() {
     const [availableWidgets, adminTemplate] = await Promise.all([
-        plugins.hooks.fire('filter:widgets.getWidgets', []),
+        plugins.hooks.fire("filter:widgets.getWidgets", []),
         renderAdminTemplate(),
     ]);
     availableWidgets.forEach((w) => {
@@ -52,9 +65,15 @@ async function getAvailableWidgets() {
 }
 
 async function renderAdminTemplate() {
-    const groupsData = await groups.getNonPrivilegeGroups('groups:createtime', 0, -1);
+    const groupsData = await groups.getNonPrivilegeGroups(
+        "groups:createtime",
+        0,
+        -1
+    );
     groupsData.sort((a, b) => b.system - a.system);
-    return await webserver.app.renderAsync('admin/partials/widget-settings', { groups: groupsData });
+    return await webserver.app.renderAsync("admin/partials/widget-settings", {
+        groups: groupsData,
+    });
 }
 
 function buildTemplatesFromAreas(areas) {
@@ -63,7 +82,7 @@ function buildTemplatesFromAreas(areas) {
     let index = 0;
 
     areas.forEach((area) => {
-        if (typeof list[area.template] === 'undefined') {
+        if (typeof list[area.template] === "undefined") {
             list[area.template] = index;
             templates.push({
                 template: area.template,
@@ -81,4 +100,4 @@ function buildTemplatesFromAreas(areas) {
     return templates;
 }
 
-require('../promisify')(admin);
+require("../promisify")(admin);

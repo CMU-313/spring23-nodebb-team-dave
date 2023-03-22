@@ -1,12 +1,12 @@
 {
-	"pagination": "Pagination Settings",
-	"enable": "Paginer tråder og innlegg istedet for å bruke uendelig scrolling.",
-	"posts": "Post Pagination",
-	"topics": "Trådpaginering",
-	"posts-per-page": "Posts per Page",
-	"max-posts-per-page": "Maximum posts per page",
-	"categories": "Category Pagination",
-	"topics-per-page": "Tråder per side",
-	"max-topics-per-page": "Maximum topics per page",
-	"categories-per-page": "Categories per page"
+  "pagination": "Pagination Settings",
+  "enable": "Paginer tråder og innlegg istedet for å bruke uendelig scrolling.",
+  "posts": "Post Pagination",
+  "topics": "Trådpaginering",
+  "posts-per-page": "Posts per Page",
+  "max-posts-per-page": "Maximum posts per page",
+  "categories": "Category Pagination",
+  "topics-per-page": "Tråder per side",
+  "max-topics-per-page": "Maximum topics per page",
+  "categories-per-page": "Categories per page"
 }

@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 module.exports = {
-    name: 'Widget visibility groups',
+    name: "Widget visibility groups",
     timestamp: Date.UTC(2018, 10, 10),
     method: async function () {
-        const widgetAdmin = require('../../widgets/admin');
-        const widgets = require('../../widgets');
+        const widgetAdmin = require("../../widgets/admin");
+        const widgets = require("../../widgets");
         const areas = await widgetAdmin.getAreas();
         for (const area of areas) {
             if (area.data.length) {
@@ -13,12 +13,15 @@ module.exports = {
                 area.widgets = area.data;
                 area.widgets.forEach((widget) => {
                     if (widget && widget.data) {
-                        const groupsToShow = ['administrators', 'Global Moderators'];
-                        if (widget.data['hide-guests'] !== 'on') {
-                            groupsToShow.push('guests');
+                        const groupsToShow = [
+                            "administrators",
+                            "Global Moderators",
+                        ];
+                        if (widget.data["hide-guests"] !== "on") {
+                            groupsToShow.push("guests");
                         }
-                        if (widget.data['hide-registered'] !== 'on') {
-                            groupsToShow.push('registered-users');
+                        if (widget.data["hide-registered"] !== "on") {
+                            groupsToShow.push("registered-users");
                         }
 
                         widget.data.groups = groupsToShow;

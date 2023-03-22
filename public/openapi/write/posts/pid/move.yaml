@@ -22,7 +22,7 @@ put:
               description: a valid topic id
               example: 4
   responses:
-    '200':
+    "200":
       description: Post successfully moved
       content:
         application/json:

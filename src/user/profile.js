@@ -1,32 +1,38 @@
+"use strict";
 
-'use strict';
+const _ = require("lodash");
+const validator = require("validator");
+const winston = require("winston");
 
-const _ = require('lodash');
-const validator = require('validator');
-const winston = require('winston');
-
-const utils = require('../utils');
-const slugify = require('../slugify');
-const meta = require('../meta');
-const db = require('../database');
-const groups = require('../groups');
-const plugins = require('../plugins');
+const utils = require("../utils");
+const slugify = require("../slugify");
+const meta = require("../meta");
+const db = require("../database");
+const groups = require("../groups");
+const plugins = require("../plugins");
 
 module.exports = function (User) {
     User.updateProfile = async function (uid, data, extraFields) {
         let fields = [
-            'username', 'email', 'fullname', 'website', 'location',
-            'groupTitle', 'birthday', 'signature', 'aboutme',
+            "username",
+            "email",
+            "fullname",
+            "website",
+            "location",
+            "groupTitle",
+            "birthday",
+            "signature",
+            "aboutme",
         ];
         if (Array.isArray(extraFields)) {
             fields = _.uniq(fields.concat(extraFields));
         }
         if (!data.uid) {
-            throw new Error('[[error:invalid-update-uid]]');
+            throw new Error("[[error:invalid-update-uid]]");
         }
         const updateUid = data.uid;
 
-        const result = await plugins.hooks.fire('filter:user.updateProfile', {
+        const result = await plugins.hooks.fire("filter:user.updateProfile", {
             uid: uid,
             data: data,
             fields: fields,
@@ -38,28 +44,35 @@ module.exports = function (User) {
 
         const oldData = await User.getUserFields(updateUid, fields);
         const updateData = {};
-        await Promise.all(fields.map(async (field) => {
-            if (!(data[field] !== undefined && typeof data[field] === 'string')) {
-                return;
-            }
+        await Promise.all(
+            fields.map(async (field) => {
+                if (
+                    !(
+                        data[field] !== undefined &&
+                        typeof data[field] === "string"
+                    )
+                ) {
+                    return;
+                }
 
-            data[field] = data[field].trim();
+                data[field] = data[field].trim();
 
-            if (field === 'email') {
-                return await updateEmail(updateUid, data.email);
-            } else if (field === 'username') {
-                return await updateUsername(updateUid, data.username);
-            } else if (field === 'fullname') {
-                return await updateFullname(updateUid, data.fullname);
-            }
-            updateData[field] = data[field];
-        }));
+                if (field === "email") {
+                    return await updateEmail(updateUid, data.email);
+                } else if (field === "username") {
+                    return await updateUsername(updateUid, data.username);
+                } else if (field === "fullname") {
+                    return await updateFullname(updateUid, data.fullname);
+                }
+                updateData[field] = data[field];
+            })
+        );
 
         if (Object.keys(updateData).length) {
             await User.setUserFields(updateUid, updateData);
         }
 
-        plugins.hooks.fire('action:user.updateProfile', {
+        plugins.hooks.fire("action:user.updateProfile", {
             uid: uid,
             data: data,
             fields: fields,
@@ -67,8 +80,12 @@ module.exports = function (User) {
         });
 
         return await User.getUserFields(updateUid, [
-            'email', 'username', 'userslug',
-            'picture', 'icon:text', 'icon:bgColor',
+            "email",
+            "username",
+            "userslug",
+            "picture",
+            "icon:text",
+            "icon:bgColor",
         ]);
     };
 
@@ -91,7 +108,7 @@ module.exports = function (User) {
 
         data.email = data.email.trim();
         if (!utils.isEmailValid(data.email)) {
-            throw new Error('[[error:invalid-email]]');
+            throw new Error("[[error:invalid-email]]");
         }
     }
 
@@ -103,23 +120,23 @@ module.exports = function (User) {
 
         let userData;
         if (uid) {
-            userData = await User.getUserFields(uid, ['username', 'userslug']);
+            userData = await User.getUserFields(uid, ["username", "userslug"]);
             if (userData.username === data.username) {
                 return;
             }
         }
 
         if (data.username.length < meta.config.minimumUsernameLength) {
-            throw new Error('[[error:username-too-short]]');
+            throw new Error("[[error:username-too-short]]");
         }
 
         if (data.username.length > meta.config.maximumUsernameLength) {
-            throw new Error('[[error:username-too-long]]');
+            throw new Error("[[error:username-too-long]]");
         }
 
         const userslug = slugify(data.username);
         if (!utils.isUserNameValid(data.username) || !userslug) {
-            throw new Error('[[error:invalid-username]]');
+            throw new Error("[[error:invalid-username]]");
         }
 
         if (uid && userslug === userData.userslug) {
@@ -127,10 +144,10 @@ module.exports = function (User) {
         }
         const exists = await User.existsBySlug(userslug);
         if (exists) {
-            throw new Error('[[error:username-taken]]');
+            throw new Error("[[error:username-taken]]");
         }
 
-        const { error } = await plugins.hooks.fire('filter:username.check', {
+        const { error } = await plugins.hooks.fire("filter:username.check", {
             username: data.username,
             error: undefined,
         });
@@ -138,49 +155,62 @@ module.exports = function (User) {
             throw error;
         }
     }
-    User.checkUsername = async username => isUsernameAvailable({ username });
+    User.checkUsername = async (username) => isUsernameAvailable({ username });
 
     async function isWebsiteValid(callerUid, data) {
         if (!data.website) {
             return;
         }
         if (data.website.length > 255) {
-            throw new Error('[[error:invalid-website]]');
+            throw new Error("[[error:invalid-website]]");
         }
-        await User.checkMinReputation(callerUid, data.uid, 'min:rep:website');
+        await User.checkMinReputation(callerUid, data.uid, "min:rep:website");
     }
 
     async function isAboutMeValid(callerUid, data) {
         if (!data.aboutme) {
             return;
         }
-        if (data.aboutme !== undefined && data.aboutme.length > meta.config.maximumAboutMeLength) {
-            throw new Error(`[[error:about-me-too-long, ${meta.config.maximumAboutMeLength}]]`);
+        if (
+            data.aboutme !== undefined &&
+            data.aboutme.length > meta.config.maximumAboutMeLength
+        ) {
+            throw new Error(
+                `[[error:about-me-too-long, ${meta.config.maximumAboutMeLength}]]`
+            );
         }
 
-        await User.checkMinReputation(callerUid, data.uid, 'min:rep:aboutme');
+        await User.checkMinReputation(callerUid, data.uid, "min:rep:aboutme");
     }
 
     async function isSignatureValid(callerUid, data) {
         if (!data.signature) {
             return;
         }
-        const signature = data.signature.replace(/\r\n/g, '\n');
+        const signature = data.signature.replace(/\r\n/g, "\n");
         if (signature.length > meta.config.maximumSignatureLength) {
-            throw new Error(`[[error:signature-too-long, ${meta.config.maximumSignatureLength}]]`);
+            throw new Error(
+                `[[error:signature-too-long, ${meta.config.maximumSignatureLength}]]`
+            );
         }
-        await User.checkMinReputation(callerUid, data.uid, 'min:rep:signature');
+        await User.checkMinReputation(callerUid, data.uid, "min:rep:signature");
     }
 
     function isFullnameValid(data) {
-        if (data.fullname && (validator.isURL(data.fullname) || data.fullname.length > 255)) {
-            throw new Error('[[error:invalid-fullname]]');
+        if (
+            data.fullname &&
+            (validator.isURL(data.fullname) || data.fullname.length > 255)
+        ) {
+            throw new Error("[[error:invalid-fullname]]");
         }
     }
 
     function isLocationValid(data) {
-        if (data.location && (validator.isURL(data.location) || data.location.length > 255)) {
-            throw new Error('[[error:invalid-location]]');
+        if (
+            data.location &&
+            (validator.isURL(data.location) || data.location.length > 255)
+        ) {
+            throw new Error("[[error:invalid-location]]");
         }
     }
 
@@ -190,15 +220,18 @@ module.exports = function (User) {
         }
 
         const result = new Date(data.birthday);
-        if (result && result.toString() === 'Invalid Date') {
-            throw new Error('[[error:invalid-birthday]]');
+        if (result && result.toString() === "Invalid Date") {
+            throw new Error("[[error:invalid-birthday]]");
         }
     }
 
     function isGroupTitleValid(data) {
         function checkTitle(title) {
-            if (title === 'registered-users' || groups.isPrivilegeGroup(title)) {
-                throw new Error('[[error:invalid-group-title]]');
+            if (
+                title === "registered-users" ||
+                groups.isPrivilegeGroup(title)
+            ) {
+                throw new Error("[[error:invalid-group-title]]");
             }
         }
         if (!data.groupTitle) {
@@ -208,9 +241,9 @@ module.exports = function (User) {
         if (validator.isJSON(data.groupTitle)) {
             groupTitles = JSON.parse(data.groupTitle);
             if (!Array.isArray(groupTitles)) {
-                throw new Error('[[error:invalid-group-title]]');
+                throw new Error("[[error:invalid-group-title]]");
             }
-            groupTitles.forEach(title => checkTitle(title));
+            groupTitles.forEach((title) => checkTitle(title));
         } else {
             groupTitles = [data.groupTitle];
             checkTitle(data.groupTitle);
@@ -222,28 +255,38 @@ module.exports = function (User) {
 
     User.checkMinReputation = async function (callerUid, uid, setting) {
         const isSelf = parseInt(callerUid, 10) === parseInt(uid, 10);
-        if (!isSelf || meta.config['reputation:disabled']) {
+        if (!isSelf || meta.config["reputation:disabled"]) {
             return;
         }
-        const reputation = await User.getUserField(uid, 'reputation');
+        const reputation = await User.getUserField(uid, "reputation");
         if (reputation < meta.config[setting]) {
-            throw new Error(`[[error:not-enough-reputation-${setting.replace(/:/g, '-')}, ${meta.config[setting]}]]`);
+            throw new Error(
+                `[[error:not-enough-reputation-${setting.replace(/:/g, "-")}, ${
+                    meta.config[setting]
+                }]]`
+            );
         }
     };
 
     async function updateEmail(uid, newEmail) {
-        let oldEmail = await User.getUserField(uid, 'email');
-        oldEmail = oldEmail || '';
+        let oldEmail = await User.getUserField(uid, "email");
+        oldEmail = oldEmail || "";
         if (oldEmail === newEmail) {
             return;
         }
 
         // 👉 Looking for email change logic? src/user/email.js (UserEmail.confirmByUid)
         if (newEmail) {
-            await User.email.sendValidationEmail(uid, {
-                email: newEmail,
-                force: 1,
-            }).catch(err => winston.error(`[user.create] Validation email failed to send\n[emailer.send] ${err.stack}`));
+            await User.email
+                .sendValidationEmail(uid, {
+                    email: newEmail,
+                    force: 1,
+                })
+                .catch((err) =>
+                    winston.error(
+                        `[user.create] Validation email failed to send\n[emailer.send] ${err.stack}`
+                    )
+                );
         }
     }
 
@@ -251,19 +294,33 @@ module.exports = function (User) {
         if (!newUsername) {
             return;
         }
-        const userData = await User.getUserFields(uid, ['username', 'userslug']);
+        const userData = await User.getUserFields(uid, [
+            "username",
+            "userslug",
+        ]);
         if (userData.username === newUsername) {
             return;
         }
         const newUserslug = slugify(newUsername);
         const now = Date.now();
         await Promise.all([
-            updateUidMapping('username', uid, newUsername, userData.username),
-            updateUidMapping('userslug', uid, newUserslug, userData.userslug),
-            db.sortedSetAdd(`user:${uid}:usernames`, now, `${newUsername}:${now}`),
+            updateUidMapping("username", uid, newUsername, userData.username),
+            updateUidMapping("userslug", uid, newUserslug, userData.userslug),
+            db.sortedSetAdd(
+                `user:${uid}:usernames`,
+                now,
+                `${newUsername}:${now}`
+            ),
         ]);
-        await db.sortedSetRemove('username:sorted', `${userData.username.toLowerCase()}:${uid}`);
-        await db.sortedSetAdd('username:sorted', 0, `${newUsername.toLowerCase()}:${uid}`);
+        await db.sortedSetRemove(
+            "username:sorted",
+            `${userData.username.toLowerCase()}:${uid}`
+        );
+        await db.sortedSetAdd(
+            "username:sorted",
+            0,
+            `${newUsername.toLowerCase()}:${uid}`
+        );
     }
 
     async function updateUidMapping(field, uid, value, oldValue) {
@@ -278,21 +335,28 @@ module.exports = function (User) {
     }
 
     async function updateFullname(uid, newFullname) {
-        const fullname = await User.getUserField(uid, 'fullname');
-        await updateUidMapping('fullname', uid, newFullname, fullname);
+        const fullname = await User.getUserField(uid, "fullname");
+        await updateUidMapping("fullname", uid, newFullname, fullname);
         if (newFullname !== fullname) {
             if (fullname) {
-                await db.sortedSetRemove('fullname:sorted', `${fullname.toLowerCase()}:${uid}`);
+                await db.sortedSetRemove(
+                    "fullname:sorted",
+                    `${fullname.toLowerCase()}:${uid}`
+                );
             }
             if (newFullname) {
-                await db.sortedSetAdd('fullname:sorted', 0, `${newFullname.toLowerCase()}:${uid}`);
+                await db.sortedSetAdd(
+                    "fullname:sorted",
+                    0,
+                    `${newFullname.toLowerCase()}:${uid}`
+                );
             }
         }
     }
 
     User.changePassword = async function (uid, data) {
         if (uid <= 0 || !data || !data.uid) {
-            throw new Error('[[error:invalid-uid]]');
+            throw new Error("[[error:invalid-uid]]");
         }
         User.isPasswordValid(data.newPassword);
         const [isAdmin, hasPassword] = await Promise.all([
@@ -300,20 +364,24 @@ module.exports = function (User) {
             User.hasPassword(uid),
         ]);
 
-        if (meta.config['password:disableEdit'] && !isAdmin) {
-            throw new Error('[[error:no-privileges]]');
+        if (meta.config["password:disableEdit"] && !isAdmin) {
+            throw new Error("[[error:no-privileges]]");
         }
 
         const isSelf = parseInt(uid, 10) === parseInt(data.uid, 10);
 
         if (!isAdmin && !isSelf) {
-            throw new Error('[[user:change_password_error_privileges]]');
+            throw new Error("[[user:change_password_error_privileges]]");
         }
 
         if (isSelf && hasPassword) {
-            const correct = await User.isPasswordCorrect(data.uid, data.currentPassword, data.ip);
+            const correct = await User.isPasswordCorrect(
+                data.uid,
+                data.currentPassword,
+                data.ip
+            );
             if (!correct) {
-                throw new Error('[[user:change_password_error_wrong_current]]');
+                throw new Error("[[user:change_password_error_wrong_current]]");
             }
         }
 
@@ -321,7 +389,7 @@ module.exports = function (User) {
         await Promise.all([
             User.setUserFields(data.uid, {
                 password: hashedPassword,
-                'password:shaWrapped': 1,
+                "password:shaWrapped": 1,
                 rss_token: utils.generateUUID(),
             }),
             User.reset.cleanByUid(data.uid),
@@ -330,6 +398,9 @@ module.exports = function (User) {
             User.email.expireValidation(data.uid),
         ]);
 
-        plugins.hooks.fire('action:password.change', { uid: uid, targetUid: data.uid });
+        plugins.hooks.fire("action:password.change", {
+            uid: uid,
+            targetUid: data.uid,
+        });
     };
 };

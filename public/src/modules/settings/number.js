@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-define('settings/number', function () {
+define("settings/number", function () {
     return {
-        types: ['number'],
+        types: ["number"],
         get: function (element, trim, empty) {
             const value = element.val();
             if (!empty) {

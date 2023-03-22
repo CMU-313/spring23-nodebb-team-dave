@@ -17,7 +17,7 @@ get:
       required: false
       schema:
         type: number
-      example: ''
+      example: ""
   responses:
     "200":
       description: ""
@@ -44,7 +44,8 @@ get:
                           description: A category identifier
                         mainPid:
                           type: number
-                          description: The post id of the first post in this topic (also called the
+                          description:
+                            The post id of the first post in this topic (also called the
                             "original post")
                         title:
                           type: string
@@ -68,7 +69,8 @@ get:
                           type: number
                         pinned:
                           type: number
-                          description: Whether or not this particular topic is pinned to the top of the
+                          description:
+                            Whether or not this particular topic is pinned to the top of the
                             category
                         upvotes:
                           type: number
@@ -117,7 +119,8 @@ get:
                               description: A friendly name for a given user account
                             userslug:
                               type: string
-                              description: An URL-safe variant of the username (i.e. lower-cased, spaces
+                              description:
+                                An URL-safe variant of the username (i.e. lower-cased, spaces
                                 removed, etc.)
                             reputation:
                               type: number
@@ -135,12 +138,14 @@ get:
                               type: string
                             icon:text:
                               type: string
-                              description: A single-letter representation of a username. This is used in the
+                              description:
+                                A single-letter representation of a username. This is used in the
                                 auto-generated icon given to users without
                                 an avatar
                             icon:bgColor:
                               type: string
-                              description: A six-character hexadecimal colour code assigned to the user. This
+                              description:
+                                A six-character hexadecimal colour code assigned to the user. This
                                 value is used in conjunction with
                                 `icon:text` for the user's auto-generated
                                 icon
@@ -178,19 +183,22 @@ get:
                                   description: A friendly name for a given user account
                                 userslug:
                                   type: string
-                                  description: An URL-safe variant of the username (i.e. lower-cased, spaces
+                                  description:
+                                    An URL-safe variant of the username (i.e. lower-cased, spaces
                                     removed, etc.)
                                 picture:
                                   nullable: true
                                   type: string
                                 icon:text:
                                   type: string
-                                  description: A single-letter representation of a username. This is used in the
+                                  description:
+                                    A single-letter representation of a username. This is used in the
                                     auto-generated icon given to users
                                     without an avatar
                                 icon:bgColor:
                                   type: string
-                                  description: A six-character hexadecimal colour code assigned to the user. This
+                                  description:
+                                    A six-character hexadecimal colour code assigned to the user. This
                                     value is used in conjunction with
                                     `icon:text` for the user's
                                     auto-generated icon

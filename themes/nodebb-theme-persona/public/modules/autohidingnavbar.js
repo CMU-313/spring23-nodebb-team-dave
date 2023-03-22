@@ -9,7 +9,7 @@
  *  Under Apache License v2.0 License
  */
 (function ($, window, document) {
-    var pluginName = 'autoHidingNavbar';
+    var pluginName = "autoHidingNavbar";
     var $window = $(window);
     var $document = $(document);
     var _scrollThrottleTimer = null;
@@ -24,7 +24,7 @@
         disableAutohide: false,
         showOnUpscroll: true,
         showOnBottom: true,
-        hideOffset: 'auto', // "auto" means the navbar height
+        hideOffset: "auto", // "auto" means the navbar height
         animationDuration: 200,
         navbarOffset: 0,
     };
@@ -42,20 +42,28 @@
             return;
         }
 
-        autoHidingNavbar.element.addClass('navbar-hidden').animate({
-            top: (-1 * parseInt(autoHidingNavbar.element.css('height'), 10)) + autoHidingNavbar.settings.navbarOffset,
-        }, {
-            queue: false,
-            duration: autoHidingNavbar.settings.animationDuration,
-        });
+        autoHidingNavbar.element.addClass("navbar-hidden").animate(
+            {
+                top:
+                    -1 * parseInt(autoHidingNavbar.element.css("height"), 10) +
+                    autoHidingNavbar.settings.navbarOffset,
+            },
+            {
+                queue: false,
+                duration: autoHidingNavbar.settings.animationDuration,
+            }
+        );
 
         try {
-            $('.dropdown.open .dropdown-toggle, .dropdown.show .dropdown-toggle', autoHidingNavbar.element).dropdown('toggle');
+            $(
+                ".dropdown.open .dropdown-toggle, .dropdown.show .dropdown-toggle",
+                autoHidingNavbar.element
+            ).dropdown("toggle");
         } catch (e) {}
 
         _visible = false;
 
-        autoHidingNavbar.element.trigger('hide.autoHidingNavbar');
+        autoHidingNavbar.element.trigger("hide.autoHidingNavbar");
     }
 
     function show(autoHidingNavbar) {
@@ -63,15 +71,18 @@
             return;
         }
 
-        autoHidingNavbar.element.removeClass('navbar-hidden').animate({
-            top: 0,
-        }, {
-            queue: false,
-            duration: autoHidingNavbar.settings.animationDuration,
-        });
+        autoHidingNavbar.element.removeClass("navbar-hidden").animate(
+            {
+                top: 0,
+            },
+            {
+                queue: false,
+                duration: autoHidingNavbar.settings.animationDuration,
+            }
+        );
         _visible = true;
 
-        autoHidingNavbar.element.trigger('show.autoHidingNavbar');
+        autoHidingNavbar.element.trigger("show.autoHidingNavbar");
     }
 
     function detectState(autoHidingNavbar) {
@@ -85,12 +96,18 @@
                 return;
             }
 
-            if (autoHidingNavbar.settings.showOnUpscroll || scrollTop <= _hideOffset) {
+            if (
+                autoHidingNavbar.settings.showOnUpscroll ||
+                scrollTop <= _hideOffset
+            ) {
                 show(autoHidingNavbar);
             }
         } else if (scrollDelta > 0) {
             if (!_visible) {
-                if (autoHidingNavbar.settings.showOnBottom && scrollTop + _windowHeight === $document.height()) {
+                if (
+                    autoHidingNavbar.settings.showOnBottom &&
+                    scrollTop + _windowHeight === $document.height()
+                ) {
                     show(autoHidingNavbar);
                 }
                 return;
@@ -113,7 +130,7 @@
     }
 
     function bindEvents(autoHidingNavbar) {
-        $document.on('scroll.' + pluginName, function () {
+        $document.on("scroll." + pluginName, function () {
             if (new Date().getTime() - _lastScrollHandlerRun > _throttleDelay) {
                 scrollHandler(autoHidingNavbar);
             } else {
@@ -124,7 +141,7 @@
             }
         });
 
-        $window.on('resize.' + pluginName, function () {
+        $window.on("resize." + pluginName, function () {
             clearTimeout(_resizeThrottleTimer);
             _resizeThrottleTimer = setTimeout(function () {
                 _windowHeight = $window.height();
@@ -133,9 +150,9 @@
     }
 
     function unbindEvents() {
-        $document.off('.' + pluginName);
+        $document.off("." + pluginName);
 
-        $window.off('.' + pluginName);
+        $window.off("." + pluginName);
     }
 
     AutoHidingNavbar.prototype = {
@@ -150,7 +167,10 @@
             this.setHideOffset(this.settings.hideOffset);
             this.setAnimationDuration(this.settings.animationDuration);
 
-            _hideOffset = this.settings.hideOffset === 'auto' ? parseInt(this.element.css('height'), 10) : this.settings.hideOffset;
+            _hideOffset =
+                this.settings.hideOffset === "auto"
+                    ? parseInt(this.element.css("height"), 10)
+                    : this.settings.hideOffset;
             bindEvents(this);
 
             return this.element;
@@ -186,7 +206,7 @@
         destroy: function () {
             unbindEvents(this);
             show(this);
-            $.data(this, 'plugin_' + pluginName, null);
+            $.data(this, "plugin_" + pluginName, null);
             return this.element;
         },
     };
@@ -194,24 +214,38 @@
     $.fn[pluginName] = function (options) {
         var args = arguments;
 
-        if (options === undefined || typeof options === 'object') {
+        if (options === undefined || typeof options === "object") {
             return this.each(function () {
-                if (!$.data(this, 'plugin_' + pluginName)) {
-                    $.data(this, 'plugin_' + pluginName, new AutoHidingNavbar(this, options));
+                if (!$.data(this, "plugin_" + pluginName)) {
+                    $.data(
+                        this,
+                        "plugin_" + pluginName,
+                        new AutoHidingNavbar(this, options)
+                    );
                 }
             });
-        } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
+        } else if (
+            typeof options === "string" &&
+            options[0] !== "_" &&
+            options !== "init"
+        ) {
             var returns;
 
             this.each(function () {
-                var instance = $.data(this, 'plugin_' + pluginName);
+                var instance = $.data(this, "plugin_" + pluginName);
 
-                if (instance instanceof AutoHidingNavbar && typeof instance[options] === 'function') {
-                    returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
+                if (
+                    instance instanceof AutoHidingNavbar &&
+                    typeof instance[options] === "function"
+                ) {
+                    returns = instance[options].apply(
+                        instance,
+                        Array.prototype.slice.call(args, 1)
+                    );
                 }
             });
 
             return returns !== undefined ? returns : this;
         }
     };
-}(jQuery, window, document));
+})(jQuery, window, document);

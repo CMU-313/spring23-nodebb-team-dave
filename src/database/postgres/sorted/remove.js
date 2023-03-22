@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
-    const helpers = require('../helpers');
+    const helpers = require("../helpers");
 
     module.sortedSetRemove = async function (key, value) {
         if (!key) {
@@ -21,7 +21,7 @@ module.exports = function (module) {
         }
         value = value.map(helpers.valueToString);
         await module.pool.query({
-            name: 'sortedSetRemove',
+            name: "sortedSetRemove",
             text: `
 DELETE FROM "legacy_zset"
  WHERE "_key" = ANY($1::TEXT[])
@@ -38,7 +38,7 @@ DELETE FROM "legacy_zset"
         value = helpers.valueToString(value);
 
         await module.pool.query({
-            name: 'sortedSetsRemove',
+            name: "sortedSetsRemove",
             text: `
 DELETE FROM "legacy_zset"
  WHERE "_key" = ANY($1::TEXT[])
@@ -52,15 +52,15 @@ DELETE FROM "legacy_zset"
             return;
         }
 
-        if (min === '-inf') {
+        if (min === "-inf") {
             min = null;
         }
-        if (max === '+inf') {
+        if (max === "+inf") {
             max = null;
         }
 
         await module.pool.query({
-            name: 'sortedSetsRemoveRangeByScore',
+            name: "sortedSetsRemoveRangeByScore",
             text: `
 DELETE FROM "legacy_zset"
  WHERE "_key" = ANY($1::TEXT[])
@@ -74,11 +74,11 @@ DELETE FROM "legacy_zset"
         if (!Array.isArray(data) || !data.length) {
             return;
         }
-        const keys = data.map(d => d[0]);
-        const values = data.map(d => d[1]);
+        const keys = data.map((d) => d[0]);
+        const values = data.map((d) => d[1]);
 
         await module.pool.query({
-            name: 'sortedSetRemoveBulk',
+            name: "sortedSetRemoveBulk",
             text: `
     DELETE FROM "legacy_zset"
     WHERE (_key, value) IN (

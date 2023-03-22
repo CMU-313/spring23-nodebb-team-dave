@@ -24,7 +24,7 @@ put:
               type: string
               example: the reason for the ban
   responses:
-    '200':
+    "200":
       description: successfully banned user
       content:
         application/json:
@@ -48,7 +48,7 @@ delete:
       description: uid of the user to unban
       example: 2
   responses:
-    '200':
+    "200":
       description: successfully unbanned user
       content:
         application/json:

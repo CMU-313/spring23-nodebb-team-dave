@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
     module.transaction = async function (perform, txClient) {
@@ -18,11 +18,11 @@ module.exports = function (module) {
         const client = await module.pool.connect();
 
         try {
-            await client.query('BEGIN');
+            await client.query("BEGIN");
             res = await perform(client);
-            await client.query('COMMIT');
+            await client.query("COMMIT");
         } catch (err) {
-            await client.query('ROLLBACK');
+            await client.query("ROLLBACK");
             throw err;
         } finally {
             client.release();

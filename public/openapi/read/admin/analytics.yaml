@@ -15,7 +15,7 @@ get:
       schema:
         type: number
       description: A UNIX timestamp denoting the end of the analytics reporting period
-      example: ''
+      example: ""
     - in: query
       name: count
       schema:

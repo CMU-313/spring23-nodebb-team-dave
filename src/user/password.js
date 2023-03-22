@@ -1,10 +1,9 @@
-'use strict';
+"use strict";
 
+const nconf = require("nconf");
 
-const nconf = require('nconf');
-
-const db = require('../database');
-const Password = require('../password');
+const db = require("../database");
+const Password = require("../password");
 
 module.exports = function (User) {
     User.hashPassword = async function (password) {
@@ -12,18 +11,19 @@ module.exports = function (User) {
             return password;
         }
 
-        return await Password.hash(nconf.get('bcrypt_rounds') || 12, password);
+        return await Password.hash(nconf.get("bcrypt_rounds") || 12, password);
     };
 
     User.isPasswordCorrect = async function (uid, password, ip) {
-        password = password || '';
-        let {
-            password: hashedPassword,
-            'password:shaWrapped': shaWrapped,
-        } = await db.getObjectFields(`user:${uid}`, ['password', 'password:shaWrapped']);
+        password = password || "";
+        let { password: hashedPassword, "password:shaWrapped": shaWrapped } =
+            await db.getObjectFields(`user:${uid}`, [
+                "password",
+                "password:shaWrapped",
+            ]);
         if (!hashedPassword) {
             // Non-existant user, submit fake hash for comparison
-            hashedPassword = '';
+            hashedPassword = "";
         }
 
         try {
@@ -33,7 +33,11 @@ module.exports = function (User) {
         }
 
         await User.auth.logAttempt(uid, ip);
-        const ok = await Password.compare(password, hashedPassword, !!parseInt(shaWrapped, 10));
+        const ok = await Password.compare(
+            password,
+            hashedPassword,
+            !!parseInt(shaWrapped, 10)
+        );
         if (ok) {
             await User.auth.clearLoginAttempts(uid);
         }
@@ -41,7 +45,10 @@ module.exports = function (User) {
     };
 
     User.hasPassword = async function (uid) {
-        const hashedPassword = await db.getObjectField(`user:${uid}`, 'password');
+        const hashedPassword = await db.getObjectField(
+            `user:${uid}`,
+            "password"
+        );
         return !!hashedPassword;
     };
 };

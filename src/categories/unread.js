@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const db = require('../database');
+const db = require("../database");
 
 module.exports = function (Categories) {
     Categories.markAsRead = async function (cids, uid) {
         if (!Array.isArray(cids) || !cids.length || parseInt(uid, 10) <= 0) {
             return;
         }
-        let keys = cids.map(cid => `cid:${cid}:read_by_uid`);
+        let keys = cids.map((cid) => `cid:${cid}:read_by_uid`);
         const hasRead = await db.isMemberOfSets(keys, uid);
         keys = keys.filter((key, index) => !hasRead[index]);
         await db.setsAdd(keys, uid);
@@ -25,7 +25,7 @@ module.exports = function (Categories) {
             return cids.map(() => false);
         }
 
-        const sets = cids.map(cid => `cid:${cid}:read_by_uid`);
+        const sets = cids.map((cid) => `cid:${cid}:read_by_uid`);
         return await db.isMemberOfSets(sets, uid);
     };
 

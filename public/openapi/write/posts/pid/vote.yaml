@@ -23,7 +23,7 @@ put:
               description: Positive integer for upvote, negative integer for downvote (0 to unvote.)
               example: 1
   responses:
-    '200':
+    "200":
       description: Post successfully upvoted
       content:
         application/json:
@@ -49,7 +49,7 @@ delete:
       description: a valid post id
       example: 2
   responses:
-    '200':
+    "200":
       description: Post successfully unvoted
       content:
         application/json:

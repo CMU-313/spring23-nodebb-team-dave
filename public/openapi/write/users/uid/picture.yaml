@@ -19,18 +19,18 @@ put:
             type:
               type: string
               description: The source of the picture
-              enum: ['default', 'uploaded', 'external']
+              enum: ["default", "uploaded", "external"]
               example: default
             url:
               type: string
               description: Only used for `external` type, specifies the source of the external image to use as avatar
-              example: ''
+              example: ""
             bgColor:
               type: string
               description: A hexadecimal colour representation
-              example: '#ff0000'
+              example: "#ff0000"
   responses:
-    '200':
+    "200":
       description: successfully updated user picture
       content:
         application/json:

@@ -1,10 +1,25 @@
 "use strict";
 // 'use strict';
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+    (this && this.__importDefault) ||
+    function (mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.monitorConfig = exports.io = exports.io_close = exports.io_one = exports.prepare_io_string = exports.init = exports.setup = exports.setup_one = exports.setup_one_log = exports.close = exports.open = exports.express_open = exports.expressLogger = void 0;
+exports.monitorConfig =
+    exports.io =
+    exports.io_close =
+    exports.io_one =
+    exports.prepare_io_string =
+    exports.init =
+    exports.setup =
+    exports.setup_one =
+    exports.setup_one_log =
+    exports.close =
+    exports.open =
+    exports.express_open =
+    exports.expressLogger =
+        void 0;
 const express_1 = __importDefault(require("express"));
 /*
  * Logger module: ability to dynamically turn on/off logging for http requests & socket.io events
@@ -32,10 +47,10 @@ const opts = {
 /* -- Logger -- */
 function expressLogger(req, res, next) {
     /*
-        * The new express.logger
-        *
-        * This hijack allows us to turn logger on/off dynamically within express
-        */
+     * The new express.logger
+     *
+     * This hijack allows us to turn logger on/off dynamically within express
+     */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     if (meta_1.default.config.loggerStatus > 0) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
@@ -50,10 +65,10 @@ function express_open() {
         opts.express.app.use(expressLogger);
     }
     /*
-        * Always initialize "ofn" (original function) with the original logger function
-        */
+     * Always initialize "ofn" (original function) with the original logger function
+     */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    opts.express.ofn = morgan('combined', { stream: opts.streams.log.f });
+    opts.express.ofn = morgan("combined", { stream: opts.streams.log.f });
 }
 exports.express_open = express_open;
 function open(value) {
@@ -64,23 +79,23 @@ function open(value) {
             const stats = fs.statSync(value);
             if (stats) {
                 if (stats.isDirectory()) {
-                    stream = fs.createWriteStream(path.join(value, 'nodebb.log'), { flags: 'a' });
-                }
-                else {
-                    stream = fs.createWriteStream(value, { flags: 'a' });
+                    stream = fs.createWriteStream(
+                        path.join(value, "nodebb.log"),
+                        { flags: "a" }
+                    );
+                } else {
+                    stream = fs.createWriteStream(value, { flags: "a" });
                 }
             }
-        }
-        else {
-            stream = fs.createWriteStream(value, { flags: 'a' });
+        } else {
+            stream = fs.createWriteStream(value, { flags: "a" });
         }
         if (stream) {
-            stream.on('error', (err) => {
+            stream.on("error", (err) => {
                 winston.error(err.stack);
             });
         }
-    }
-    else {
+    } else {
         stream = process.stdout;
     }
     return stream;
@@ -96,30 +111,31 @@ function close(stream) {
 exports.close = close;
 function setup_one_log(value) {
     /*
-        * If logging is currently enabled, create a stream.
-        * Otherwise, close the current stream
-        */
+     * If logging is currently enabled, create a stream.
+     * Otherwise, close the current stream
+     */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    if (meta_1.default.config.loggerStatus > 0 || meta_1.default.config.loggerIOStatus) {
+    if (
+        meta_1.default.config.loggerStatus > 0 ||
+        meta_1.default.config.loggerIOStatus
+    ) {
         const stream = open(value);
         if (stream) {
             opts.streams.log.f = stream;
-        }
-        else {
+        } else {
             opts.streams.log.f = process.stdout;
         }
-    }
-    else {
+    } else {
         close(opts.streams.log);
     }
 }
 exports.setup_one_log = setup_one_log;
 function setup_one(key, value) {
     /*
-        * 1. Open the logger stream: stdout or file
-        * 2. Re-initialize the express logger hijack
-        */
-    if (key === 'loggerPath') {
+     * 1. Open the logger stream: stdout or file
+     * 2. Re-initialize the express logger hijack
+     */
+    if (key === "loggerPath") {
         setup_one_log(value);
         express_open();
     }
@@ -127,7 +143,7 @@ function setup_one(key, value) {
 exports.setup_one = setup_one;
 function setup() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    setup_one('loggerPath', meta_1.default.config.loggerPath);
+    setup_one("loggerPath", meta_1.default.config.loggerPath);
 }
 exports.setup = setup;
 function init(app) {
@@ -138,23 +154,25 @@ function init(app) {
 exports.init = init;
 function prepare_io_string(_type, _uid, _args) {
     /*
-        * This prepares the output string for intercepted socket.io events
-        *
-        * The format is: io: <uid> <event> <args>
-        */
+     * This prepares the output string for intercepted socket.io events
+     *
+     * The format is: io: <uid> <event> <args>
+     */
     try {
-        return `io: ${_uid} ${_type} ${util.inspect(Array.prototype.slice.call(_args), { depth: 3 })}\n`;
-    }
-    catch (err) {
-        winston.info('Logger.prepare_io_string: Failed', err);
-        return 'error';
+        return `io: ${_uid} ${_type} ${util.inspect(
+            Array.prototype.slice.call(_args),
+            { depth: 3 }
+        )}\n`;
+    } catch (err) {
+        winston.info("Logger.prepare_io_string: Failed", err);
+        return "error";
     }
 }
 exports.prepare_io_string = prepare_io_string;
 function io_one(socket, uid) {
     /*
-        * This function replaces a socket's .emit/.on functions in order to intercept events
-        */
+     * This function replaces a socket's .emit/.on functions in order to intercept events
+     */
     function override(method, name, errorMsg) {
         return (...args) => {
             if (opts.streams.log.f) {
@@ -162,8 +180,7 @@ function io_one(socket, uid) {
             }
             try {
                 method.apply(socket, args);
-            }
-            catch (err) {
+            } catch (err) {
                 winston.info(errorMsg, err);
             }
         };
@@ -173,18 +190,31 @@ function io_one(socket, uid) {
         // courtesy of: http://stackoverflow.com/a/9674248
         socket.oEmit = socket.emit;
         const { emit } = socket;
-        socket.emit = override(emit, 'emit', 'Logger.io_one: emit.apply: Failed');
+        socket.emit = override(
+            emit,
+            "emit",
+            "Logger.io_one: emit.apply: Failed"
+        );
         socket.$onvent = socket.onevent;
         const $onevent = socket.onevent;
-        socket.onevent = override($onevent, 'on', 'Logger.io_one: $emit.apply: Failed');
+        socket.onevent = override(
+            $onevent,
+            "on",
+            "Logger.io_one: $emit.apply: Failed"
+        );
     }
 }
 exports.io_one = io_one;
 function io_close(socket) {
     /*
-        * Restore all hijacked sockets to their original emit/on functions
-        */
-    if (!socket || !socket.io || !socket.io.sockets || !socket.io.sockets.sockets) {
+     * Restore all hijacked sockets to their original emit/on functions
+     */
+    if (
+        !socket ||
+        !socket.io ||
+        !socket.io.sockets ||
+        !socket.io.sockets.sockets
+    ) {
         return;
     }
     const clientsMap = socket.io.sockets.sockets;
@@ -200,9 +230,14 @@ function io_close(socket) {
 exports.io_close = io_close;
 function io(socket) {
     /*
-        * Go through all of the currently established sockets & hook their .emit/.on
-        */
-    if (!socket || !socket.io || !socket.io.sockets || !socket.io.sockets.sockets) {
+     * Go through all of the currently established sockets & hook their .emit/.on
+     */
+    if (
+        !socket ||
+        !socket.io ||
+        !socket.io.sockets ||
+        !socket.io.sockets.sockets
+    ) {
         return;
     }
     const clientsMap = socket.io.sockets.sockets;
@@ -213,8 +248,8 @@ function io(socket) {
 exports.io = io;
 function monitorConfig(socket, data) {
     /*
-        * This monitor's when a user clicks "save" in the Logger section of the admin panel
-        */
+     * This monitor's when a user clicks "save" in the Logger section of the admin panel
+     */
     setup_one(data.key, data.value);
     io_close(socket);
     io(socket);

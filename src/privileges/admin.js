@@ -1,13 +1,12 @@
+"use strict";
 
-'use strict';
+const _ = require("lodash");
 
-const _ = require('lodash');
-
-const user = require('../user');
-const groups = require('../groups');
-const helpers = require('./helpers');
-const plugins = require('../plugins');
-const utils = require('../utils');
+const user = require("../user");
+const groups = require("../groups");
+const helpers = require("./helpers");
+const plugins = require("../plugins");
+const utils = require("../utils");
 
 const privsAdmin = module.exports;
 
@@ -17,18 +16,40 @@ const privsAdmin = module.exports;
  * in to your listener.
  */
 const _privilegeMap = new Map([
-    ['admin:dashboard', { label: '[[admin/manage/privileges:admin-dashboard]]' }],
-    ['admin:categories', { label: '[[admin/manage/privileges:admin-categories]]' }],
-    ['admin:privileges', { label: '[[admin/manage/privileges:admin-privileges]]' }],
-    ['admin:admins-mods', { label: '[[admin/manage/privileges:admin-admins-mods]]' }],
-    ['admin:users', { label: '[[admin/manage/privileges:admin-users]]' }],
-    ['admin:groups', { label: '[[admin/manage/privileges:admin-groups]]' }],
-    ['admin:tags', { label: '[[admin/manage/privileges:admin-tags]]' }],
-    ['admin:settings', { label: '[[admin/manage/privileges:admin-settings]]' }],
+    [
+        "admin:dashboard",
+        { label: "[[admin/manage/privileges:admin-dashboard]]" },
+    ],
+    [
+        "admin:categories",
+        { label: "[[admin/manage/privileges:admin-categories]]" },
+    ],
+    [
+        "admin:privileges",
+        { label: "[[admin/manage/privileges:admin-privileges]]" },
+    ],
+    [
+        "admin:admins-mods",
+        { label: "[[admin/manage/privileges:admin-admins-mods]]" },
+    ],
+    ["admin:users", { label: "[[admin/manage/privileges:admin-users]]" }],
+    ["admin:groups", { label: "[[admin/manage/privileges:admin-groups]]" }],
+    ["admin:tags", { label: "[[admin/manage/privileges:admin-tags]]" }],
+    ["admin:settings", { label: "[[admin/manage/privileges:admin-settings]]" }],
 ]);
 
-privsAdmin.getUserPrivilegeList = async () => await plugins.hooks.fire('filter:privileges.admin.list', Array.from(_privilegeMap.keys()));
-privsAdmin.getGroupPrivilegeList = async () => await plugins.hooks.fire('filter:privileges.admin.groups.list', Array.from(_privilegeMap.keys()).map(privilege => `groups:${privilege}`));
+privsAdmin.getUserPrivilegeList = async () =>
+    await plugins.hooks.fire(
+        "filter:privileges.admin.list",
+        Array.from(_privilegeMap.keys())
+    );
+privsAdmin.getGroupPrivilegeList = async () =>
+    await plugins.hooks.fire(
+        "filter:privileges.admin.groups.list",
+        Array.from(_privilegeMap.keys()).map(
+            (privilege) => `groups:${privilege}`
+        )
+    );
 privsAdmin.getPrivilegeList = async () => {
     const [user, group] = await Promise.all([
         privsAdmin.getUserPrivilegeList(),
@@ -38,78 +59,78 @@ privsAdmin.getPrivilegeList = async () => {
 };
 
 privsAdmin.init = async () => {
-    await plugins.hooks.fire('static:privileges.admin.init', {
+    await plugins.hooks.fire("static:privileges.admin.init", {
         privileges: _privilegeMap,
     });
 };
 
 // Mapping for a page route (via direct match or regexp) to a privilege
 privsAdmin.routeMap = {
-    dashboard: 'admin:dashboard',
-    'manage/categories': 'admin:categories',
-    'manage/privileges': 'admin:privileges',
-    'manage/admins-mods': 'admin:admins-mods',
-    'manage/users': 'admin:users',
-    'manage/groups': 'admin:groups',
-    'manage/tags': 'admin:tags',
-    'settings/tags': 'admin:tags',
-    'extend/plugins': 'admin:settings',
-    'extend/widgets': 'admin:settings',
-    'extend/rewards': 'admin:settings',
+    dashboard: "admin:dashboard",
+    "manage/categories": "admin:categories",
+    "manage/privileges": "admin:privileges",
+    "manage/admins-mods": "admin:admins-mods",
+    "manage/users": "admin:users",
+    "manage/groups": "admin:groups",
+    "manage/tags": "admin:tags",
+    "settings/tags": "admin:tags",
+    "extend/plugins": "admin:settings",
+    "extend/widgets": "admin:settings",
+    "extend/rewards": "admin:settings",
     // uploads
-    'category/uploadpicture': 'admin:categories',
-    uploadfavicon: 'admin:settings',
-    uploadTouchIcon: 'admin:settings',
-    uploadMaskableIcon: 'admin:settings',
-    uploadlogo: 'admin:settings',
-    uploadOgImage: 'admin:settings',
-    uploadDefaultAvatar: 'admin:settings',
+    "category/uploadpicture": "admin:categories",
+    uploadfavicon: "admin:settings",
+    uploadTouchIcon: "admin:settings",
+    uploadMaskableIcon: "admin:settings",
+    uploadlogo: "admin:settings",
+    uploadOgImage: "admin:settings",
+    uploadDefaultAvatar: "admin:settings",
 };
 privsAdmin.routePrefixMap = {
-    'manage/categories/': 'admin:categories',
-    'manage/privileges/': 'admin:privileges',
-    'manage/groups/': 'admin:groups',
-    'settings/': 'admin:settings',
-    'appearance/': 'admin:settings',
-    'plugins/': 'admin:settings',
+    "manage/categories/": "admin:categories",
+    "manage/privileges/": "admin:privileges",
+    "manage/groups/": "admin:groups",
+    "settings/": "admin:settings",
+    "appearance/": "admin:settings",
+    "plugins/": "admin:settings",
 };
 
 // Mapping for socket call methods to a privilege
 // In NodeBB v2, these socket calls will be removed in favour of xhr calls
 privsAdmin.socketMap = {
-    'admin.rooms.getAll': 'admin:dashboard',
-    'admin.analytics.get': 'admin:dashboard',
+    "admin.rooms.getAll": "admin:dashboard",
+    "admin.analytics.get": "admin:dashboard",
 
-    'admin.categories.copySettingsFrom': 'admin:categories',
-    'admin.categories.copyPrivilegesToChildren': 'admin:privileges',
-    'admin.categories.copyPrivilegesFrom': 'admin:privileges',
-    'admin.categories.copyPrivilegesToAllCategories': 'admin:privileges',
+    "admin.categories.copySettingsFrom": "admin:categories",
+    "admin.categories.copyPrivilegesToChildren": "admin:privileges",
+    "admin.categories.copyPrivilegesFrom": "admin:privileges",
+    "admin.categories.copyPrivilegesToAllCategories": "admin:privileges",
 
-    'admin.user.makeAdmins': 'admin:admins-mods',
-    'admin.user.removeAdmins': 'admin:admins-mods',
+    "admin.user.makeAdmins": "admin:admins-mods",
+    "admin.user.removeAdmins": "admin:admins-mods",
 
-    'admin.user.loadGroups': 'admin:users',
-    'admin.groups.join': 'admin:users',
-    'admin.groups.leave': 'admin:users',
-    'admin.user.resetLockouts': 'admin:users',
-    'admin.user.validateEmail': 'admin:users',
-    'admin.user.sendValidationEmail': 'admin:users',
-    'admin.user.sendPasswordResetEmail': 'admin:users',
-    'admin.user.forcePasswordReset': 'admin:users',
-    'admin.user.invite': 'admin:users',
+    "admin.user.loadGroups": "admin:users",
+    "admin.groups.join": "admin:users",
+    "admin.groups.leave": "admin:users",
+    "admin.user.resetLockouts": "admin:users",
+    "admin.user.validateEmail": "admin:users",
+    "admin.user.sendValidationEmail": "admin:users",
+    "admin.user.sendPasswordResetEmail": "admin:users",
+    "admin.user.forcePasswordReset": "admin:users",
+    "admin.user.invite": "admin:users",
 
-    'admin.tags.create': 'admin:tags',
-    'admin.tags.rename': 'admin:tags',
-    'admin.tags.deleteTags': 'admin:tags',
+    "admin.tags.create": "admin:tags",
+    "admin.tags.rename": "admin:tags",
+    "admin.tags.deleteTags": "admin:tags",
 
-    'admin.getSearchDict': 'admin:settings',
-    'admin.config.setMultiple': 'admin:settings',
-    'admin.config.remove': 'admin:settings',
-    'admin.themes.getInstalled': 'admin:settings',
-    'admin.themes.set': 'admin:settings',
-    'admin.reloadAllSessions': 'admin:settings',
-    'admin.settings.get': 'admin:settings',
-    'admin.settings.set': 'admin:settings',
+    "admin.getSearchDict": "admin:settings",
+    "admin.config.setMultiple": "admin:settings",
+    "admin.config.remove": "admin:settings",
+    "admin.themes.getInstalled": "admin:settings",
+    "admin.themes.set": "admin:settings",
+    "admin.reloadAllSessions": "admin:settings",
+    "admin.settings.get": "admin:settings",
+    "admin.settings.set": "admin:settings",
 };
 
 privsAdmin.resolve = (path) => {
@@ -118,7 +139,7 @@ privsAdmin.resolve = (path) => {
     }
 
     const found = Object.entries(privsAdmin.routePrefixMap)
-        .filter(entry => path.startsWith(entry[0]))
+        .filter((entry) => path.startsWith(entry[0]))
         .sort((entry1, entry2) => entry2[0].length - entry1[0].length);
     if (!found.length) {
         return undefined;
@@ -127,21 +148,31 @@ privsAdmin.resolve = (path) => {
 };
 
 privsAdmin.list = async function (uid) {
-    const privilegeLabels = Array.from(_privilegeMap.values()).map(data => data.label);
+    const privilegeLabels = Array.from(_privilegeMap.values()).map(
+        (data) => data.label
+    );
     const userPrivilegeList = await privsAdmin.getUserPrivilegeList();
     const groupPrivilegeList = await privsAdmin.getGroupPrivilegeList();
 
     // Restrict privileges column to superadmins
     if (!(await user.isAdministrator(uid))) {
-        const idx = Array.from(_privilegeMap.keys()).indexOf('admin:privileges');
+        const idx = Array.from(_privilegeMap.keys()).indexOf(
+            "admin:privileges"
+        );
         privilegeLabels.splice(idx, 1);
         userPrivilegeList.splice(idx, 1);
         groupPrivilegeList.splice(idx, 1);
     }
 
     const labels = await utils.promiseParallel({
-        users: plugins.hooks.fire('filter:privileges.admin.list_human', privilegeLabels.slice()),
-        groups: plugins.hooks.fire('filter:privileges.admin.groups.list_human', privilegeLabels.slice()),
+        users: plugins.hooks.fire(
+            "filter:privileges.admin.list_human",
+            privilegeLabels.slice()
+        ),
+        groups: plugins.hooks.fire(
+            "filter:privileges.admin.groups.list_human",
+            privilegeLabels.slice()
+        ),
     });
 
     const keys = {
@@ -166,11 +197,13 @@ privsAdmin.get = async function (uid) {
         user.isAdministrator(uid),
     ]);
 
-    const combined = userPrivileges.map(allowed => allowed || isAdministrator);
+    const combined = userPrivileges.map(
+        (allowed) => allowed || isAdministrator
+    );
     const privData = _.zipObject(userPrivilegeList, combined);
 
     privData.superadmin = isAdministrator;
-    return await plugins.hooks.fire('filter:privileges.admin.get', privData);
+    return await plugins.hooks.fire("filter:privileges.admin.get", privData);
 };
 
 privsAdmin.can = async function (privilege, uid) {
@@ -182,12 +215,15 @@ privsAdmin.can = async function (privilege, uid) {
 };
 
 privsAdmin.canGroup = async function (privilege, groupName) {
-    return await groups.isMember(groupName, `cid:0:privileges:groups:${privilege}`);
+    return await groups.isMember(
+        groupName,
+        `cid:0:privileges:groups:${privilege}`
+    );
 };
 
 privsAdmin.give = async function (privileges, groupName) {
     await helpers.giveOrRescind(groups.join, privileges, 0, groupName);
-    plugins.hooks.fire('action:privileges.admin.give', {
+    plugins.hooks.fire("action:privileges.admin.give", {
         privileges: privileges,
         groupNames: Array.isArray(groupName) ? groupName : [groupName],
     });
@@ -195,7 +231,7 @@ privsAdmin.give = async function (privileges, groupName) {
 
 privsAdmin.rescind = async function (privileges, groupName) {
     await helpers.giveOrRescind(groups.leave, privileges, 0, groupName);
-    plugins.hooks.fire('action:privileges.admin.rescind', {
+    plugins.hooks.fire("action:privileges.admin.rescind", {
         privileges: privileges,
         groupNames: Array.isArray(groupName) ? groupName : [groupName],
     });
@@ -208,5 +244,9 @@ privsAdmin.userPrivileges = async function (uid) {
 
 privsAdmin.groupPrivileges = async function (groupName) {
     const groupPrivilegeList = await privsAdmin.getGroupPrivilegeList();
-    return await helpers.userOrGroupPrivileges(0, groupName, groupPrivilegeList);
+    return await helpers.userOrGroupPrivileges(
+        0,
+        groupName,
+        groupPrivilegeList
+    );
 };

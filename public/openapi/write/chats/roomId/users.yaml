@@ -12,7 +12,7 @@ get:
       description: a valid chat room id
       example: 1
   responses:
-    '200':
+    "200":
       description: Users successfully retrieved
       content:
         application/json:
@@ -51,7 +51,7 @@ post:
                 type: number
                 description: A valid uid
   responses:
-    '200':
+    "200":
       description: users successfully invited to chat room
       content:
         application/json:
@@ -90,7 +90,7 @@ delete:
                 type: number
                 description: A valid uid
   responses:
-    '200':
+    "200":
       description: users successfully removed from chat room
       content:
         application/json:

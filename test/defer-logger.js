@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const winston = require('winston');
-const Transport = require('winston-transport');
+const winston = require("winston");
+const Transport = require("winston-transport");
 
 const winstonLogged = [];
 
@@ -13,7 +13,7 @@ class DeferLogger extends Transport {
 
     log(info, callback) {
         setImmediate(() => {
-            this.emit('logged', info);
+            this.emit("logged", info);
         });
 
         this.logged.push([info.level, info.message]);
@@ -29,7 +29,7 @@ before(() => {
 });
 
 after(() => {
-    console.log('\n\n');
+    console.log("\n\n");
 
     winstonLogged.forEach((args) => {
         console.log(`${args[0]} ${args[1]}`);

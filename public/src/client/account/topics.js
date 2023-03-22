@@ -1,10 +1,9 @@
-'use strict';
+"use strict";
 
-
-define('forum/account/topics', [
-    'forum/account/header',
-    'forum/infinitescroll',
-    'hooks',
+define("forum/account/topics", [
+    "forum/account/header",
+    "forum/infinitescroll",
+    "hooks",
 ], function (header, infinitescroll, hooks) {
     const AccountTopics = {};
 
@@ -14,7 +13,7 @@ define('forum/account/topics', [
     AccountTopics.init = function () {
         header.init();
 
-        AccountTopics.handleInfiniteScroll('account/topics');
+        AccountTopics.handleInfiniteScroll("account/topics");
     };
 
     AccountTopics.handleInfiniteScroll = function (_template) {
@@ -43,14 +42,21 @@ define('forum/account/topics', [
     }
 
     function onTopicsLoaded(topics, callback) {
-        app.parseAndTranslate(template, 'topics', { topics: topics }, function (html) {
-            $('[component="category"]').append(html);
-            html.find('.timeago').timeago();
-            app.createUserTooltips(html);
-            utils.makeNumbersHumanReadable(html.find('.human-readable-number'));
-            hooks.fire('action:topics.loaded', { topics: topics });
-            callback();
-        });
+        app.parseAndTranslate(
+            template,
+            "topics",
+            { topics: topics },
+            function (html) {
+                $('[component="category"]').append(html);
+                html.find(".timeago").timeago();
+                app.createUserTooltips(html);
+                utils.makeNumbersHumanReadable(
+                    html.find(".human-readable-number")
+                );
+                hooks.fire("action:topics.loaded", { topics: topics });
+                callback();
+            }
+        );
     }
 
     return AccountTopics;

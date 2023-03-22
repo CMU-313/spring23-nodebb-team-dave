@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-define('forum/recent', ['topicList'], function (topicList) {
+define("forum/recent", ["topicList"], function (topicList) {
     const Recent = {};
 
     Recent.init = function () {
-        app.enterRoom('recent_topics');
+        app.enterRoom("recent_topics");
 
-        topicList.init('recent');
+        topicList.init("recent");
     };
 
     return Recent;

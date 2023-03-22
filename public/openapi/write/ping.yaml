@@ -4,7 +4,7 @@ get:
   summary: test route
   description: This route responds with a simple `200 OK` if the Write API is enabled. Since there is no way of disabling the Write API, this will always return a success. However, it is also a good way to ensure the instance you are calling supports v3 of the Write API.
   responses:
-    '200':
+    "200":
       description: pingback
       content:
         application/json:
@@ -36,7 +36,7 @@ post:
           properties: {}
           additionalProperties: {}
   responses:
-    '200':
+    "200":
       description: pingback
       content:
         application/json:

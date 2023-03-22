@@ -17,7 +17,7 @@ get:
       description: The page number
       example: 1
   responses:
-    '200':
+    "200":
       description: chat rooms successfully listed
       content:
         application/json:
@@ -60,7 +60,8 @@ get:
                                 description: This is either username or fullname depending on forum and user settings
                               userslug:
                                 type: string
-                                description: An URL-safe variant of the username (i.e. lower-cased, spaces
+                                description:
+                                  An URL-safe variant of the username (i.e. lower-cased, spaces
                                   removed, etc.)
                               picture:
                                 nullable: true
@@ -71,12 +72,14 @@ get:
                                 type: number
                               icon:text:
                                 type: string
-                                description: A single-letter representation of a username. This is used in the
+                                description:
+                                  A single-letter representation of a username. This is used in the
                                   auto-generated icon given to users
                                   without an avatar
                               icon:bgColor:
                                 type: string
-                                description: A six-character hexadecimal colour code assigned to the user. This
+                                description:
+                                  A six-character hexadecimal colour code assigned to the user. This
                                   value is used in conjunction with
                                   `icon:text` for the user's
                                   auto-generated icon
@@ -99,7 +102,8 @@ get:
                               description: This is either username or fullname depending on forum and user settings
                             userslug:
                               type: string
-                              description: An URL-safe variant of the username (i.e. lower-cased, spaces
+                              description:
+                                An URL-safe variant of the username (i.e. lower-cased, spaces
                                 removed, etc.)
                             picture:
                               nullable: true
@@ -110,12 +114,14 @@ get:
                               type: number
                             icon:text:
                               type: string
-                              description: A single-letter representation of a username. This is used in the
+                              description:
+                                A single-letter representation of a username. This is used in the
                                 auto-generated icon given to users
                                 without an avatar
                             icon:bgColor:
                               type: string
-                              description: A six-character hexadecimal colour code assigned to the user. This
+                              description:
+                                A six-character hexadecimal colour code assigned to the user. This
                                 value is used in conjunction with
                                 `icon:text` for the user's
                                 auto-generated icon
@@ -136,7 +142,8 @@ get:
                             description: This is either username or fullname depending on forum and user settings
                           userslug:
                             type: string
-                            description: An URL-safe variant of the username (i.e. lower-cased, spaces
+                            description:
+                              An URL-safe variant of the username (i.e. lower-cased, spaces
                               removed, etc.)
                           picture:
                             nullable: true
@@ -147,12 +154,14 @@ get:
                             type: number
                           icon:text:
                             type: string
-                            description: A single-letter representation of a username. This is used in the
+                            description:
+                              A single-letter representation of a username. This is used in the
                               auto-generated icon given to users
                               without an avatar
                           icon:bgColor:
                             type: string
-                            description: A six-character hexadecimal colour code assigned to the user. This
+                            description:
+                              A six-character hexadecimal colour code assigned to the user. This
                               value is used in conjunction with
                               `icon:text` for the user's
                               auto-generated icon
@@ -179,7 +188,7 @@ post:
           required:
             - uids
   responses:
-    '200':
+    "200":
       description: chat room successfully created
       content:
         application/json:

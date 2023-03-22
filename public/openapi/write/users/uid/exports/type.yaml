@@ -18,9 +18,9 @@ head:
       description: The type of export to query
       example: posts
   responses:
-    '204':
+    "204":
       description: Exported file found.
-    '404':
+    "404":
       description: Exported file not found — this could be because an export has never been generated for this user.
 get:
   tags:
@@ -42,9 +42,9 @@ get:
       description: The type of export to download
       example: posts
   responses:
-    '200':
+    "200":
       description: A download containing the requested exported data
-    '404':
+    "404":
       description: Exported file not found — this could be because an export has never been generated for this user.
 post:
   tags:
@@ -72,7 +72,7 @@ post:
       description: The type of export to download
       example: posts
   responses:
-    '202':
+    "202":
       description: Successfully started generating the requested user export
       content:
         application/json:

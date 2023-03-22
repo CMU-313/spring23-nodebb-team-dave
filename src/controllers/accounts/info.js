@@ -1,15 +1,19 @@
-'use strict';
+"use strict";
 
-const db = require('../../database');
-const user = require('../../user');
-const helpers = require('../helpers');
-const accountHelpers = require('./helpers');
-const pagination = require('../../pagination');
+const db = require("../../database");
+const user = require("../../user");
+const helpers = require("../helpers");
+const accountHelpers = require("./helpers");
+const pagination = require("../../pagination");
 
 const infoController = module.exports;
 
 infoController.get = async function (req, res, next) {
-    const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query);
+    const userData = await accountHelpers.getUserDataByUserSlug(
+        req.params.userslug,
+        req.uid,
+        req.query
+    );
     if (!userData) {
         return next();
     }
@@ -36,10 +40,13 @@ infoController.get = async function (req, res, next) {
         const pageCount = Math.ceil(notes.count / itemsPerPage);
         userData.pagination = pagination.create(page, pageCount, req.query);
     }
-    userData.title = '[[pages:account/info]]';
-    userData.breadcrumbs = helpers.buildBreadcrumbs([{ text: userData.username, url: `/user/${userData.userslug}` }, { text: '[[user:account_info]]' }]);
+    userData.title = "[[pages:account/info]]";
+    userData.breadcrumbs = helpers.buildBreadcrumbs([
+        { text: userData.username, url: `/user/${userData.userslug}` },
+        { text: "[[user:account_info]]" },
+    ]);
 
-    res.render('account/info', userData);
+    res.render("account/info", userData);
 };
 
 async function getNotes(userData, start, stop) {

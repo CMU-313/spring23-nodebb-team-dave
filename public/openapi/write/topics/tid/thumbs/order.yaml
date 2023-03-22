@@ -27,7 +27,7 @@ put:
               description: The order of topic thumbnails. Lower numbers are loaded first.
               example: 0
   responses:
-    '200':
+    "200":
       description: Topic thumbnail re-ordered
       content:
         application/json:

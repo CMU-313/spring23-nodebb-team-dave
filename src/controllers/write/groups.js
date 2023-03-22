@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const api = require('../../api');
+const api = require("../../api");
 
-const helpers = require('../helpers');
+const helpers = require("../helpers");
 
 const Groups = module.exports;
 

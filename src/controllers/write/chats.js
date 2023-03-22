@@ -1,18 +1,25 @@
-'use strict';
+"use strict";
 
-const api = require('../../api');
-const messaging = require('../../messaging');
+const api = require("../../api");
+const messaging = require("../../messaging");
 
-const helpers = require('../helpers');
+const helpers = require("../helpers");
 
 const Chats = module.exports;
 
 Chats.list = async (req, res) => {
-    const page = (isFinite(req.query.page) && parseInt(req.query.page, 10)) || 1;
-    const perPage = (isFinite(req.query.perPage) && parseInt(req.query.perPage, 10)) || 20;
+    const page =
+        (isFinite(req.query.page) && parseInt(req.query.page, 10)) || 1;
+    const perPage =
+        (isFinite(req.query.perPage) && parseInt(req.query.perPage, 10)) || 20;
     const start = Math.max(0, page - 1) * perPage;
     const stop = start + perPage;
-    const { rooms } = await messaging.getRecentChats(req.uid, req.uid, start, stop);
+    const { rooms } = await messaging.getRecentChats(
+        req.uid,
+        req.uid,
+        start,
+        stop
+    );
 
     helpers.formatApiResponse(200, res, { rooms });
 };
@@ -102,15 +109,30 @@ Chats.messages.list = async (req, res) => {
 };
 
 Chats.messages.get = async (req, res) => {
-    const messages = await messaging.getMessagesData([req.params.mid], req.uid, req.params.roomId, false);
+    const messages = await messaging.getMessagesData(
+        [req.params.mid],
+        req.uid,
+        req.params.roomId,
+        false
+    );
     helpers.formatApiResponse(200, res, messages.pop());
 };
 
 Chats.messages.edit = async (req, res) => {
     await messaging.canEdit(req.params.mid, req.uid);
-    await messaging.editMessage(req.uid, req.params.mid, req.params.roomId, req.body.message);
+    await messaging.editMessage(
+        req.uid,
+        req.params.mid,
+        req.params.roomId,
+        req.body.message
+    );
 
-    const messages = await messaging.getMessagesData([req.params.mid], req.uid, req.params.roomId, false);
+    const messages = await messaging.getMessagesData(
+        [req.params.mid],
+        req.uid,
+        req.params.roomId,
+        false
+    );
     helpers.formatApiResponse(200, res, messages.pop());
 };
 

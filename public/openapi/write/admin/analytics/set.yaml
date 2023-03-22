@@ -23,7 +23,7 @@ get:
       schema:
         type: number
       description: A UNIX timestamp denoting the end of the analytics reporting period
-      example: ''
+      example: ""
     - in: query
       name: count
       schema:
@@ -31,7 +31,7 @@ get:
       description: The number of entries to return (e.g. if `units` is `hourly`, and `count` is `24`, the result set will contain 24 hours' worth of analytics)
       example: 20
   responses:
-    '200':
+    "200":
       description: Analytics set retrieved
       content:
         application/json:

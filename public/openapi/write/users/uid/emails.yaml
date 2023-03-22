@@ -14,7 +14,7 @@ get:
       description: A valid user id
       example: 1
   responses:
-    '200':
+    "200":
       description: user emails successfully listed
       content:
         application/json:

@@ -24,7 +24,7 @@ get:
       description: At which chat message index to start returning messages from
       example: 0
   responses:
-    '200':
+    "200":
       description: Messages successfully retrieved
       content:
         application/json:

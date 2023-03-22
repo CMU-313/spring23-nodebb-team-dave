@@ -1,25 +1,33 @@
-'use strict';
+"use strict";
 
-
-define('forum/chats', [
-    'components',
-    'translator',
-    'mousetrap',
-    'forum/chats/recent',
-    'forum/chats/search',
-    'forum/chats/messages',
-    'composer/autocomplete',
-    'hooks',
-    'bootbox',
-    'alerts',
-    'chat',
-    'api',
-    'uploadHelpers',
+define("forum/chats", [
+    "components",
+    "translator",
+    "mousetrap",
+    "forum/chats/recent",
+    "forum/chats/search",
+    "forum/chats/messages",
+    "composer/autocomplete",
+    "hooks",
+    "bootbox",
+    "alerts",
+    "chat",
+    "api",
+    "uploadHelpers",
 ], function (
-    components, translator, mousetrap,
-    recentChats, search, messages,
-    autocomplete, hooks, bootbox, alerts, chatModule,
-    api, uploadHelpers
+    components,
+    translator,
+    mousetrap,
+    recentChats,
+    search,
+    messages,
+    autocomplete,
+    hooks,
+    bootbox,
+    alerts,
+    chatModule,
+    api,
+    uploadHelpers
 ) {
     const Chats = {
         initialised: false,
@@ -40,44 +48,64 @@ define('forum/chats', [
         Chats.addEventListeners();
         Chats.setActive();
 
-        if (env === 'md' || env === 'lg') {
+        if (env === "md" || env === "lg") {
             Chats.addHotkeys();
         }
 
         $(document).ready(function () {
-            hooks.fire('action:chat.loaded', $('.chats-full'));
+            hooks.fire("action:chat.loaded", $(".chats-full"));
         });
 
         Chats.initialised = true;
-        messages.scrollToBottom($('.expanded-chat ul.chat-content'));
+        messages.scrollToBottom($(".expanded-chat ul.chat-content"));
 
         search.init();
 
-        if (ajaxify.data.hasOwnProperty('roomId')) {
-            components.get('chat/input').focus();
+        if (ajaxify.data.hasOwnProperty("roomId")) {
+            components.get("chat/input").focus();
         }
     };
 
     Chats.addEventListeners = function () {
-        Chats.addSendHandlers(ajaxify.data.roomId, $('.chat-input'), $('.expanded-chat button[data-action="send"]'));
+        Chats.addSendHandlers(
+            ajaxify.data.roomId,
+            $(".chat-input"),
+            $('.expanded-chat button[data-action="send"]')
+        );
         Chats.addPopoutHandler();
-        Chats.addActionHandlers(components.get('chat/messages'), ajaxify.data.roomId);
-        Chats.addMemberHandler(ajaxify.data.roomId, components.get('chat/controls').find('[data-action="members"]'));
-        Chats.addRenameHandler(ajaxify.data.roomId, components.get('chat/controls').find('[data-action="rename"]'));
-        Chats.addLeaveHandler(ajaxify.data.roomId, components.get('chat/controls').find('[data-action="leave"]'));
-        Chats.addScrollHandler(ajaxify.data.roomId, ajaxify.data.uid, $('.chat-content'));
-        Chats.addScrollBottomHandler($('.chat-content'));
+        Chats.addActionHandlers(
+            components.get("chat/messages"),
+            ajaxify.data.roomId
+        );
+        Chats.addMemberHandler(
+            ajaxify.data.roomId,
+            components.get("chat/controls").find('[data-action="members"]')
+        );
+        Chats.addRenameHandler(
+            ajaxify.data.roomId,
+            components.get("chat/controls").find('[data-action="rename"]')
+        );
+        Chats.addLeaveHandler(
+            ajaxify.data.roomId,
+            components.get("chat/controls").find('[data-action="leave"]')
+        );
+        Chats.addScrollHandler(
+            ajaxify.data.roomId,
+            ajaxify.data.uid,
+            $(".chat-content")
+        );
+        Chats.addScrollBottomHandler($(".chat-content"));
         Chats.addCharactersLeftHandler($('[component="chat/main-wrapper"]'));
         Chats.addIPHandler($('[component="chat/main-wrapper"]'));
         Chats.createAutoComplete($('[component="chat/input"]'));
         Chats.addUploadHandler({
-            dragDropAreaEl: $('.chats-full'),
+            dragDropAreaEl: $(".chats-full"),
             pasteEl: $('[component="chat/input"]'),
             uploadFormEl: $('[component="chat/upload"]'),
             inputEl: $('[component="chat/input"]'),
         });
 
-        $('[data-action="close"]').on('click', function () {
+        $('[data-action="close"]').on("click", function () {
             Chats.switchChat();
         });
     };
@@ -87,12 +115,16 @@ define('forum/chats', [
             dragDropAreaEl: options.dragDropAreaEl,
             pasteEl: options.pasteEl,
             uploadFormEl: options.uploadFormEl,
-            route: '/api/post/upload', // using same route as post uploads
+            route: "/api/post/upload", // using same route as post uploads
             callback: function (uploads) {
                 const inputEl = options.inputEl;
                 let text = inputEl.val();
                 uploads.forEach((upload) => {
-                    text = text + (text ? '\n' : '') + (upload.isImage ? '!' : '') + `[${upload.filename}](${upload.url})`;
+                    text =
+                        text +
+                        (text ? "\n" : "") +
+                        (upload.isImage ? "!" : "") +
+                        `[${upload.filename}](${upload.url})`;
                 });
                 inputEl.val(text);
             },
@@ -100,10 +132,10 @@ define('forum/chats', [
     };
 
     Chats.addIPHandler = function (container) {
-        container.on('click', '.chat-ip-button', function () {
+        container.on("click", ".chat-ip-button", function () {
             const ipEl = $(this).parent();
-            const mid = ipEl.parents('[data-mid]').attr('data-mid');
-            socket.emit('modules.chats.getIP', mid, function (err, ip) {
+            const mid = ipEl.parents("[data-mid]").attr("data-mid");
+            socket.emit("modules.chats.getIP", mid, function (err, ip) {
                 if (err) {
                     return alerts.error(err);
                 }
@@ -113,28 +145,32 @@ define('forum/chats', [
     };
 
     Chats.addPopoutHandler = function () {
-        $('[data-action="pop-out"]').on('click', function () {
-            const text = components.get('chat/input').val();
+        $('[data-action="pop-out"]').on("click", function () {
+            const text = components.get("chat/input").val();
             const roomId = ajaxify.data.roomId;
 
             if (app.previousUrl && app.previousUrl.match(/chats/)) {
-                ajaxify.go('user/' + ajaxify.data.userslug + '/chats', function () {
-                    chatModule.openChat(roomId, ajaxify.data.uid);
-                }, true);
+                ajaxify.go(
+                    "user/" + ajaxify.data.userslug + "/chats",
+                    function () {
+                        chatModule.openChat(roomId, ajaxify.data.uid);
+                    },
+                    true
+                );
             } else {
                 window.history.go(-1);
                 chatModule.openChat(roomId, ajaxify.data.uid);
             }
 
-            $(window).one('action:chat.loaded', function () {
-                components.get('chat/input').val(text);
+            $(window).one("action:chat.loaded", function () {
+                components.get("chat/input").val(text);
             });
         });
     };
 
     Chats.addScrollHandler = function (roomId, uid, el) {
         let loading = false;
-        el.off('scroll').on('scroll', function () {
+        el.off("scroll").on("scroll", function () {
             messages.toggleScrollUpAlert(el);
             if (loading) {
                 return;
@@ -145,98 +181,119 @@ define('forum/chats', [
                 return;
             }
             loading = true;
-            const start = parseInt(el.children('[data-mid]').length, 10);
-            api.get(`/chats/${roomId}/messages`, { uid, start }).then((data) => {
-                data = data.messages;
+            const start = parseInt(el.children("[data-mid]").length, 10);
+            api.get(`/chats/${roomId}/messages`, { uid, start })
+                .then((data) => {
+                    data = data.messages;
 
-                if (!data) {
-                    loading = false;
-                    return;
-                }
-                data = data.filter(function (chatMsg) {
-                    return !$('[component="chat/message"][data-mid="' + chatMsg.messageId + '"]').length;
-                });
-                if (!data.length) {
-                    loading = false;
-                    return;
-                }
-                messages.parseMessage(data, function (html) {
-                    const currentScrollTop = el.scrollTop();
-                    const previousHeight = el[0].scrollHeight;
-                    html = $(html);
-                    el.prepend(html);
-                    html.find('.timeago').timeago();
-                    html.find('img:not(.not-responsive)').addClass('img-responsive');
-                    el.scrollTop((el[0].scrollHeight - previousHeight) + currentScrollTop);
-                    loading = false;
-                });
-            }).catch(alerts.error);
+                    if (!data) {
+                        loading = false;
+                        return;
+                    }
+                    data = data.filter(function (chatMsg) {
+                        return !$(
+                            '[component="chat/message"][data-mid="' +
+                                chatMsg.messageId +
+                                '"]'
+                        ).length;
+                    });
+                    if (!data.length) {
+                        loading = false;
+                        return;
+                    }
+                    messages.parseMessage(data, function (html) {
+                        const currentScrollTop = el.scrollTop();
+                        const previousHeight = el[0].scrollHeight;
+                        html = $(html);
+                        el.prepend(html);
+                        html.find(".timeago").timeago();
+                        html.find("img:not(.not-responsive)").addClass(
+                            "img-responsive"
+                        );
+                        el.scrollTop(
+                            el[0].scrollHeight -
+                                previousHeight +
+                                currentScrollTop
+                        );
+                        loading = false;
+                    });
+                })
+                .catch(alerts.error);
         });
     };
 
     Chats.addScrollBottomHandler = function (chatContent) {
-        chatContent.parent()
+        chatContent
+            .parent()
             .find('[component="chat/messages/scroll-up-alert"]')
-            .off('click').on('click', function () {
+            .off("click")
+            .on("click", function () {
                 messages.scrollToBottom(chatContent);
             });
     };
 
     Chats.addCharactersLeftHandler = function (parent) {
         const element = parent.find('[component="chat/input"]');
-        element.on('change keyup paste', function () {
+        element.on("change keyup paste", function () {
             messages.updateRemainingLength(parent);
         });
     };
 
     Chats.addActionHandlers = function (element, roomId) {
-        element.on('click', '[data-action]', function () {
-            const messageId = $(this).parents('[data-mid]').attr('data-mid');
-            const action = this.getAttribute('data-action');
+        element.on("click", "[data-action]", function () {
+            const messageId = $(this).parents("[data-mid]").attr("data-mid");
+            const action = this.getAttribute("data-action");
 
             switch (action) {
-            case 'edit': {
-                const inputEl = $('[data-roomid="' + roomId + '"] [component="chat/input"]');
-                messages.prepEdit(inputEl, messageId, roomId);
-                break;
-            }
-            case 'delete':
-                messages.delete(messageId, roomId);
-                break;
+                case "edit": {
+                    const inputEl = $(
+                        '[data-roomid="' +
+                            roomId +
+                            '"] [component="chat/input"]'
+                    );
+                    messages.prepEdit(inputEl, messageId, roomId);
+                    break;
+                }
+                case "delete":
+                    messages.delete(messageId, roomId);
+                    break;
 
-            case 'restore':
-                messages.restore(messageId, roomId);
-                break;
+                case "restore":
+                    messages.restore(messageId, roomId);
+                    break;
             }
         });
     };
 
     Chats.addHotkeys = function () {
-        mousetrap.bind('ctrl+up', function () {
-            const activeContact = $('.chats-list .bg-info');
+        mousetrap.bind("ctrl+up", function () {
+            const activeContact = $(".chats-list .bg-info");
             const prev = activeContact.prev();
 
             if (prev.length) {
-                Chats.switchChat(prev.attr('data-roomid'));
+                Chats.switchChat(prev.attr("data-roomid"));
             }
         });
-        mousetrap.bind('ctrl+down', function () {
-            const activeContact = $('.chats-list .bg-info');
+        mousetrap.bind("ctrl+down", function () {
+            const activeContact = $(".chats-list .bg-info");
             const next = activeContact.next();
 
             if (next.length) {
-                Chats.switchChat(next.attr('data-roomid'));
+                Chats.switchChat(next.attr("data-roomid"));
             }
         });
-        mousetrap.bind('up', function (e) {
-            if (e.target === components.get('chat/input').get(0)) {
+        mousetrap.bind("up", function (e) {
+            if (e.target === components.get("chat/input").get(0)) {
                 // Retrieve message id from messages list
-                const message = components.get('chat/messages').find('.chat-message[data-self="1"]').last();
+                const message = components
+                    .get("chat/messages")
+                    .find('.chat-message[data-self="1"]')
+                    .last();
                 if (!message.length) {
                     return;
                 }
-                const lastMid = message.attr('data-mid');
-                const inputEl = components.get('chat/input');
+                const lastMid = message.attr("data-mid");
+                const inputEl = components.get("chat/input");
 
                 messages.prepEdit(inputEl, lastMid, ajaxify.data.roomId);
             }
@@ -246,66 +303,90 @@ define('forum/chats', [
     Chats.addMemberHandler = function (roomId, buttonEl) {
         let modal;
 
-        buttonEl.on('click', function () {
-            app.parseAndTranslate('partials/modals/manage_room', {}, function (html) {
-                modal = bootbox.dialog({
-                    title: '[[modules:chat.manage-room]]',
-                    message: html,
-                });
-
-                modal.attr('component', 'chat/manage-modal');
-
-                Chats.refreshParticipantsList(roomId, modal);
-                Chats.addKickHandler(roomId, modal);
-
-                const searchInput = modal.find('input');
-                const errorEl = modal.find('.text-danger');
-                require(['autocomplete', 'translator'], function (autocomplete, translator) {
-                    autocomplete.user(searchInput, function (event, selected) {
-                        errorEl.text('');
-                        api.post(`/chats/${roomId}/users`, {
-                            uids: [selected.item.user.uid],
-                        }).then((body) => {
-                            Chats.refreshParticipantsList(roomId, modal, body);
-                            searchInput.val('');
-                        }).catch((err) => {
-                            translator.translate(err.message, function (translated) {
-                                errorEl.text(translated);
-                            });
-                        });
+        buttonEl.on("click", function () {
+            app.parseAndTranslate(
+                "partials/modals/manage_room",
+                {},
+                function (html) {
+                    modal = bootbox.dialog({
+                        title: "[[modules:chat.manage-room]]",
+                        message: html,
                     });
-                });
-            });
+
+                    modal.attr("component", "chat/manage-modal");
+
+                    Chats.refreshParticipantsList(roomId, modal);
+                    Chats.addKickHandler(roomId, modal);
+
+                    const searchInput = modal.find("input");
+                    const errorEl = modal.find(".text-danger");
+                    require(["autocomplete", "translator"], function (
+                        autocomplete,
+                        translator
+                    ) {
+                        autocomplete.user(
+                            searchInput,
+                            function (event, selected) {
+                                errorEl.text("");
+                                api.post(`/chats/${roomId}/users`, {
+                                    uids: [selected.item.user.uid],
+                                })
+                                    .then((body) => {
+                                        Chats.refreshParticipantsList(
+                                            roomId,
+                                            modal,
+                                            body
+                                        );
+                                        searchInput.val("");
+                                    })
+                                    .catch((err) => {
+                                        translator.translate(
+                                            err.message,
+                                            function (translated) {
+                                                errorEl.text(translated);
+                                            }
+                                        );
+                                    });
+                            }
+                        );
+                    });
+                }
+            );
         });
     };
 
     Chats.addKickHandler = function (roomId, modal) {
-        modal.on('click', '[data-action="kick"]', function () {
-            const uid = parseInt(this.getAttribute('data-uid'), 10);
+        modal.on("click", '[data-action="kick"]', function () {
+            const uid = parseInt(this.getAttribute("data-uid"), 10);
 
-            api.delete(`/chats/${roomId}/users/${uid}`, {}).then((body) => {
-                Chats.refreshParticipantsList(roomId, modal, body);
-            }).catch(alerts.error);
+            api.delete(`/chats/${roomId}/users/${uid}`, {})
+                .then((body) => {
+                    Chats.refreshParticipantsList(roomId, modal, body);
+                })
+                .catch(alerts.error);
         });
     };
 
     Chats.addLeaveHandler = function (roomId, buttonEl) {
-        buttonEl.on('click', function () {
+        buttonEl.on("click", function () {
             bootbox.confirm({
-                size: 'small',
-                title: '[[modules:chat.leave]]',
-                message: '<p>[[modules:chat.leave-prompt]]</p><p class="help-block">[[modules:chat.leave-help]]</p>',
+                size: "small",
+                title: "[[modules:chat.leave]]",
+                message:
+                    '<p>[[modules:chat.leave-prompt]]</p><p class="help-block">[[modules:chat.leave-help]]</p>',
                 callback: function (ok) {
                     if (ok) {
-                        api.delete(`/chats/${roomId}/users/${app.user.uid}`, {}).then(() => {
-                            // Return user to chats page. If modal, close modal.
-                            const modal = buttonEl.parents('.chat-modal');
-                            if (modal.length) {
-                                chatModule.close(modal);
-                            } else {
-                                ajaxify.go('chats');
-                            }
-                        }).catch(alerts.error);
+                        api.delete(`/chats/${roomId}/users/${app.user.uid}`, {})
+                            .then(() => {
+                                // Return user to chats page. If modal, close modal.
+                                const modal = buttonEl.parents(".chat-modal");
+                                if (modal.length) {
+                                    chatModule.close(modal);
+                                } else {
+                                    ajaxify.go("chats");
+                                }
+                            })
+                            .catch(alerts.error);
                     }
                 },
             });
@@ -313,60 +394,71 @@ define('forum/chats', [
     };
 
     Chats.refreshParticipantsList = async (roomId, modal, data) => {
-        const listEl = modal.find('.list-group');
+        const listEl = modal.find(".list-group");
 
         if (!data) {
             try {
                 data = await api.get(`/chats/${roomId}/users`, {});
             } catch (err) {
-                translator.translate('[[error:invalid-data]]', function (translated) {
-                    listEl.find('li').text(translated);
-                });
+                translator.translate(
+                    "[[error:invalid-data]]",
+                    function (translated) {
+                        listEl.find("li").text(translated);
+                    }
+                );
             }
         }
 
-        app.parseAndTranslate('partials/modals/manage_room_users', data, function (html) {
-            listEl.html(html);
-        });
+        app.parseAndTranslate(
+            "partials/modals/manage_room_users",
+            data,
+            function (html) {
+                listEl.html(html);
+            }
+        );
     };
 
     Chats.addRenameHandler = function (roomId, buttonEl, roomName) {
         let modal;
 
-        buttonEl.on('click', function () {
-            app.parseAndTranslate('partials/modals/rename_room', {
-                name: roomName || ajaxify.data.roomName,
-            }, function (html) {
-                modal = bootbox.dialog({
-                    title: '[[modules:chat.rename-room]]',
-                    message: html,
-                    buttons: {
-                        save: {
-                            label: '[[global:save]]',
-                            className: 'btn-primary',
-                            callback: submit,
+        buttonEl.on("click", function () {
+            app.parseAndTranslate(
+                "partials/modals/rename_room",
+                {
+                    name: roomName || ajaxify.data.roomName,
+                },
+                function (html) {
+                    modal = bootbox.dialog({
+                        title: "[[modules:chat.rename-room]]",
+                        message: html,
+                        buttons: {
+                            save: {
+                                label: "[[global:save]]",
+                                className: "btn-primary",
+                                callback: submit,
+                            },
                         },
-                    },
-                });
-            });
+                    });
+                }
+            );
         });
 
         function submit() {
             api.put(`/chats/${roomId}`, {
-                name: modal.find('#roomName').val(),
+                name: modal.find("#roomName").val(),
             }).catch(alerts.error);
         }
     };
 
     Chats.addSendHandlers = function (roomId, inputEl, sendEl) {
-        inputEl.off('keypress').on('keypress', function (e) {
+        inputEl.off("keypress").on("keypress", function (e) {
             if (e.which === 13 && !e.shiftKey) {
                 messages.sendMessage(roomId, inputEl);
                 return false;
             }
         });
 
-        sendEl.off('click').on('click', function () {
+        sendEl.off("click").on("click", function () {
             messages.sendMessage(roomId, inputEl);
             inputEl.focus();
             return false;
@@ -383,69 +475,100 @@ define('forum/chats', [
             strategies: [],
             options: {
                 style: {
-                    'z-index': 20000,
+                    "z-index": 20000,
                     flex: 0,
-                    top: 'inherit',
+                    top: "inherit",
                 },
-                placement: 'top',
+                placement: "top",
             },
         };
 
-        $(window).trigger('chat:autocomplete:init', data);
+        $(window).trigger("chat:autocomplete:init", data);
         if (data.strategies.length) {
             autocomplete.setup(data);
         }
     };
 
     Chats.leave = function (el) {
-        const roomId = el.attr('data-roomid');
-        api.delete(`/chats/${roomId}/users/${app.user.uid}`, {}).then(() => {
-            if (parseInt(roomId, 10) === parseInt(ajaxify.data.roomId, 10)) {
-                ajaxify.go('user/' + ajaxify.data.userslug + '/chats');
-            } else {
-                el.remove();
-            }
+        const roomId = el.attr("data-roomid");
+        api.delete(`/chats/${roomId}/users/${app.user.uid}`, {})
+            .then(() => {
+                if (
+                    parseInt(roomId, 10) === parseInt(ajaxify.data.roomId, 10)
+                ) {
+                    ajaxify.go("user/" + ajaxify.data.userslug + "/chats");
+                } else {
+                    el.remove();
+                }
 
-            const modal = chatModule.getModal(roomId);
-            if (modal.length) {
-                chatModule.close(modal);
-            }
-        }).catch(alerts.error);
+                const modal = chatModule.getModal(roomId);
+                if (modal.length) {
+                    chatModule.close(modal);
+                }
+            })
+            .catch(alerts.error);
     };
 
     Chats.switchChat = function (roomid) {
         // Allow empty arg for return to chat list/close chat
         if (!roomid) {
-            roomid = '';
+            roomid = "";
         }
 
-        const url = 'user/' + ajaxify.data.userslug + '/chats/' + roomid + window.location.search;
+        const url =
+            "user/" +
+            ajaxify.data.userslug +
+            "/chats/" +
+            roomid +
+            window.location.search;
         if (self.fetch) {
-            fetch(config.relative_path + '/api/' + url, { credentials: 'include' })
+            fetch(config.relative_path + "/api/" + url, {
+                credentials: "include",
+            })
                 .then(function (response) {
                     if (response.ok) {
                         response.json().then(function (payload) {
-                            app.parseAndTranslate('partials/chats/message-window', payload, function (html) {
-                                components.get('chat/main-wrapper').html(html);
-                                html.find('.timeago').timeago();
-                                ajaxify.data = payload;
-                                Chats.setActive();
-                                Chats.addEventListeners();
-                                hooks.fire('action:chat.loaded', $('.chats-full'));
-                                messages.scrollToBottom($('.expanded-chat ul.chat-content'));
-                                if (history.pushState) {
-                                    history.pushState({
-                                        url: url,
-                                    }, null, window.location.protocol + '//' + window.location.host + config.relative_path + '/' + url);
+                            app.parseAndTranslate(
+                                "partials/chats/message-window",
+                                payload,
+                                function (html) {
+                                    components
+                                        .get("chat/main-wrapper")
+                                        .html(html);
+                                    html.find(".timeago").timeago();
+                                    ajaxify.data = payload;
+                                    Chats.setActive();
+                                    Chats.addEventListeners();
+                                    hooks.fire(
+                                        "action:chat.loaded",
+                                        $(".chats-full")
+                                    );
+                                    messages.scrollToBottom(
+                                        $(".expanded-chat ul.chat-content")
+                                    );
+                                    if (history.pushState) {
+                                        history.pushState(
+                                            {
+                                                url: url,
+                                            },
+                                            null,
+                                            window.location.protocol +
+                                                "//" +
+                                                window.location.host +
+                                                config.relative_path +
+                                                "/" +
+                                                url
+                                        );
+                                    }
                                 }
-                            });
+                            );
                         });
                     } else {
-                        console.warn('[search] Received ' + response.status);
+                        console.warn("[search] Received " + response.status);
                     }
                 })
                 .catch(function (error) {
-                    console.warn('[search] ' + error.message);
+                    console.warn("[search] " + error.message);
                 });
         } else {
             ajaxify.go(url);
@@ -453,50 +576,66 @@ define('forum/chats', [
     };
 
     Chats.addGlobalEventListeners = function () {
-        $(window).on('mousemove keypress click', function () {
+        $(window).on("mousemove keypress click", function () {
             if (newMessage && ajaxify.data.roomId) {
-                socket.emit('modules.chats.markRead', ajaxify.data.roomId);
+                socket.emit("modules.chats.markRead", ajaxify.data.roomId);
                 newMessage = false;
             }
         });
     };
 
     Chats.addSocketListeners = function () {
-        socket.on('event:chats.receive', function (data) {
-            if (parseInt(data.roomId, 10) === parseInt(ajaxify.data.roomId, 10)) {
+        socket.on("event:chats.receive", function (data) {
+            if (
+                parseInt(data.roomId, 10) === parseInt(ajaxify.data.roomId, 10)
+            ) {
                 newMessage = data.self === 0;
                 data.message.self = data.self;
 
-                messages.appendChatMessage($('.expanded-chat .chat-content'), data.message);
+                messages.appendChatMessage(
+                    $(".expanded-chat .chat-content"),
+                    data.message
+                );
             } else if (ajaxify.data.template.chats) {
-                const roomEl = $('[data-roomid=' + data.roomId + ']');
+                const roomEl = $("[data-roomid=" + data.roomId + "]");
 
                 if (roomEl.length > 0) {
-                    roomEl.addClass('unread');
+                    roomEl.addClass("unread");
                 } else {
-                    const recentEl = components.get('chat/recent');
-                    app.parseAndTranslate('partials/chats/recent_room', {
-                        rooms: {
-                            roomId: data.roomId,
-                            lastUser: data.message.fromUser,
-                            usernames: data.message.fromUser.username,
-                            unread: true,
+                    const recentEl = components.get("chat/recent");
+                    app.parseAndTranslate(
+                        "partials/chats/recent_room",
+                        {
+                            rooms: {
+                                roomId: data.roomId,
+                                lastUser: data.message.fromUser,
+                                usernames: data.message.fromUser.username,
+                                unread: true,
+                            },
                         },
-                    }, function (html) {
-                        recentEl.prepend(html);
-                    });
+                        function (html) {
+                            recentEl.prepend(html);
+                        }
+                    );
                 }
             }
         });
 
-        socket.on('event:user_status_change', function (data) {
-            app.updateUserStatus($('.chats-list [data-uid="' + data.uid + '"] [component="user/status"]'), data.status);
+        socket.on("event:user_status_change", function (data) {
+            app.updateUserStatus(
+                $(
+                    '.chats-list [data-uid="' +
+                        data.uid +
+                        '"] [component="user/status"]'
+                ),
+                data.status
+            );
         });
 
         messages.addSocketListeners();
 
-        socket.on('event:chats.roomRename', function (data) {
-            const roomEl = components.get('chat/recent/room', data.roomId);
+        socket.on("event:chats.roomRename", function (data) {
+            const roomEl = components.get("chat/recent/room", data.roomId);
             const titleEl = roomEl.find('[component="chat/title"]');
             ajaxify.data.roomName = data.newName;
 
@@ -506,16 +645,22 @@ define('forum/chats', [
 
     Chats.setActive = function () {
         if (ajaxify.data.roomId) {
-            socket.emit('modules.chats.markRead', ajaxify.data.roomId);
-            $('[data-roomid="' + ajaxify.data.roomId + '"]').toggleClass('unread', false);
+            socket.emit("modules.chats.markRead", ajaxify.data.roomId);
+            $('[data-roomid="' + ajaxify.data.roomId + '"]').toggleClass(
+                "unread",
+                false
+            );
             $('.expanded-chat [component="chat/input"]').focus();
         }
-        $('.chats-list li').removeClass('bg-info');
-        $('.chats-list li[data-roomid="' + ajaxify.data.roomId + '"]').addClass('bg-info');
+        $(".chats-list li").removeClass("bg-info");
+        $('.chats-list li[data-roomid="' + ajaxify.data.roomId + '"]').addClass(
+            "bg-info"
+        );
 
-        components.get('chat/nav-wrapper').attr('data-loaded', ajaxify.data.roomId ? '1' : '0');
+        components
+            .get("chat/nav-wrapper")
+            .attr("data-loaded", ajaxify.data.roomId ? "1" : "0");
     };
-
 
     return Chats;
 });

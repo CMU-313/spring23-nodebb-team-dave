@@ -24,7 +24,7 @@ put:
               type: string
               example: the reason for the mute
   responses:
-    '200':
+    "200":
       description: successfully muted user
       content:
         application/json:
@@ -48,7 +48,7 @@ delete:
       description: uid of the user to unmute
       example: 2
   responses:
-    '200':
+    "200":
       description: successfully unmuted user
       content:
         application/json:

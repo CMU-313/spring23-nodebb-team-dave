@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /**
  * Checks localStorage and provides a fallback if it doesn't exist or is disabled
  */
-define('storage', function () {
+define("storage", function () {
     function Storage() {
         this._store = {};
         this._keys = [];
@@ -40,7 +40,7 @@ define('storage', function () {
         return this._keys[n];
     };
     if (Object.defineProperty) {
-        Object.defineProperty(Storage.prototype, 'length', {
+        Object.defineProperty(Storage.prototype, "length", {
             get: function () {
                 return this._keys.length;
             },
@@ -54,28 +54,30 @@ define('storage', function () {
         storage = window.localStorage;
         storage.setItem(item, item);
         if (storage.getItem(item) !== item) {
-            throw Error('localStorage behaved unexpectedly');
+            throw Error("localStorage behaved unexpectedly");
         }
         storage.removeItem(item);
 
         return storage;
     } catch (e) {
         console.warn(e);
-        console.warn('localStorage failed, falling back on sessionStorage');
+        console.warn("localStorage failed, falling back on sessionStorage");
 
         // see if sessionStorage works, and if so, return that
         try {
             storage = window.sessionStorage;
             storage.setItem(item, item);
             if (storage.getItem(item) !== item) {
-                throw Error('sessionStorage behaved unexpectedly');
+                throw Error("sessionStorage behaved unexpectedly");
             }
             storage.removeItem(item);
 
             return storage;
         } catch (e) {
             console.warn(e);
-            console.warn('sessionStorage failed, falling back on memory storage');
+            console.warn(
+                "sessionStorage failed, falling back on memory storage"
+            );
 
             // return an object implementing mock methods
             return new Storage();

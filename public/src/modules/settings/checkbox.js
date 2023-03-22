@@ -1,24 +1,26 @@
-'use strict';
+"use strict";
 
-define('settings/checkbox', function () {
+define("settings/checkbox", function () {
     let Settings = null;
 
     const SettingsCheckbox = {
-        types: ['checkbox'],
+        types: ["checkbox"],
         use: function () {
             Settings = this;
         },
         create: function () {
-            return Settings.helper.createElement('input', {
-                type: 'checkbox',
+            return Settings.helper.createElement("input", {
+                type: "checkbox",
             });
         },
         set: function (element, value) {
-            element.prop('checked', value);
-            element.closest('.mdl-switch').toggleClass('is-checked', element.is(':checked'));
+            element.prop("checked", value);
+            element
+                .closest(".mdl-switch")
+                .toggleClass("is-checked", element.is(":checked"));
         },
         get: function (element, trim, empty) {
-            const value = element.prop('checked');
+            const value = element.prop("checked");
             if (value == null) {
                 return;
             }

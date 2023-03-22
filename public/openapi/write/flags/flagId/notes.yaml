@@ -20,14 +20,14 @@ post:
           properties:
             note:
               type: string
-              example: 'test note'
+              example: "test note"
             datetime:
               type: number
               example: 1626446956652
           required:
             - note
   responses:
-    '200':
+    "200":
       description: flag note successfully added or updated
       content:
         application/json:

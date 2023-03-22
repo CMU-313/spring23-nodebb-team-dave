@@ -19,7 +19,7 @@ delete:
       description: a valid user id
       example: 4
   responses:
-    '200':
+    "200":
       description: user successfully removed from chat room
       content:
         application/json:

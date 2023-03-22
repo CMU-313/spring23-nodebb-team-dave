@@ -6,7 +6,7 @@
 
 .navbar {
   border: none;
-  .box-shadow(0 1px 2px rgba(0,0,0,.3));
+  .box-shadow(0 1px 2px rgba(0,0,0,0.3));
 
   &-brand {
     font-size: 24px;
@@ -17,8 +17,8 @@
       color: #fff;
       .placeholder(@navbar-inverse-link-color);
 
-      &[type=text],
-      &[type=password] {
+      &[type="text"],
+      &[type="password"] {
         .box-shadow(inset 0 -1px 0 @navbar-inverse-link-color);
 
         &:focus {
@@ -47,9 +47,9 @@
 
     &:active {
       background-color: darken(@bg, 12%);
-      #gradient > .radial(darken(@bg, 12%) 10%, @bg 11%);
+      #gradient > .radial(darken(@bg, 12%) 10%, @bg 11%);;
       background-size: 1000%;
-      .box-shadow(2px 2px 4px rgba(0,0,0,.4));
+      .box-shadow(2px 2px 4px rgba(0,0,0,0.4));
     }
   }
 }
@@ -65,7 +65,7 @@
 .btn {
   text-transform: uppercase;
   border: none;
-  .box-shadow(1px 1px 4px rgba(0,0,0,.4));
+  .box-shadow(1px 1px 4px rgba(0,0,0,0.4));
   .transition(all 0.4s);
 
   &-link {
@@ -82,7 +82,6 @@
   }
 
   &-default {
-
     &.disabled {
       background-color: rgba(0, 0, 0, 0.1);
       color: rgba(0, 0, 0, 0.4);
@@ -113,7 +112,7 @@
 
 body {
   -webkit-font-smoothing: antialiased;
-  letter-spacing: .1px;
+  letter-spacing: 0.1px;
 }
 
 p {
@@ -123,7 +122,7 @@ p {
 input,
 button {
   -webkit-font-smoothing: antialiased;
-  letter-spacing: .1px;
+  letter-spacing: 0.1px;
 }
 
 a {
@@ -149,14 +148,14 @@ label {
 textarea,
 textarea.form-control,
 input.form-control,
-input[type=text],
-input[type=password],
-input[type=email],
-input[type=number],
-[type=text].form-control,
-[type=password].form-control,
-[type=email].form-control,
-[type=tel].form-control,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+[type="text"].form-control,
+[type="password"].form-control,
+[type="email"].form-control,
+[type="tel"].form-control,
 [contenteditable].form-control {
   padding: 0;
   border: none;
@@ -372,12 +371,12 @@ input[type="checkbox"],
 }
 
 .has-warning {
-  input:not([type=checkbox]),
+  input:not([type="checkbox"]),
   .form-control,
   input.form-control[readonly],
-  input[type=text][readonly],
-  [type=text].form-control[readonly],
-  input:not([type=checkbox]):focus,
+  input[type="text"][readonly],
+  [type="text"].form-control[readonly],
+  input:not([type="checkbox"]):focus,
   .form-control:focus {
     border-bottom: none;
     .box-shadow(inset 0 -2px 0 @brand-warning);
@@ -385,12 +384,12 @@ input[type="checkbox"],
 }
 
 .has-error {
-  input:not([type=checkbox]),
+  input:not([type="checkbox"]),
   .form-control,
   input.form-control[readonly],
-  input[type=text][readonly],
-  [type=text].form-control[readonly],
-  input:not([type=checkbox]):focus,
+  input[type="text"][readonly],
+  [type="text"].form-control[readonly],
+  input:not([type="checkbox"]):focus,
   .form-control:focus {
     border-bottom: none;
     .box-shadow(inset 0 -2px 0 @brand-danger);
@@ -398,12 +397,12 @@ input[type="checkbox"],
 }
 
 .has-success {
-  input:not([type=checkbox]),
+  input:not([type="checkbox"]),
   .form-control,
   input.form-control[readonly],
-  input[type=text][readonly],
-  [type=text].form-control[readonly],
-  input:not([type=checkbox]):focus,
+  input[type="text"][readonly],
+  [type="text"].form-control[readonly],
+  input:not([type="checkbox"]):focus,
   .form-control:focus {
     border-bottom: none;
     .box-shadow(inset 0 -2px 0 @brand-success);
@@ -412,7 +411,9 @@ input[type="checkbox"],
 
 // Remove the Bootstrap feedback styles for input addons
 .input-group-addon {
-  .has-warning &, .has-error &, .has-success & {
+  .has-warning &,
+  .has-error &,
+  .has-success & {
     color: @input-color;
     border-color: @input-group-addon-border-color;
     background-color: @input-group-addon-bg;
@@ -455,7 +456,6 @@ input[type="checkbox"],
   }
 
   &.nav-justified {
-
     & > li > a,
     & > li > a:hover,
     & > li > a:focus,
@@ -474,7 +474,7 @@ input[type="checkbox"],
 .dropdown-menu {
   margin-top: 0;
   border: none;
-  .box-shadow(0 1px 4px rgba(0,0,0,.3));
+  .box-shadow(0 1px 4px rgba(0,0,0,0.3));
 }
 
 // Indicators =================================================================
@@ -577,7 +577,6 @@ input[type="checkbox"],
 }
 
 .list-group {
-
   &-item {
     padding: 15px;
   }
@@ -595,7 +594,7 @@ input[type="checkbox"],
 .panel {
   border: none;
   border-radius: 2px;
-  .box-shadow(0 1px 4px rgba(0,0,0,.3));
+  .box-shadow(0 1px 4px rgba(0,0,0,0.3));
 
   &-heading {
     border-bottom: none;
@@ -608,14 +607,18 @@ input[type="checkbox"],
 
 .popover {
   border: none;
-  .box-shadow(0 1px 4px rgba(0,0,0,.3));
+  .box-shadow(0 1px 4px rgba(0,0,0,0.3));
 }
 
 .carousel {
   &-caption {
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       color: inherit;
     }
   }
 }
-

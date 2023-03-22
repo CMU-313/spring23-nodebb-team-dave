@@ -17,9 +17,9 @@ post:
               example: admin
             password:
               type: string
-              example: '123456'
+              example: "123456"
   responses:
-    '200':
+    "200":
       description: credentials successfully validated
       content:
         application/json:

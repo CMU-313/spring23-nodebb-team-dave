@@ -12,7 +12,7 @@ get:
       description: a valid category id, `0` for global privileges, `admin` for admin privileges
       example: 1
   responses:
-    '200':
+    "200":
       description: Category privileges successfully retrieved
       content:
         application/json:

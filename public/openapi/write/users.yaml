@@ -12,7 +12,7 @@ post:
           properties:
             username:
               type: string
-              description: 'If the username is taken, a number will be appended'
+              description: "If the username is taken, a number will be appended"
               example: Dragon Fruit
             password:
               type: string
@@ -23,7 +23,7 @@ post:
           required:
             - username
   responses:
-    '200':
+    "200":
       description: user successfully created
       content:
         application/json:
@@ -34,15 +34,15 @@ post:
                 $ref: ../components/schemas/Status.yaml#/Status
               response:
                 $ref: ../components/schemas/UserObj.yaml#/UserObj
-    '400':
+    "400":
       $ref: ../components/responses/400.yaml#/400
-    '401':
+    "401":
       $ref: ../components/responses/401.yaml#/401
-    '403':
+    "403":
       $ref: ../components/responses/403.yaml#/403
-    '426':
+    "426":
       $ref: ../components/responses/426.yaml#/426
-    '500':
+    "500":
       $ref: ../components/responses/500.yaml#/500
 delete:
   tags:
@@ -63,7 +63,7 @@ delete:
                 type: number
               example: [5, 6]
   responses:
-    '200':
+    "200":
       description: user account(s) deleted
       content:
         application/json:

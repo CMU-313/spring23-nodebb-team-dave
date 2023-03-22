@@ -1,8 +1,11 @@
-'use strict';
+"use strict";
 
-
-define('forum/topic/move-post', [
-    'components', 'postSelect', 'translator', 'alerts', 'api',
+define("forum/topic/move-post", [
+    "components",
+    "postSelect",
+    "translator",
+    "alerts",
+    "api",
 ], function (components, postSelect, translator, alerts, api) {
     const MovePost = {};
 
@@ -15,49 +18,54 @@ define('forum/topic/move-post', [
             return;
         }
         fromTid = ajaxify.data.tid;
-        app.parseAndTranslate('modals/move-post', {}, function (html) {
+        app.parseAndTranslate("modals/move-post", {}, function (html) {
             moveModal = html;
 
-            moveCommit = moveModal.find('#move_posts_confirm');
+            moveCommit = moveModal.find("#move_posts_confirm");
 
-            $('body').append(moveModal);
+            $("body").append(moveModal);
 
-            moveModal.find('.close,#move_posts_cancel').on('click', closeMoveModal);
-            moveModal.find('#topicId').on('keyup', utils.debounce(checkMoveButtonEnable, 200));
+            moveModal
+                .find(".close,#move_posts_cancel")
+                .on("click", closeMoveModal);
+            moveModal
+                .find("#topicId")
+                .on("keyup", utils.debounce(checkMoveButtonEnable, 200));
             postSelect.init(onPostToggled);
             showPostsSelected();
 
             if (postEl) {
-                postSelect.togglePostSelection(postEl, postEl.attr('data-pid'));
+                postSelect.togglePostSelection(postEl, postEl.attr("data-pid"));
             }
 
-            $(window).off('action:ajaxify.end', onAjaxifyEnd)
-                .on('action:ajaxify.end', onAjaxifyEnd);
+            $(window)
+                .off("action:ajaxify.end", onAjaxifyEnd)
+                .on("action:ajaxify.end", onAjaxifyEnd);
 
-            moveCommit.on('click', function () {
+            moveCommit.on("click", function () {
                 const targetTid = getTargetTid();
                 if (!targetTid) {
                     return;
                 }
-                moveCommit.attr('disabled', true);
+                moveCommit.attr("disabled", true);
                 const data = {
                     pids: postSelect.pids.slice(),
                     tid: targetTid,
                 };
                 if (config.undoTimeout > 0) {
                     return alerts.alert({
-                        alert_id: 'pids_move_' + postSelect.pids.join('-'),
-                        title: '[[topic:thread_tools.move-posts]]',
-                        message: '[[topic:topic_move_posts_success]]',
-                        type: 'success',
+                        alert_id: "pids_move_" + postSelect.pids.join("-"),
+                        title: "[[topic:thread_tools.move-posts]]",
+                        message: "[[topic:topic_move_posts_success]]",
+                        type: "success",
                         timeout: 10000,
                         timeoutfn: function () {
                             movePosts(data);
                         },
                         clickfn: function (alert, params) {
                             delete params.timeoutfn;
-                            alerts.success('[[topic:topic_move_posts_undone]]');
-                            moveCommit.removeAttr('disabled');
+                            alerts.success("[[topic:topic_move_posts_undone]]");
+                            moveCommit.removeAttr("disabled");
                         },
                     });
                 }
@@ -71,9 +79,11 @@ define('forum/topic/move-post', [
         if (!moveModal) {
             return;
         }
-        const tidInput = moveModal.find('#topicId');
+        const tidInput = moveModal.find("#topicId");
         let targetTid = null;
-        if (ajaxify.data.template.topic && ajaxify.data.tid &&
+        if (
+            ajaxify.data.template.topic &&
+            ajaxify.data.tid &&
             parseInt(ajaxify.data.tid, 10) !== fromTid
         ) {
             targetTid = ajaxify.data.tid;
@@ -85,7 +95,7 @@ define('forum/topic/move-post', [
     }
 
     function getTargetTid() {
-        const tidInput = moveModal.find('#topicId');
+        const tidInput = moveModal.find("#topicId");
         if (tidInput.length && tidInput.val()) {
             return tidInput.val();
         }
@@ -98,22 +108,39 @@ define('forum/topic/move-post', [
         }
         const targetTid = getTargetTid();
         if (postSelect.pids.length) {
-            if (targetTid && parseInt(targetTid, 10) !== parseInt(fromTid, 10)) {
-                api.get('/topics/' + targetTid, {}).then(function (data) {
+            if (
+                targetTid &&
+                parseInt(targetTid, 10) !== parseInt(fromTid, 10)
+            ) {
+                api.get("/topics/" + targetTid, {}).then(function (data) {
                     if (!data || !data.tid) {
-                        return alerts.error('[[error:no-topic]]');
+                        return alerts.error("[[error:no-topic]]");
                     }
                     if (data.scheduled) {
-                        return alerts.error('[[error:cant-move-posts-to-scheduled]]');
+                        return alerts.error(
+                            "[[error:cant-move-posts-to-scheduled]]"
+                        );
                     }
-                    const translateStr = translator.compile('topic:x-posts-will-be-moved-to-y', postSelect.pids.length, data.title);
-                    moveModal.find('#pids').translateHtml(translateStr);
+                    const translateStr = translator.compile(
+                        "topic:x-posts-will-be-moved-to-y",
+                        postSelect.pids.length,
+                        data.title
+                    );
+                    moveModal.find("#pids").translateHtml(translateStr);
                 });
             } else {
-                moveModal.find('#pids').translateHtml('[[topic:x-posts-selected, ' + postSelect.pids.length + ']]');
+                moveModal
+                    .find("#pids")
+                    .translateHtml(
+                        "[[topic:x-posts-selected, " +
+                            postSelect.pids.length +
+                            "]]"
+                    );
             }
         } else {
-            moveModal.find('#pids').translateHtml('[[topic:no-posts-selected]]');
+            moveModal
+                .find("#pids")
+                .translateHtml("[[topic:no-posts-selected]]");
         }
     }
 
@@ -122,12 +149,14 @@ define('forum/topic/move-post', [
             return;
         }
         const targetTid = getTargetTid();
-        if (postSelect.pids.length && targetTid &&
+        if (
+            postSelect.pids.length &&
+            targetTid &&
             parseInt(targetTid, 10) !== parseInt(fromTid, 10)
         ) {
-            moveCommit.removeAttr('disabled');
+            moveCommit.removeAttr("disabled");
         } else {
-            moveCommit.attr('disabled', true);
+            moveCommit.attr("disabled", true);
         }
         showPostsSelected();
     }
@@ -141,17 +170,25 @@ define('forum/topic/move-post', [
             return;
         }
 
-        Promise.all(data.pids.map(pid => api.put(`/posts/${pid}/move`, {
-            tid: data.tid,
-        }))).then(() => {
-            data.pids.forEach(function (pid) {
-                components.get('post', 'pid', pid).fadeOut(500, function () {
-                    $(this).remove();
+        Promise.all(
+            data.pids.map((pid) =>
+                api.put(`/posts/${pid}/move`, {
+                    tid: data.tid,
+                })
+            )
+        )
+            .then(() => {
+                data.pids.forEach(function (pid) {
+                    components
+                        .get("post", "pid", pid)
+                        .fadeOut(500, function () {
+                            $(this).remove();
+                        });
                 });
-            });
 
-            closeMoveModal();
-        }).catch(alerts.error);
+                closeMoveModal();
+            })
+            .catch(alerts.error);
     }
 
     function closeMoveModal() {
@@ -159,7 +196,7 @@ define('forum/topic/move-post', [
             moveModal.remove();
             moveModal = null;
             postSelect.disable();
-            $(window).off('action:ajaxify.end', onAjaxifyEnd);
+            $(window).off("action:ajaxify.end", onAjaxifyEnd);
         }
     }
 

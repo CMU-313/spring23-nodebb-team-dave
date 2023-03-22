@@ -20,12 +20,12 @@ put:
           properties:
             tags:
               type: array
-              description: 'An array of tags'
+              description: "An array of tags"
               items:
                 type: string
               example: [test, foobar]
   responses:
-    '200':
+    "200":
       description: Topic tags successfully added
       content:
         application/json:
@@ -51,7 +51,7 @@ delete:
       description: a valid topic id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic tags successfully removed.
       content:
         application/json:

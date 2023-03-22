@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const meta = require('./meta');
-const pubsub = require('./pubsub');
+const meta = require("./meta");
+const pubsub = require("./pubsub");
 
 function expandObjBy(obj1, obj2) {
     let changed = false;
@@ -11,10 +11,14 @@ function expandObjBy(obj1, obj2) {
     for (const [key, val2] of Object.entries(obj2)) {
         const val1 = obj1[key];
         const xorIsArray = Array.isArray(val1) !== Array.isArray(val2);
-        if (xorIsArray || !obj1.hasOwnProperty(key) || typeof val2 !== typeof val1) {
+        if (
+            xorIsArray ||
+            !obj1.hasOwnProperty(key) ||
+            typeof val2 !== typeof val1
+        ) {
             obj1[key] = val2;
             changed = true;
-        } else if (typeof val2 === 'object' && !Array.isArray(val2)) {
+        } else if (typeof val2 === "object" && !Array.isArray(val2)) {
             if (expandObjBy(val1, val2)) {
                 changed = true;
             }
@@ -27,17 +31,17 @@ function trim(obj1, obj2) {
     for (const [key, val1] of Object.entries(obj1)) {
         if (!obj2.hasOwnProperty(key)) {
             delete obj1[key];
-        } else if (typeof val1 === 'object' && !Array.isArray(val1)) {
+        } else if (typeof val1 === "object" && !Array.isArray(val1)) {
             trim(val1, obj2[key]);
         }
     }
 }
 
 function mergeSettings(cfg, defCfg) {
-    if (typeof defCfg !== 'object') {
+    if (typeof defCfg !== "object") {
         return;
     }
-    if (typeof cfg._ !== 'object') {
+    if (typeof cfg._ !== "object") {
         cfg._ = defCfg;
     } else {
         expandObjBy(cfg._, defCfg);
@@ -76,10 +80,10 @@ function Settings(hash, version, defCfg, callback, forceUpdate, reset) {
     });
 }
 
-Settings.prototype.hash = '';
+Settings.prototype.hash = "";
 Settings.prototype.defCfg = {};
 Settings.prototype.cfg = {};
-Settings.prototype.version = '0.0.0';
+Settings.prototype.version = "0.0.0";
 
 /**
  Synchronizes the local object with the saved object (reverts changes).
@@ -94,12 +98,12 @@ Settings.prototype.sync = function (callback) {
             }
         } catch (_error) {}
         _this.cfg = settings;
-        if (typeof _this.cfg._ !== 'object') {
+        if (typeof _this.cfg._ !== "object") {
             _this.cfg._ = _this.defCfg;
             _this.persist(callback);
         } else if (expandObjBy(_this.cfg._, _this.defCfg)) {
             _this.persist(callback);
-        } else if (typeof callback === 'function') {
+        } else if (typeof callback === "function") {
             callback.apply(_this, err);
         }
     });
@@ -112,14 +116,18 @@ Settings.prototype.sync = function (callback) {
 Settings.prototype.persist = function (callback) {
     let conf = this.cfg._;
     const _this = this;
-    if (typeof conf === 'object') {
+    if (typeof conf === "object") {
         conf = JSON.stringify(conf);
     }
-    meta.settings.set(this.hash, this.createWrapper(this.cfg.v, conf), (...args) => {
-        if (typeof callback === 'function') {
-            callback.apply(_this, args || []);
+    meta.settings.set(
+        this.hash,
+        this.createWrapper(this.cfg.v, conf),
+        (...args) => {
+            if (typeof callback === "function") {
+                callback.apply(_this, args || []);
+            }
         }
-    });
+    );
     return this;
 };
 
@@ -131,7 +139,7 @@ Settings.prototype.persist = function (callback) {
  */
 Settings.prototype.get = function (key, def) {
     let obj = this.cfg._;
-    const parts = (key || '').split('.');
+    const parts = (key || "").split(".");
     let part;
     for (let i = 0; i < parts.length; i += 1) {
         part = parts[i];
@@ -195,7 +203,7 @@ Settings.prototype.set = function (key, val) {
         this.cfg._ = val || key;
     } else {
         obj = this.cfg._;
-        parts = key.split('.');
+        parts = key.split(".");
         for (let i = 0, _len = parts.length - 1; i < _len; i += 1) {
             part = parts[i];
             if (part) {
@@ -226,7 +234,7 @@ Settings.prototype.reset = function (callback) {
  */
 Settings.prototype.checkStructure = function (callback, force) {
     if (!force && this.cfg.v === this.version) {
-        if (typeof callback === 'function') {
+        if (typeof callback === "function") {
             callback();
         }
     } else {

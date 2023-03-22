@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const meta = require('../../meta');
-const widgets = require('../../widgets');
+const meta = require("../../meta");
+const widgets = require("../../widgets");
 
 const Themes = module.exports;
 
@@ -11,9 +11,9 @@ Themes.getInstalled = async function () {
 
 Themes.set = async function (socket, data) {
     if (!data) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
-    if (data.type === 'local') {
+    if (data.type === "local") {
         await widgets.reset();
     }
 

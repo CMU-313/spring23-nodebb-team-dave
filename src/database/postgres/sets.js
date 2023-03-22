@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 module.exports = function (module) {
-    const helpers = require('./helpers');
+    const helpers = require("./helpers");
 
     module.setAdd = async function (key, value) {
         if (!Array.isArray(value)) {
@@ -13,9 +13,9 @@ module.exports = function (module) {
             return;
         }
         await module.transaction(async (client) => {
-            await helpers.ensureLegacyObjectType(client, key, 'set');
+            await helpers.ensureLegacyObjectType(client, key, "set");
             await client.query({
-                name: 'setAdd',
+                name: "setAdd",
                 text: `
 INSERT INTO "legacy_set" ("_key", "member")
 SELECT $1::TEXT, m
@@ -39,9 +39,9 @@ DO NOTHING`,
         keys = _.uniq(keys);
 
         await module.transaction(async (client) => {
-            await helpers.ensureLegacyObjectsType(client, keys, 'set');
+            await helpers.ensureLegacyObjectsType(client, keys, "set");
             await client.query({
-                name: 'setsAdd',
+                name: "setsAdd",
                 text: `
 INSERT INTO "legacy_set" ("_key", "member")
 SELECT k, m
@@ -64,7 +64,7 @@ DO NOTHING`,
         }
 
         await module.pool.query({
-            name: 'setRemove',
+            name: "setRemove",
             text: `
 DELETE FROM "legacy_set"
  WHERE "_key" = ANY($1::TEXT[])
@@ -79,7 +79,7 @@ DELETE FROM "legacy_set"
         }
 
         await module.pool.query({
-            name: 'setsRemove',
+            name: "setsRemove",
             text: `
 DELETE FROM "legacy_set"
  WHERE "_key" = ANY($1::TEXT[])
@@ -94,7 +94,7 @@ DELETE FROM "legacy_set"
         }
 
         const res = await module.pool.query({
-            name: 'isSetMember',
+            name: "isSetMember",
             text: `
 SELECT 1
   FROM "legacy_object_live" o
@@ -117,7 +117,7 @@ SELECT 1
         values = values.map(helpers.valueToString);
 
         const res = await module.pool.query({
-            name: 'isSetMembers',
+            name: "isSetMembers",
             text: `
 SELECT s."member" m
   FROM "legacy_object_live" o
@@ -129,7 +129,7 @@ SELECT s."member" m
             values: [key, values],
         });
 
-        return values.map(v => res.rows.some(r => r.m === v));
+        return values.map((v) => res.rows.some((r) => r.m === v));
     };
 
     module.isMemberOfSets = async function (sets, value) {
@@ -140,7 +140,7 @@ SELECT s."member" m
         value = helpers.valueToString(value);
 
         const res = await module.pool.query({
-            name: 'isMemberOfSets',
+            name: "isMemberOfSets",
             text: `
 SELECT o."_key" k
   FROM "legacy_object_live" o
@@ -152,7 +152,7 @@ SELECT o."_key" k
             values: [sets, value],
         });
 
-        return sets.map(s => res.rows.some(r => r.k === s));
+        return sets.map((s) => res.rows.some((r) => r.k === s));
     };
 
     module.getSetMembers = async function (key) {
@@ -161,7 +161,7 @@ SELECT o."_key" k
         }
 
         const res = await module.pool.query({
-            name: 'getSetMembers',
+            name: "getSetMembers",
             text: `
 SELECT s."member" m
   FROM "legacy_object_live" o
@@ -172,7 +172,7 @@ SELECT s."member" m
             values: [key],
         });
 
-        return res.rows.map(r => r.m);
+        return res.rows.map((r) => r.m);
     };
 
     module.getSetsMembers = async function (keys) {
@@ -181,7 +181,7 @@ SELECT s."member" m
         }
 
         const res = await module.pool.query({
-            name: 'getSetsMembers',
+            name: "getSetsMembers",
             text: `
 SELECT o."_key" k,
        array_agg(s."member") m
@@ -194,7 +194,9 @@ SELECT o."_key" k,
             values: [keys],
         });
 
-        return keys.map(k => (res.rows.find(r => r.k === k) || { m: [] }).m);
+        return keys.map(
+            (k) => (res.rows.find((r) => r.k === k) || { m: [] }).m
+        );
     };
 
     module.setCount = async function (key) {
@@ -203,7 +205,7 @@ SELECT o."_key" k,
         }
 
         const res = await module.pool.query({
-            name: 'setCount',
+            name: "setCount",
             text: `
 SELECT COUNT(*) c
   FROM "legacy_object_live" o
@@ -219,7 +221,7 @@ SELECT COUNT(*) c
 
     module.setsCount = async function (keys) {
         const res = await module.pool.query({
-            name: 'setsCount',
+            name: "setsCount",
             text: `
 SELECT o."_key" k,
        COUNT(*) c
@@ -232,12 +234,12 @@ SELECT o."_key" k,
             values: [keys],
         });
 
-        return keys.map(k => (res.rows.find(r => r.k === k) || { c: 0 }).c);
+        return keys.map((k) => (res.rows.find((r) => r.k === k) || { c: 0 }).c);
     };
 
     module.setRemoveRandom = async function (key) {
         const res = await module.pool.query({
-            name: 'setRemoveRandom',
+            name: "setRemoveRandom",
             text: `
 WITH A AS (
     SELECT s."member"

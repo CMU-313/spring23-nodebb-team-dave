@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const categories = require('../categories');
-const privileges = require('../privileges');
-const user = require('../user');
-const topics = require('../topics');
+const categories = require("../categories");
+const privileges = require("../privileges");
+const user = require("../user");
+const topics = require("../topics");
 
 const SocketCategories = module.exports;
 
-require('./categories/search')(SocketCategories);
+require("./categories/search")(SocketCategories);
 
 SocketCategories.getRecentReplies = async function (socket, cid) {
     return await categories.getRecentReplies(cid, socket.uid, 0, 4);
@@ -15,27 +15,39 @@ SocketCategories.getRecentReplies = async function (socket, cid) {
 
 SocketCategories.get = async function (socket) {
     async function getCategories() {
-        const cids = await categories.getCidsByPrivilege('categories:cid', socket.uid, 'find');
+        const cids = await categories.getCidsByPrivilege(
+            "categories:cid",
+            socket.uid,
+            "find"
+        );
         return await categories.getCategoriesData(cids);
     }
     const [isAdmin, categoriesData] = await Promise.all([
         user.isAdministrator(socket.uid),
         getCategories(),
     ]);
-    return categoriesData.filter(category => category && (!category.disabled || isAdmin));
+    return categoriesData.filter(
+        (category) => category && (!category.disabled || isAdmin)
+    );
 };
 
 SocketCategories.getWatchedCategories = async function (socket) {
     const [categoriesData, ignoredCids] = await Promise.all([
-        categories.getCategoriesByPrivilege('cid:0:children', socket.uid, 'find'),
+        categories.getCategoriesByPrivilege(
+            "cid:0:children",
+            socket.uid,
+            "find"
+        ),
         user.getIgnoredCategories(socket.uid),
     ]);
-    return categoriesData.filter(category => category && !ignoredCids.includes(String(category.cid)));
+    return categoriesData.filter(
+        (category) => category && !ignoredCids.includes(String(category.cid))
+    );
 };
 
 SocketCategories.loadMore = async function (socket, data) {
     if (!data) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
     data.query = data.query || {};
     const [userPrivileges, settings, targetUid] = await Promise.all([
@@ -45,7 +57,7 @@ SocketCategories.loadMore = async function (socket, data) {
     ]);
 
     if (!userPrivileges.read) {
-        throw new Error('[[error:no-privileges]]');
+        throw new Error("[[error:no-privileges]]");
     }
 
     const infScrollTopicsPerPage = 20;
@@ -77,17 +89,21 @@ SocketCategories.loadMore = async function (socket, data) {
     result.privileges = userPrivileges;
     result.template = {
         category: true,
-        name: 'category',
+        name: "category",
     };
     return result;
 };
 
 SocketCategories.getTopicCount = async function (socket, cid) {
-    return await categories.getCategoryField(cid, 'topic_count');
+    return await categories.getCategoryField(cid, "topic_count");
 };
 
 SocketCategories.getCategoriesByPrivilege = async function (socket, privilege) {
-    return await categories.getCategoriesByPrivilege('categories:cid', socket.uid, privilege);
+    return await categories.getCategoriesByPrivilege(
+        "categories:cid",
+        socket.uid,
+        privilege
+    );
 };
 
 SocketCategories.getMoveCategories = async function (socket, data) {
@@ -97,18 +113,29 @@ SocketCategories.getMoveCategories = async function (socket, data) {
 SocketCategories.getSelectCategories = async function (socket) {
     const [isAdmin, categoriesData] = await Promise.all([
         user.isAdministrator(socket.uid),
-        categories.buildForSelect(socket.uid, 'find', ['disabled', 'link']),
+        categories.buildForSelect(socket.uid, "find", ["disabled", "link"]),
     ]);
-    return categoriesData.filter(category => category && (!category.disabled || isAdmin) && !category.link);
+    return categoriesData.filter(
+        (category) =>
+            category && (!category.disabled || isAdmin) && !category.link
+    );
 };
 
 SocketCategories.setWatchState = async function (socket, data) {
     if (!data || !data.cid || !data.state) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
-    return await ignoreOrWatch(async (uid, cids) => {
-        await user.setCategoryWatchState(uid, cids, categories.watchStates[data.state]);
-    }, socket, data);
+    return await ignoreOrWatch(
+        async (uid, cids) => {
+            await user.setCategoryWatchState(
+                uid,
+                cids,
+                categories.watchStates[data.state]
+            );
+        },
+        socket,
+        data
+    );
 };
 
 SocketCategories.watch = async function (socket, data) {
@@ -121,18 +148,25 @@ SocketCategories.ignore = async function (socket, data) {
 
 async function ignoreOrWatch(fn, socket, data) {
     let targetUid = socket.uid;
-    const cids = Array.isArray(data.cid) ? data.cid.map(cid => parseInt(cid, 10)) : [parseInt(data.cid, 10)];
-    if (data.hasOwnProperty('uid')) {
+    const cids = Array.isArray(data.cid)
+        ? data.cid.map((cid) => parseInt(cid, 10))
+        : [parseInt(data.cid, 10)];
+    if (data.hasOwnProperty("uid")) {
         targetUid = data.uid;
     }
     await user.isAdminOrGlobalModOrSelf(socket.uid, targetUid);
-    const allCids = await categories.getAllCidsFromSet('categories:cid');
-    const categoryData = await categories.getCategoriesFields(allCids, ['cid', 'parentCid']);
+    const allCids = await categories.getAllCidsFromSet("categories:cid");
+    const categoryData = await categories.getCategoriesFields(allCids, [
+        "cid",
+        "parentCid",
+    ]);
 
     // filter to subcategories of cid
     let cat;
     do {
-        cat = categoryData.find(c => !cids.includes(c.cid) && cids.includes(c.parentCid));
+        cat = categoryData.find(
+            (c) => !cids.includes(c.cid) && cids.includes(c.parentCid)
+        );
         if (cat) {
             cids.push(cat.cid);
         }
@@ -149,11 +183,15 @@ SocketCategories.isModerator = async function (socket, cid) {
 
 SocketCategories.loadMoreSubCategories = async function (socket, data) {
     if (!data || !data.cid || !(parseInt(data.start, 10) > 0)) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
-    const allowed = await privileges.categories.can('read', data.cid, socket.uid);
+    const allowed = await privileges.categories.can(
+        "read",
+        data.cid,
+        socket.uid
+    );
     if (!allowed) {
-        throw new Error('[[error:no-privileges]]');
+        throw new Error("[[error:no-privileges]]");
     }
     const category = await categories.getCategoryData(data.cid);
     await categories.getChildrenTree(category, socket.uid);
@@ -161,7 +199,10 @@ SocketCategories.loadMoreSubCategories = async function (socket, data) {
     categories.flattenCategories(allCategories, category.children);
     await categories.getRecentTopicReplies(allCategories, socket.uid);
     const start = parseInt(data.start, 10);
-    return category.children.slice(start, start + category.subCategoriesPerPage);
+    return category.children.slice(
+        start,
+        start + category.subCategoriesPerPage
+    );
 };
 
-require('../promisify')(SocketCategories);
+require("../promisify")(SocketCategories);

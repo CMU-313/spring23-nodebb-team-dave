@@ -11,7 +11,7 @@ get:
             type: string
             example: /register
     "200":
-      description: ''
+      description: ""
       content:
         application/json:
           schema:

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const meta = require('../../meta');
+const meta = require("../../meta");
 
 const Errors = module.exports;
 

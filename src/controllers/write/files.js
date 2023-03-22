@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-const fs = require('fs').promises;
-const helpers = require('../helpers');
+const fs = require("fs").promises;
+const helpers = require("../helpers");
 
 const Files = module.exports;
 

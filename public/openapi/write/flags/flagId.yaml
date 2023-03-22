@@ -12,7 +12,7 @@ get:
       description: a valid flag id
       example: 1
   responses:
-    '200':
+    "200":
       description: flag successfully retrieved
       content:
         application/json:
@@ -48,13 +48,13 @@ put:
               example: 1625859990035
             state:
               type: string
-              enum: ['open', 'wip', 'resolved', 'rejected']
-              example: 'wip'
+              enum: ["open", "wip", "resolved", "rejected"]
+              example: "wip"
             assignee:
               type: number
               example: 1
   responses:
-    '200':
+    "200":
       description: flag successfully updated
       content:
         application/json:
@@ -81,7 +81,7 @@ delete:
       description: a valid flag id
       example: 1
   responses:
-    '200':
+    "200":
       description: Flag successfully deleted
       content:
         application/json:

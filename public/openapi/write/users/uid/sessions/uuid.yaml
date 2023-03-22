@@ -18,7 +18,7 @@ delete:
       description: uuid of the user's session
       example: 7c1a66b3-90e1-41f4-9f74-2b2edaebf917
   responses:
-    '200':
+    "200":
       description: user session revoked
       content:
         application/json:

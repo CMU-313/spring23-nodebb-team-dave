@@ -1,8 +1,7 @@
-
-'use strict';
+"use strict";
 
 module.exports = function (module) {
-    const helpers = require('../helpers');
+    const helpers = require("../helpers");
     module.sortedSetUnionCard = async function (keys) {
         const tempSetName = `temp_${Date.now()}`;
         if (!keys.length) {
@@ -17,12 +16,12 @@ module.exports = function (module) {
     };
 
     module.getSortedSetUnion = async function (params) {
-        params.method = 'zrange';
+        params.method = "zrange";
         return await module.sortedSetUnion(params);
     };
 
     module.getSortedSetRevUnion = async function (params) {
-        params.method = 'zrevrange';
+        params.method = "zrevrange";
         return await module.sortedSetUnion(params);
     };
 
@@ -35,11 +34,13 @@ module.exports = function (module) {
 
         const rangeParams = [tempSetName, params.start, params.stop];
         if (params.withScores) {
-            rangeParams.push('WITHSCORES');
+            rangeParams.push("WITHSCORES");
         }
 
         const multi = module.client.multi();
-        multi.zunionstore([tempSetName, params.sets.length].concat(params.sets));
+        multi.zunionstore(
+            [tempSetName, params.sets.length].concat(params.sets)
+        );
         multi[params.method](rangeParams);
         multi.del(tempSetName);
         let results = await helpers.execBatch(multi);

@@ -1,28 +1,35 @@
-'use strict';
+"use strict";
 
-const url = require('url');
+const url = require("url");
 
-const plugins = require('../plugins');
-const meta = require('../meta');
-const user = require('../user');
+const plugins = require("../plugins");
+const meta = require("../meta");
+const user = require("../user");
 
 function adminHomePageRoute() {
-    return ((meta.config.homePageRoute === 'custom' ? meta.config.homePageCustom : meta.config.homePageRoute) || 'categories').replace(/^\//, '');
+    return (
+        (meta.config.homePageRoute === "custom"
+            ? meta.config.homePageCustom
+            : meta.config.homePageRoute) || "categories"
+    ).replace(/^\//, "");
 }
 
 async function getUserHomeRoute(uid) {
     const settings = await user.getSettings(uid);
     let route = adminHomePageRoute();
 
-    if (settings.homePageRoute !== 'undefined' && settings.homePageRoute !== 'none') {
-        route = (settings.homePageRoute || route).replace(/^\/+/, '');
+    if (
+        settings.homePageRoute !== "undefined" &&
+        settings.homePageRoute !== "none"
+    ) {
+        route = (settings.homePageRoute || route).replace(/^\/+/, "");
     }
 
     return route;
 }
 
 async function rewrite(req, res, next) {
-    if (req.path !== '/' && req.path !== '/api/' && req.path !== '/api') {
+    if (req.path !== "/" && req.path !== "/api/" && req.path !== "/api") {
         return next();
     }
     let route = adminHomePageRoute();
@@ -40,7 +47,7 @@ async function rewrite(req, res, next) {
     const { pathname } = parsedUrl;
     const hook = `action:homepage.get:${pathname}`;
     if (!plugins.hooks.hasListeners(hook)) {
-        req.url = req.path + (!req.path.endsWith('/') ? '/' : '') + pathname;
+        req.url = req.path + (!req.path.endsWith("/") ? "/" : "") + pathname;
     } else {
         res.locals.homePageRoute = pathname;
     }

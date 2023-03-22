@@ -11,9 +11,9 @@ head:
       description: room ID to check
       example: 1
   responses:
-    '200':
+    "200":
       description: chat room found
-    '404':
+    "404":
       description: chat room not found
 get:
   tags:
@@ -29,7 +29,7 @@ get:
       description: a valid chat room id
       example: 1
   responses:
-    '200':
+    "200":
       description: Chat room successfully retrieved
       content:
         application/json:
@@ -66,7 +66,7 @@ post:
           required:
             - message
   responses:
-    '200':
+    "200":
       description: message successfully sent
       content:
         application/json:
@@ -113,9 +113,9 @@ put:
             name:
               type: string
               description: the new name of the room
-              example: 'casper the friendly room'
+              example: "casper the friendly room"
   responses:
-    '200':
+    "200":
       description: Chat room renamed
       content:
         application/json:

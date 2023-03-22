@@ -1,7 +1,6 @@
-'use strict';
+"use strict";
 
-
-define('forum/account/following', ['forum/account/header'], function (header) {
+define("forum/account/following", ["forum/account/header"], function (header) {
     const Following = {};
 
     Following.init = function () {

@@ -1,14 +1,16 @@
-'use strict';
+"use strict";
 
 module.exports = function (utils, load, warn) {
     const assign = Object.assign || jQuery.extend;
 
     function escapeHTML(str) {
-        return utils.escapeHTML(utils.decodeHTMLEntities(
-            String(str)
-                .replace(/[\s\xa0]+/g, ' ')
-                .replace(/^\s+|\s+$/g, '')
-        ));
+        return utils.escapeHTML(
+            utils.decodeHTMLEntities(
+                String(str)
+                    .replace(/[\s\xa0]+/g, " ")
+                    .replace(/^\s+|\s+$/g, "")
+            )
+        );
     }
 
     const Translator = (function () {
@@ -21,19 +23,25 @@ module.exports = function (utils, load, warn) {
             const self = this;
 
             if (!language) {
-                throw new TypeError('Parameter `language` must be a language string. Received ' + language + (language === '' ? '(empty string)' : ''));
+                throw new TypeError(
+                    "Parameter `language` must be a language string. Received " +
+                        language +
+                        (language === "" ? "(empty string)" : "")
+                );
             }
 
-            self.modules = Object.keys(Translator.moduleFactories).map(function (namespace) {
-                const factory = Translator.moduleFactories[namespace];
-                return [namespace, factory(language)];
-            }).reduce(function (prev, elem) {
-                const namespace = elem[0];
-                const module = elem[1];
-                prev[namespace] = module;
+            self.modules = Object.keys(Translator.moduleFactories)
+                .map(function (namespace) {
+                    const factory = Translator.moduleFactories[namespace];
+                    return [namespace, factory(language)];
+                })
+                .reduce(function (prev, elem) {
+                    const namespace = elem[0];
+                    const module = elem[1];
+                    prev[namespace] = module;
 
-                return prev;
-            }, {});
+                    return prev;
+                }, {});
 
             self.lang = language;
             self.translations = {};
@@ -48,9 +56,9 @@ module.exports = function (utils, load, warn) {
          */
         Translator.prototype.translate = function translate(str) {
             // regex for valid text in namespace / key
-            const validText = 'a-zA-Z0-9\\-_.\\/';
-            const validTextRegex = new RegExp('[' + validText + ']');
-            const invalidTextRegex = new RegExp('[^' + validText + '\\]]');
+            const validText = "a-zA-Z0-9\\-_.\\/";
+            const validTextRegex = new RegExp("[" + validText + "]");
+            const invalidTextRegex = new RegExp("[^" + validText + "\\]]");
 
             // current cursor position
             let cursor = 0;
@@ -75,13 +83,17 @@ module.exports = function (utils, load, warn) {
                 let level = 0;
 
                 while (i + 2 <= len) {
-                    if (text[i] === '[' && text[i + 1] === '[') {
+                    if (text[i] === "[" && text[i + 1] === "[") {
                         level += 1;
                         i += 1;
-                    } else if (text[i] === ']' && text[i + 1] === ']') {
+                    } else if (text[i] === "]" && text[i + 1] === "]") {
                         level -= 1;
                         i += 1;
-                    } else if (level === 0 && text[i] === ',' && text[i - 1] !== '\\') {
+                    } else if (
+                        level === 0 &&
+                        text[i] === "," &&
+                        text[i - 1] !== "\\"
+                    ) {
                         arr.push(text.slice(brk, i).trim());
                         i += 1;
                         brk = i;
@@ -93,7 +105,7 @@ module.exports = function (utils, load, warn) {
             }
 
             // move to the first [[
-            cursor = str.indexOf('[[', cursor);
+            cursor = str.indexOf("[[", cursor);
 
             // the loooop, we'll go to where the cursor
             // is equal to the length of the string since
@@ -130,22 +142,41 @@ module.exports = function (utils, load, warn) {
                     if (!textBeforeColonFound && validTextRegex.test(char0)) {
                         textBeforeColonFound = true;
                         cursor += 1;
-                    // found a colon, so this is probably a translation string
-                    } else if (textBeforeColonFound && !colonFound && char0 === ':') {
+                        // found a colon, so this is probably a translation string
+                    } else if (
+                        textBeforeColonFound &&
+                        !colonFound &&
+                        char0 === ":"
+                    ) {
                         colonFound = true;
                         cursor += 1;
-                    // found some text after the colon,
-                    // so this is probably a translation string
-                    } else if (colonFound && !textAfterColonFound && validTextRegex.test(char0)) {
+                        // found some text after the colon,
+                        // so this is probably a translation string
+                    } else if (
+                        colonFound &&
+                        !textAfterColonFound &&
+                        validTextRegex.test(char0)
+                    ) {
                         textAfterColonFound = true;
                         cursor += 1;
-                    } else if (textAfterColonFound && !commaAfterNameFound && char0 === ',') {
+                    } else if (
+                        textAfterColonFound &&
+                        !commaAfterNameFound &&
+                        char0 === ","
+                    ) {
                         commaAfterNameFound = true;
                         cursor += 1;
-                    // a space or comma was found before the name
-                    // this isn't a translation string, so back out
-                    } else if (!(textBeforeColonFound && colonFound && textAfterColonFound && commaAfterNameFound) &&
-                            invalidTextRegex.test(char0)) {
+                        // a space or comma was found before the name
+                        // this isn't a translation string, so back out
+                    } else if (
+                        !(
+                            textBeforeColonFound &&
+                            colonFound &&
+                            textAfterColonFound &&
+                            commaAfterNameFound
+                        ) &&
+                        invalidTextRegex.test(char0)
+                    ) {
                         cursor += 1;
                         lastBreak -= 2;
                         // no longer in a token
@@ -155,13 +186,13 @@ module.exports = function (utils, load, warn) {
                         } else {
                             break;
                         }
-                    // if we're at the beginning of another translation string,
-                    // we're nested, so add to our level
-                    } else if (char0 === '[' && char1 === '[') {
+                        // if we're at the beginning of another translation string,
+                        // we're nested, so add to our level
+                    } else if (char0 === "[" && char1 === "[") {
                         level += 1;
                         cursor += 2;
-                    // if we're at the end of a translation string
-                    } else if (char0 === ']' && char1 === ']') {
+                        // if we're at the end of a translation string
+                    } else if (char0 === "]" && char1 === "]") {
                         // if we're at the base level, then this is the end
                         if (level === 0) {
                             // so grab the name and args
@@ -172,12 +203,14 @@ module.exports = function (utils, load, warn) {
 
                             // make a backup based on the raw string of the token
                             // if there are arguments to the token
-                            let backup = '';
+                            let backup = "";
                             if (args && args.length) {
                                 backup = this.translate(currentSlice);
                             }
                             // add the translation promise to the array
-                            toTranslate.push(this.translateKey(name, args, backup));
+                            toTranslate.push(
+                                this.translateKey(name, args, backup)
+                            );
                             // skip past the ending brackets
                             cursor += 2;
                             // set this as our last break
@@ -198,7 +231,7 @@ module.exports = function (utils, load, warn) {
                 }
 
                 // skip to the next [[
-                cursor = str.indexOf('[[', cursor);
+                cursor = str.indexOf("[[", cursor);
             }
 
             // ending string of source
@@ -214,7 +247,7 @@ module.exports = function (utils, load, warn) {
 
             // and return a promise for the concatenated translated string
             return Promise.all(toTranslate).then(function (translated) {
-                return translated.join('');
+                return translated.join("");
             });
         };
 
@@ -225,10 +258,14 @@ module.exports = function (utils, load, warn) {
          * @param {string|Promise<string>} backup - Text to use in case the key can't be found
          * @returns {Promise<string>}
          */
-        Translator.prototype.translateKey = function translateKey(name, args, backup) {
+        Translator.prototype.translateKey = function translateKey(
+            name,
+            args,
+            backup
+        ) {
             const self = this;
 
-            const result = name.split(':', 2);
+            const result = name.split(":", 2);
             const namespace = result[0];
             const key = result[1];
 
@@ -237,19 +274,31 @@ module.exports = function (utils, load, warn) {
             }
 
             if (namespace && result.length === 1) {
-                return Promise.resolve('[[' + namespace + ']]');
+                return Promise.resolve("[[" + namespace + "]]");
             }
 
             if (namespace && !key) {
-                warn('Missing key in translation token "' + name + '" for language "' + self.lang + '"');
-                return Promise.resolve('[[' + namespace + ']]');
+                warn(
+                    'Missing key in translation token "' +
+                        name +
+                        '" for language "' +
+                        self.lang +
+                        '"'
+                );
+                return Promise.resolve("[[" + namespace + "]]");
             }
 
             const translation = this.getTranslation(namespace, key);
             return translation.then(function (translated) {
                 // check if the translation is missing first
                 if (!translated) {
-                    warn('Missing translation "' + name + '" for language "' + self.lang + '"');
+                    warn(
+                        'Missing translation "' +
+                            name +
+                            '" for language "' +
+                            self.lang +
+                            '"'
+                    );
                     return backup || key;
                 }
 
@@ -257,14 +306,22 @@ module.exports = function (utils, load, warn) {
                     return self.translate(escapeHTML(arg));
                 });
 
-                return Promise.all(argsToTranslate).then(function (translatedArgs) {
+                return Promise.all(argsToTranslate).then(function (
+                    translatedArgs
+                ) {
                     let out = translated;
                     translatedArgs.forEach(function (arg, i) {
-                        let escaped = arg.replace(/%(?=\d)/g, '&#37;').replace(/\\,/g, '&#44;');
+                        let escaped = arg
+                            .replace(/%(?=\d)/g, "&#37;")
+                            .replace(/\\,/g, "&#44;");
                         // fix double escaped translation keys, see https://github.com/NodeBB/NodeBB/issues/9206
-                        escaped = escaped.replace(/&amp;lsqb;/g, '&lsqb;')
-                            .replace(/&amp;rsqb;/g, '&rsqb;');
-                        out = out.replace(new RegExp('%' + (i + 1), 'g'), escaped);
+                        escaped = escaped
+                            .replace(/&amp;lsqb;/g, "&lsqb;")
+                            .replace(/&amp;rsqb;/g, "&rsqb;");
+                        out = out.replace(
+                            new RegExp("%" + (i + 1), "g"),
+                            escaped
+                        );
                     });
                     return out;
                 });
@@ -277,31 +334,43 @@ module.exports = function (utils, load, warn) {
          * @param {string} [key] - The key of the specific translation to getJSON
          * @returns {Promise<{ [key: string]: string } | string>}
          */
-        Translator.prototype.getTranslation = function getTranslation(namespace, key) {
+        Translator.prototype.getTranslation = function getTranslation(
+            namespace,
+            key
+        ) {
             let translation;
             if (!namespace) {
-                warn('[translator] Parameter `namespace` is ' + namespace + (namespace === '' ? '(empty string)' : ''));
+                warn(
+                    "[translator] Parameter `namespace` is " +
+                        namespace +
+                        (namespace === "" ? "(empty string)" : "")
+                );
                 translation = Promise.resolve({});
             } else {
-                this.translations[namespace] = this.translations[namespace] ||
-                    this.load(this.lang, namespace).catch(function () { return {}; });
+                this.translations[namespace] =
+                    this.translations[namespace] ||
+                    this.load(this.lang, namespace).catch(function () {
+                        return {};
+                    });
                 translation = this.translations[namespace];
             }
 
             if (key) {
                 return translation.then(function (x) {
-                    if (typeof x[key] === 'string') return x[key];
-                    const keyParts = key.split('.');
+                    if (typeof x[key] === "string") return x[key];
+                    const keyParts = key.split(".");
                     for (let i = 0; i <= keyParts.length; i++) {
                         if (i === keyParts.length) {
                             // default to trying to find key with the same name as parent or equal to empty string
-                            return x[keyParts[i - 1]] !== undefined ? x[keyParts[i - 1]] : x[''];
+                            return x[keyParts[i - 1]] !== undefined
+                                ? x[keyParts[i - 1]]
+                                : x[""];
                         }
                         switch (typeof x[keyParts[i]]) {
-                            case 'object':
+                            case "object":
                                 x = x[keyParts[i]];
                                 break;
-                            case 'string':
+                            case "string":
                                 if (i === keyParts.length - 1) {
                                     return x[keyParts[i]];
                                 }
@@ -328,7 +397,11 @@ module.exports = function (utils, load, warn) {
                 if (node.nodeType === 3) {
                     textNodes.push(node);
                 } else {
-                    for (let i = 0, c = node.childNodes, l = c.length; i < l; i += 1) {
+                    for (
+                        let i = 0, c = node.childNodes, l = c.length;
+                        i < l;
+                        i += 1
+                    ) {
                         helper(c[i]);
                     }
                 }
@@ -344,23 +417,33 @@ module.exports = function (utils, load, warn) {
          * @param {string[]} [attributes] - Array of node attributes to translate
          * @returns {Promise<void>}
          */
-        Translator.prototype.translateInPlace = function translateInPlace(element, attributes) {
-            attributes = attributes || ['placeholder', 'title'];
+        Translator.prototype.translateInPlace = function translateInPlace(
+            element,
+            attributes
+        ) {
+            attributes = attributes || ["placeholder", "title"];
 
             const nodes = descendantTextNodes(element);
-            const text = nodes.map(function (node) {
-                return utils.escapeHTML(node.nodeValue);
-            }).join('  ||  ');
+            const text = nodes
+                .map(function (node) {
+                    return utils.escapeHTML(node.nodeValue);
+                })
+                .join("  ||  ");
 
             const attrNodes = attributes.reduce(function (prev, attr) {
-                const tuples = Array.prototype.map.call(element.querySelectorAll('[' + attr + '*="[["]'), function (el) {
-                    return [attr, el];
-                });
+                const tuples = Array.prototype.map.call(
+                    element.querySelectorAll("[" + attr + '*="[["]'),
+                    function (el) {
+                        return [attr, el];
+                    }
+                );
                 return prev.concat(tuples);
             }, []);
-            const attrText = attrNodes.map(function (node) {
-                return node[1].getAttribute(node[0]);
-            }).join('  ||  ');
+            const attrText = attrNodes
+                .map(function (node) {
+                    return node[1].getAttribute(node[0]);
+                })
+                .join("  ||  ");
 
             return Promise.all([
                 this.translate(text),
@@ -369,12 +452,12 @@ module.exports = function (utils, load, warn) {
                 const translated = ref[0];
                 const translatedAttrs = ref[1];
                 if (translated) {
-                    translated.split('  ||  ').forEach(function (html, i) {
+                    translated.split("  ||  ").forEach(function (html, i) {
                         $(nodes[i]).replaceWith(html);
                     });
                 }
                 if (translatedAttrs) {
-                    translatedAttrs.split('  ||  ').forEach(function (text, i) {
+                    translatedAttrs.split("  ||  ").forEach(function (text, i) {
                         attrNodes[i][1].setAttribute(attrNodes[i][0], text);
                     });
                 }
@@ -399,7 +482,8 @@ module.exports = function (utils, load, warn) {
                 language = Translator.getLanguage();
             }
 
-            Translator.cache[language] = Translator.cache[language] || new Translator(language);
+            Translator.cache[language] =
+                Translator.cache[language] || new Translator(language);
 
             return Translator.cache[language];
         };
@@ -411,7 +495,10 @@ module.exports = function (utils, load, warn) {
          * @param {string} namespace - Namespace to handle translation for
          * @param {Function} factory - Function to return the translation function for this namespace
          */
-        Translator.registerModule = function registerModule(namespace, factory) {
+        Translator.registerModule = function registerModule(
+            namespace,
+            factory
+        ) {
             Translator.moduleFactories[namespace] = factory;
 
             Object.keys(Translator.cache).forEach(function (key) {
@@ -432,18 +519,18 @@ module.exports = function (utils, load, warn) {
             let cursor = 0;
             let lastBreak = 0;
             let level = 0;
-            let out = '';
+            let out = "";
             let sub;
 
             while (cursor < len) {
                 sub = text.slice(cursor, cursor + 2);
-                if (sub === '[[') {
+                if (sub === "[[") {
                     if (level === 0) {
                         out += text.slice(lastBreak, cursor);
                     }
                     level += 1;
                     cursor += 2;
-                } else if (sub === ']]') {
+                } else if (sub === "]]") {
                     level -= 1;
                     cursor += 2;
                     if (level === 0) {
@@ -463,7 +550,11 @@ module.exports = function (utils, load, warn) {
          * @returns {string}
          */
         Translator.escape = function escape(text) {
-            return typeof text === 'string' ? text.replace(/\[\[/g, '&lsqb;&lsqb;').replace(/\]\]/g, '&rsqb;&rsqb;') : text;
+            return typeof text === "string"
+                ? text
+                      .replace(/\[\[/g, "&lsqb;&lsqb;")
+                      .replace(/\]\]/g, "&rsqb;&rsqb;")
+                : text;
         };
 
         /**
@@ -472,10 +563,13 @@ module.exports = function (utils, load, warn) {
          * @returns {string}
          */
         Translator.unescape = function unescape(text) {
-            return typeof text === 'string' ?
-                text.replace(/&lsqb;/g, '[').replace(/\\\[/g, '[')
-                    .replace(/&rsqb;/g, ']').replace(/\\\]/g, ']') :
-                text;
+            return typeof text === "string"
+                ? text
+                      .replace(/&lsqb;/g, "[")
+                      .replace(/\\\[/g, "[")
+                      .replace(/&rsqb;/g, "]")
+                      .replace(/\\\]/g, "]")
+                : text;
         };
 
         /**
@@ -484,16 +578,20 @@ module.exports = function (utils, load, warn) {
          * @param {...string} arg - Optional argument for the pattern
          */
         Translator.compile = function compile() {
-            const args = Array.prototype.slice.call(arguments, 0).map(function (text) {
-                // escape commas and percent signs in arguments
-                return String(text).replace(/%/g, '&#37;').replace(/,/g, '&#44;');
-            });
+            const args = Array.prototype.slice
+                .call(arguments, 0)
+                .map(function (text) {
+                    // escape commas and percent signs in arguments
+                    return String(text)
+                        .replace(/%/g, "&#37;")
+                        .replace(/,/g, "&#44;");
+                });
 
-            return '[[' + args.join(', ') + ']]';
+            return "[[" + args.join(", ") + "]]";
         };
 
         return Translator;
-    }());
+    })();
 
     /**
      * @exports translator
@@ -517,7 +615,8 @@ module.exports = function (utils, load, warn) {
 
         flushNamespace: function (namespace) {
             Object.keys(Translator.cache).forEach(function (code) {
-                if (Translator.cache[code] &&
+                if (
+                    Translator.cache[code] &&
                     Translator.cache[code].translations &&
                     Translator.cache[code].translations[namespace]
                 ) {
@@ -525,7 +624,6 @@ module.exports = function (utils, load, warn) {
                 }
             });
         },
-
 
         /**
          * Legacy translator function for backwards compatibility
@@ -535,36 +633,46 @@ module.exports = function (utils, load, warn) {
 
             let cb = callback;
             let lang = language;
-            if (typeof language === 'function') {
+            if (typeof language === "function") {
                 cb = language;
                 lang = null;
             }
 
-            if (!(typeof text === 'string' || text instanceof String) || text === '') {
+            if (
+                !(typeof text === "string" || text instanceof String) ||
+                text === ""
+            ) {
                 if (cb) {
-                    return setTimeout(cb, 0, '');
+                    return setTimeout(cb, 0, "");
                 }
-                return '';
+                return "";
             }
 
-            return Translator.create(lang).translate(text).then(function (output) {
-                if (cb) {
-                    setTimeout(cb, 0, output);
-                }
-                return output;
-            }, function (err) {
-                warn('Translation failed: ' + err.stack);
-            });
+            return Translator.create(lang)
+                .translate(text)
+                .then(
+                    function (output) {
+                        if (cb) {
+                            setTimeout(cb, 0, output);
+                        }
+                        return output;
+                    },
+                    function (err) {
+                        warn("Translation failed: " + err.stack);
+                    }
+                );
         },
         translateKeys: async function (keys, language, callback) {
             let cb = callback;
             let lang = language;
-            if (typeof language === 'function') {
+            if (typeof language === "function") {
                 cb = language;
                 lang = null;
             }
-            const translations = await Promise.all(keys.map(key => adaptor.translate(key, lang)));
-            if (typeof cb === 'function') {
+            const translations = await Promise.all(
+                keys.map((key) => adaptor.translate(key, lang))
+            );
+            if (typeof cb === "function") {
                 return setTimeout(cb, 0, translations);
             }
             return translations;
@@ -573,18 +681,30 @@ module.exports = function (utils, load, warn) {
         /**
          * Add translations to the cache
          */
-        addTranslation: function addTranslation(language, namespace, translation) {
-            Translator.create(language).getTranslation(namespace).then(function (translations) {
-                assign(translations, translation);
-            });
+        addTranslation: function addTranslation(
+            language,
+            namespace,
+            translation
+        ) {
+            Translator.create(language)
+                .getTranslation(namespace)
+                .then(function (translations) {
+                    assign(translations, translation);
+                });
         },
 
         /**
          * Get the translations object
          */
-        getTranslations: function getTranslations(language, namespace, callback) {
+        getTranslations: function getTranslations(
+            language,
+            namespace,
+            callback
+        ) {
             callback = callback || function () {};
-            Translator.create(language).getTranslation(namespace).then(callback);
+            Translator.create(language)
+                .getTranslation(namespace)
+                .then(callback);
         },
 
         /**
@@ -598,34 +718,55 @@ module.exports = function (utils, load, warn) {
             /* eslint "prefer-object-spread": "off" */
             function toggle() {
                 const tmp = assign({}, jQuery.timeago.settings.strings);
-                jQuery.timeago.settings.strings = assign({}, adaptor.timeagoShort);
+                jQuery.timeago.settings.strings = assign(
+                    {},
+                    adaptor.timeagoShort
+                );
                 adaptor.timeagoShort = assign({}, tmp);
-                if (typeof callback === 'function') {
+                if (typeof callback === "function") {
                     callback();
                 }
             }
 
             if (!adaptor.timeagoShort) {
                 let languageCode = utils.userLangToTimeagoCode(config.userLang);
-                if (!config.timeagoCodes.includes(languageCode + '-short')) {
-                    languageCode = 'en';
+                if (!config.timeagoCodes.includes(languageCode + "-short")) {
+                    languageCode = "en";
                 }
 
-                const originalSettings = assign({}, jQuery.timeago.settings.strings);
-                adaptor.switchTimeagoLanguage(languageCode + '-short', function () {
-                    adaptor.timeagoShort = assign({}, jQuery.timeago.settings.strings);
-                    jQuery.timeago.settings.strings = assign({}, originalSettings);
-                    toggle();
-                });
+                const originalSettings = assign(
+                    {},
+                    jQuery.timeago.settings.strings
+                );
+                adaptor.switchTimeagoLanguage(
+                    languageCode + "-short",
+                    function () {
+                        adaptor.timeagoShort = assign(
+                            {},
+                            jQuery.timeago.settings.strings
+                        );
+                        jQuery.timeago.settings.strings = assign(
+                            {},
+                            originalSettings
+                        );
+                        toggle();
+                    }
+                );
             } else {
                 toggle();
             }
         },
 
-        switchTimeagoLanguage: function switchTimeagoLanguage(langCode, callback) {
+        switchTimeagoLanguage: function switchTimeagoLanguage(
+            langCode,
+            callback
+        ) {
             // Delete the cached shorthand strings if present
             delete adaptor.timeagoShort;
-            import(/* webpackChunkName: "timeago/[request]" */ 'timeago/locales/jquery.timeago.' + langCode).then(callback);
+            import(
+                /* webpackChunkName: "timeago/[request]" */ "timeago/locales/jquery.timeago." +
+                    langCode
+            ).then(callback);
         },
     };
 

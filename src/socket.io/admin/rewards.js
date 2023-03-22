@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const rewardsAdmin = require('../../rewards/admin');
+const rewardsAdmin = require("../../rewards/admin");
 
 const SocketRewards = module.exports;
 

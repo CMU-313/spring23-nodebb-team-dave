@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
-    const helpers = require('../helpers');
-    const utils = require('../../../utils');
+    const helpers = require("../helpers");
+    const utils = require("../../../utils");
 
     module.sortedSetAdd = async function (key, score, value) {
         if (!key) {
@@ -23,7 +23,7 @@ module.exports = function (module) {
         }
 
         if (scores.length !== values.length) {
-            throw new Error('[[error:invalid-data]]');
+            throw new Error("[[error:invalid-data]]");
         }
         for (let i = 0; i < scores.length; i += 1) {
             if (!utils.isNumber(scores[i])) {
@@ -42,19 +42,26 @@ module.exports = function (module) {
             return;
         }
         const isArrayOfScores = Array.isArray(scores);
-        if ((!isArrayOfScores && !utils.isNumber(scores)) ||
-            (isArrayOfScores && scores.map(s => utils.isNumber(s)).includes(false))) {
+        if (
+            (!isArrayOfScores && !utils.isNumber(scores)) ||
+            (isArrayOfScores &&
+                scores.map((s) => utils.isNumber(s)).includes(false))
+        ) {
             throw new Error(`[[error:invalid-score, ${scores}]]`);
         }
 
         if (isArrayOfScores && scores.length !== keys.length) {
-            throw new Error('[[error:invalid-data]]');
+            throw new Error("[[error:invalid-data]]");
         }
 
         const batch = module.client.batch();
         for (let i = 0; i < keys.length; i += 1) {
             if (keys[i]) {
-                batch.zadd(keys[i], isArrayOfScores ? scores[i] : scores, String(value));
+                batch.zadd(
+                    keys[i],
+                    isArrayOfScores ? scores[i] : scores,
+                    String(value)
+                );
             }
         }
         await helpers.execBatch(batch);

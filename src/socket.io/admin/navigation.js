@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const navigationAdmin = require('../../navigation/admin');
+const navigationAdmin = require("../../navigation/admin");
 
 const SocketNavigation = module.exports;
 

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
     module.sortedSetIntersectCard = async function (keys) {
@@ -7,7 +7,7 @@ module.exports = function (module) {
         }
 
         const res = await module.pool.query({
-            name: 'sortedSetIntersectCard',
+            name: "sortedSetIntersectCard",
             text: `
 WITH A AS (SELECT z."value" v,
                   COUNT(*) c
@@ -38,10 +38,10 @@ SELECT COUNT(*) c
 
     async function getSortedSetIntersect(params) {
         const { sets } = params;
-        const start = params.hasOwnProperty('start') ? params.start : 0;
-        const stop = params.hasOwnProperty('stop') ? params.stop : -1;
+        const start = params.hasOwnProperty("start") ? params.start : 0;
+        const stop = params.hasOwnProperty("stop") ? params.stop : -1;
         let weights = params.weights || [];
-        const aggregate = params.aggregate || 'SUM';
+        const aggregate = params.aggregate || "SUM";
 
         if (sets.length < weights.length) {
             weights = weights.slice(0, sets.length);
@@ -56,7 +56,9 @@ SELECT COUNT(*) c
         }
 
         const res = await module.pool.query({
-            name: `getSortedSetIntersect${aggregate}${params.sort > 0 ? 'Asc' : 'Desc'}WithScores`,
+            name: `getSortedSetIntersect${aggregate}${
+                params.sort > 0 ? "Asc" : "Desc"
+            }WithScores`,
             text: `
 WITH A AS (SELECT z."value",
                   ${aggregate}(z."score" * k."weight") "score",
@@ -72,19 +74,19 @@ SELECT A."value",
        A."score"
   FROM A
  WHERE c = array_length($1::TEXT[], 1)
- ORDER BY A."score" ${params.sort > 0 ? 'ASC' : 'DESC'}
+ ORDER BY A."score" ${params.sort > 0 ? "ASC" : "DESC"}
  LIMIT $4::INTEGER
 OFFSET $3::INTEGER`,
             values: [sets, weights, start, limit],
         });
 
         if (params.withScores) {
-            res.rows = res.rows.map(r => ({
+            res.rows = res.rows.map((r) => ({
                 value: r.value,
                 score: parseFloat(r.score),
             }));
         } else {
-            res.rows = res.rows.map(r => r.value);
+            res.rows = res.rows.map((r) => r.value);
         }
 
         return res.rows;

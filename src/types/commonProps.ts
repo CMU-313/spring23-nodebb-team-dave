@@ -1,4 +1,4 @@
-import { TagObject } from './tag';
+import { TagObject } from "./tag";
 
 export type CommonProps = {
   loggedIn: boolean;

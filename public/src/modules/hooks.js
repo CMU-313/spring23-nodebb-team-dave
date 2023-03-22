@@ -1,13 +1,11 @@
-'use strict';
+"use strict";
 
-define('hooks', [], () => {
+define("hooks", [], () => {
     const Hooks = {
         loaded: {},
         temporary: new Set(),
         runOnce: new Set(),
-        deprecated: {
-
-        },
+        deprecated: {},
         logs: {
             _collection: new Set(),
         },
@@ -31,7 +29,7 @@ define('hooks', [], () => {
 
     Hooks.logs.flush = () => {
         if (Hooks.logs._collection && Hooks.logs._collection.size) {
-            console.groupCollapsed('[hooks] Changes to hooks on this page …');
+            console.groupCollapsed("[hooks] Changes to hooks on this page …");
             Hooks.logs._collection.forEach((args) => {
                 console.log.apply(console, args);
             });
@@ -49,9 +47,13 @@ define('hooks', [], () => {
             const deprecated = Hooks.deprecated[hookName];
 
             if (deprecated) {
-                console.groupCollapsed(`[hooks] Hook "${hookName}" is deprecated, please use "${deprecated}" instead.`);
+                console.groupCollapsed(
+                    `[hooks] Hook "${hookName}" is deprecated, please use "${deprecated}" instead.`
+                );
             } else {
-                console.groupCollapsed(`[hooks] Hook "${hookName}" is deprecated, there is no alternative.`);
+                console.groupCollapsed(
+                    `[hooks] Hook "${hookName}" is deprecated, there is no alternative.`
+                );
             }
 
             console.info(method);
@@ -73,7 +75,7 @@ define('hooks', [], () => {
         return Hooks.register(hookName, method);
     };
     Hooks.onPage = Hooks.registerPage;
-    Hooks.register('action:ajaxify.start', () => {
+    Hooks.register("action:ajaxify.start", () => {
         Hooks.temporary.forEach((pair) => {
             Hooks.unregister(pair.hookName, pair.method);
             Hooks.temporary.delete(pair);
@@ -85,17 +87,24 @@ define('hooks', [], () => {
             Hooks.loaded[hookName].delete(method);
             Hooks.logs.log(`[hooks] Unregistered ${hookName}`, method);
         } else {
-            Hooks.logs.log(`[hooks] Unregistration of ${hookName} failed, passed-in method is not a registered listener or the hook itself has no listeners, currently.`);
+            Hooks.logs.log(
+                `[hooks] Unregistration of ${hookName} failed, passed-in method is not a registered listener or the hook itself has no listeners, currently.`
+            );
         }
 
         return Hooks;
     };
     Hooks.off = Hooks.unregister;
 
-    Hooks.hasListeners = hookName => Hooks.loaded[hookName] && Hooks.loaded[hookName].size > 0;
+    Hooks.hasListeners = (hookName) =>
+        Hooks.loaded[hookName] && Hooks.loaded[hookName].size > 0;
 
     const _onHookError = (e, listener, data) => {
-        console.warn(`[hooks] Exception encountered in ${listener.name ? listener.name : 'anonymous function'}, stack trace follows.`);
+        console.warn(
+            `[hooks] Exception encountered in ${
+                listener.name ? listener.name : "anonymous function"
+            }, stack trace follows.`
+        );
         console.error(e);
         return Promise.resolve(data);
     };
@@ -106,21 +115,27 @@ define('hooks', [], () => {
         }
 
         const listeners = Array.from(Hooks.loaded[hookName]);
-        return listeners.reduce((promise, listener) => promise.then((data) => {
-            try {
-                const result = listener(data);
-                return utils.isPromise(result) ?
-                    result.then(data => Promise.resolve(data)).catch(e => _onHookError(e, listener, data)) :
-                    result;
-            } catch (e) {
-                return _onHookError(e, listener, data);
-            }
-        }), Promise.resolve(data));
+        return listeners.reduce(
+            (promise, listener) =>
+                promise.then((data) => {
+                    try {
+                        const result = listener(data);
+                        return utils.isPromise(result)
+                            ? result
+                                  .then((data) => Promise.resolve(data))
+                                  .catch((e) => _onHookError(e, listener, data))
+                            : result;
+                    } catch (e) {
+                        return _onHookError(e, listener, data);
+                    }
+                }),
+            Promise.resolve(data)
+        );
     };
 
     const _fireActionHook = (hookName, data) => {
         if (Hooks.hasListeners(hookName)) {
-            Hooks.loaded[hookName].forEach(listener => listener(data));
+            Hooks.loaded[hookName].forEach((listener) => listener(data));
         }
 
         // Backwards compatibility (remove this when we eventually remove jQuery from NodeBB core)
@@ -133,32 +148,34 @@ define('hooks', [], () => {
         }
 
         const listeners = Array.from(Hooks.loaded[hookName]);
-        await Promise.allSettled(listeners.map((listener) => {
-            try {
-                return listener(data);
-            } catch (e) {
-                return _onHookError(e, listener);
-            }
-        }));
+        await Promise.allSettled(
+            listeners.map((listener) => {
+                try {
+                    return listener(data);
+                } catch (e) {
+                    return _onHookError(e, listener);
+                }
+            })
+        );
 
         return await Promise.resolve(data);
     };
 
     Hooks.fire = (hookName, data) => {
-        const type = hookName.split(':').shift();
+        const type = hookName.split(":").shift();
         let result;
         switch (type) {
-        case 'filter':
-            result = _fireFilterHook(hookName, data);
-            break;
+            case "filter":
+                result = _fireFilterHook(hookName, data);
+                break;
 
-        case 'action':
-            result = _fireActionHook(hookName, data);
-            break;
+            case "action":
+                result = _fireActionHook(hookName, data);
+                break;
 
-        case 'static':
-            result = _fireStaticHook(hookName, data);
-            break;
+            case "static":
+                result = _fireStaticHook(hookName, data);
+                break;
         }
         Hooks.runOnce.forEach((pair) => {
             if (pair.hookName === hookName) {

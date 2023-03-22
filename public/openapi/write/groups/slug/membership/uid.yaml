@@ -19,7 +19,7 @@ put:
       description: uid of the user to join the group
       example: 1
   responses:
-    '200':
+    "200":
       description: group successfully joined, or membership requested
       content:
         application/json:
@@ -52,7 +52,7 @@ delete:
       description: uid of the user to leave the group
       example: 1
   responses:
-    '200':
+    "200":
       description: group successfully left
       content:
         application/json:

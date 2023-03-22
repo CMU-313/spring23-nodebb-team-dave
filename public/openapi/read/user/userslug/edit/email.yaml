@@ -15,9 +15,9 @@ get:
       content:
         text/plain:
           schema:
-              type: string
-              description: A relative path to the registration interstitial page so they can add or update an email for their account
-              example: /register/complete
+            type: string
+            description: A relative path to the registration interstitial page so they can add or update an email for their account
+            example: /register/complete
     "302":
       description: Redirects the user to a registration interstitial page so they can add or update an email for their account
       headers:

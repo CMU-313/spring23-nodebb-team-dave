@@ -1,24 +1,21 @@
 // webpack config for webinstaller
 
-'use strict';
+"use strict";
 
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-    mode: 'production',
+    mode: "production",
     entry: {
-        installer: './public/src/installer/install.js',
+        installer: "./public/src/installer/install.js",
     },
     output: {
-        filename: '[name].min.js',
-        path: path.resolve(__dirname, 'build/public'),
+        filename: "[name].min.js",
+        path: path.resolve(__dirname, "build/public"),
         publicPath: `/assets/`,
     },
     resolve: {
         symlinks: false,
-        modules: [
-            'public/src',
-            'node_modules',
-        ],
+        modules: ["public/src", "node_modules"],
     },
 };

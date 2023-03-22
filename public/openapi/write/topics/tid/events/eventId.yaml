@@ -19,7 +19,7 @@ delete:
       description: a valid topic event id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic event successfully deleted
       content:
         application/json:

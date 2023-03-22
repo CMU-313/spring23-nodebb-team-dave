@@ -11,7 +11,7 @@ get:
       required: true
       schema:
         type: string
-      example: 'test@example.org'
+      example: "test@example.org"
   responses:
     "200":
       description: ""

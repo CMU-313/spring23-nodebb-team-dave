@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const social = require('../../social');
+const social = require("../../social");
 
 const SocketSocial = module.exports;
 

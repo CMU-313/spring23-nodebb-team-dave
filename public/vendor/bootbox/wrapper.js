@@ -1,15 +1,17 @@
 /* global bootbox */
 
-require(['translator', 'bootbox'], function (shim, bootbox) {
-    'use strict';
+require(["translator", "bootbox"], function (shim, bootbox) {
+    "use strict";
 
     // expose as global with a warning
     if (Object.defineProperty) {
-        Object.defineProperty(window, 'bootbox', {
+        Object.defineProperty(window, "bootbox", {
             configurable: true,
             enumerable: true,
             get: function () {
-                console.warn('[deprecated] Accessing bootbox globally is deprecated. Use `require(["bootbox"], function (bootbox) { ... })` instead');
+                console.warn(
+                    '[deprecated] Accessing bootbox globally is deprecated. Use `require(["bootbox"], function (bootbox) { ... })` instead'
+                );
                 return bootbox;
             },
         });
@@ -23,7 +25,7 @@ require(['translator', 'bootbox'], function (shim, bootbox) {
 
     var translator = shim.Translator.create();
     var dialog = bootbox.dialog;
-    var attrsToTranslate = ['placeholder', 'title', 'value', 'label'];
+    var attrsToTranslate = ["placeholder", "title", "value", "label"];
     bootbox.dialog = function (options) {
         var show = options.show !== false;
         options.show = false;
@@ -32,22 +34,24 @@ require(['translator', 'bootbox'], function (shim, bootbox) {
         var element = $elem[0];
 
         if (/\[\[.+\]\]/.test(element.outerHTML)) {
-            translator.translateInPlace(element, attrsToTranslate).then(function () {
-                if (show) {
-                    $elem.modal('show');
-                }
-            });
+            translator
+                .translateInPlace(element, attrsToTranslate)
+                .then(function () {
+                    if (show) {
+                        $elem.modal("show");
+                    }
+                });
         } else if (show) {
-            $elem.modal('show');
+            $elem.modal("show");
         }
 
         return $elem;
     };
 
     Promise.all([
-        translator.translateKey('modules:bootbox.ok', []),
-        translator.translateKey('modules:bootbox.cancel', []),
-        translator.translateKey('modules:bootbox.confirm', []),
+        translator.translateKey("modules:bootbox.ok", []),
+        translator.translateKey("modules:bootbox.cancel", []),
+        translator.translateKey("modules:bootbox.confirm", []),
     ]).then(function (translations) {
         var lang = shim.getLanguage();
         bootbox.addLocale(lang, {
@@ -59,4 +63,3 @@ require(['translator', 'bootbox'], function (shim, bootbox) {
         bootbox.setLocale(lang);
     });
 });
-

@@ -12,7 +12,7 @@ put:
       description: a valid post id
       example: 2
   responses:
-    '200':
+    "200":
       description: Post successfully bookmarked
       content:
         application/json:
@@ -38,7 +38,7 @@ delete:
       description: a valid post id
       example: 2
   responses:
-    '200':
+    "200":
       description: Post successfully unbookmarked
       content:
         application/json:

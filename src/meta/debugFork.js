@@ -1,11 +1,13 @@
-'use strict';
+"use strict";
 
-const { fork } = require('child_process');
+const { fork } = require("child_process");
 
-let debugArg = process.execArgv.find(arg => /^--(debug|inspect)/.test(arg));
+let debugArg = process.execArgv.find((arg) => /^--(debug|inspect)/.test(arg));
 const debugging = !!debugArg;
 
-debugArg = debugArg ? debugArg.replace('-brk', '').split('=') : ['--debug', 5859];
+debugArg = debugArg
+    ? debugArg.replace("-brk", "").split("=")
+    : ["--debug", 5859];
 let lastAddress = parseInt(debugArg[1], 10);
 
 /**
@@ -19,7 +21,7 @@ function debugFork(modulePath, args, options) {
     if (global.v8debug || debugging) {
         lastAddress += 1;
 
-        execArgv = [`${debugArg[0]}=${lastAddress}`, '--nolazy'];
+        execArgv = [`${debugArg[0]}=${lastAddress}`, "--nolazy"];
     }
 
     if (!Array.isArray(args)) {

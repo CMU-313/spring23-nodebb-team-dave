@@ -1,9 +1,9 @@
 {
-	"loading": "Ladataan ulkoasuja...",
-	"homepage": "Kotisivu",
-	"select-skin": "Valitse ulkoasu",
-	"current-skin": "Nykyinen ulkoasu",
-	"skin-updated": "Ulkoasu päivitetty",
-	"applied-success": "Ulkoasu \"%1\" valittiin onnistuneesti.",
-	"revert-success": "Ulkoasu palautettu oletusväreille."
+  "loading": "Ladataan ulkoasuja...",
+  "homepage": "Kotisivu",
+  "select-skin": "Valitse ulkoasu",
+  "current-skin": "Nykyinen ulkoasu",
+  "skin-updated": "Ulkoasu päivitetty",
+  "applied-success": "Ulkoasu \"%1\" valittiin onnistuneesti.",
+  "revert-success": "Ulkoasu palautettu oletusväreille."
 }

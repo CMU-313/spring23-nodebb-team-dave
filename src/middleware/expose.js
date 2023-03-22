@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
 /**
  * The middlewares here strictly act to "expose" certain values from the database,
  * into `res.locals` for use in middlewares and/or controllers down the line
  */
 
-const user = require('../user');
-const privileges = require('../privileges');
-const utils = require('../utils');
+const user = require("../user");
+const privileges = require("../privileges");
+const utils = require("../utils");
 
 module.exports = function (middleware) {
     middleware.exposeAdmin = async (req, res, next) => {
@@ -41,8 +41,8 @@ module.exports = function (middleware) {
     middleware.exposePrivilegeSet = async (req, res, next) => {
         // Exposes a user's global/admin privilege set
         res.locals.privileges = {
-            ...await privileges.global.get(req.user.uid),
-            ...await privileges.admin.get(req.user.uid),
+            ...(await privileges.global.get(req.user.uid)),
+            ...(await privileges.admin.get(req.user.uid)),
         };
         next();
     };

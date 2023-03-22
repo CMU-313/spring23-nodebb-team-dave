@@ -4,13 +4,13 @@ post:
   summary: invite users with email by email
   description: This operation sends an invitation email to the given addresses, with an option to join selected groups on acceptance
   parameters:
-  - in: path
-    name: uid
-    schema:
-      type: integer
-    required: true
-    description: uid of the user sending invitations
-    example: 1
+    - in: path
+      name: uid
+      schema:
+        type: integer
+      required: true
+      description: uid of the user sending invitations
+      example: 1
   requestBody:
     required: true
     content:
@@ -25,11 +25,11 @@ post:
             groupsToJoin:
               type: array
               description: A collection of group names
-              example: ['administrators']
+              example: ["administrators"]
           required:
             - emails
   responses:
-    '200':
+    "200":
       description: invitation email(s) sent
       content:
         application/json:
@@ -40,9 +40,9 @@ post:
                 $ref: ../../../components/schemas/Status.yaml#/Status
               response:
                 type: object
-    '400':
+    "400":
       $ref: ../../../components/responses/400.yaml#/400
-    '401':
+    "401":
       $ref: ../../../components/responses/401.yaml#/401
-    '403':
+    "403":
       $ref: ../../../components/responses/403.yaml#/403

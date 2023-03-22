@@ -11,7 +11,7 @@ put:
       description: uid of the user to follow
       example: 2
   responses:
-    '200':
+    "200":
       description: successfully followed user
       content:
         application/json:
@@ -35,7 +35,7 @@ delete:
       description: uid of the user to unfollow
       example: 2
   responses:
-    '200':
+    "200":
       description: successfully unfollowed user
       content:
         application/json:

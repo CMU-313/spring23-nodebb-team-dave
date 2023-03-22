@@ -145,4 +145,4 @@ get:
                 items:
                   type: string
                   description: A valid CSS colour code
-                  example: '#fff'
+                  example: "#fff"

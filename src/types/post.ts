@@ -1,6 +1,6 @@
-import { CategoryObject } from './category';
-import { TopicObject } from './topic';
-import { UserObjectSlim } from './user';
+import { CategoryObject } from "./category";
+import { TopicObject } from "./topic";
+import { UserObjectSlim } from "./user";
 
 export type PostObject = {
   pid: number;

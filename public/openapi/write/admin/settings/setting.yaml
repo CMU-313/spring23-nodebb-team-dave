@@ -23,7 +23,7 @@ put:
               description: the value of the new setting
               example: 2
   responses:
-    '200':
+    "200":
       description: Admin setting updated
       content:
         application/json:

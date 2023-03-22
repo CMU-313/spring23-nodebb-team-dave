@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 const helpers = module.exports;
-const utils = require('../../utils');
+const utils = require("../../utils");
 
 helpers.noop = function () {};
 
@@ -19,17 +19,17 @@ helpers.fieldToString = function (field) {
         return field;
     }
 
-    if (typeof field !== 'string') {
+    if (typeof field !== "string") {
         field = field.toString();
     }
     // if there is a '.' in the field name it inserts subdocument in mongo, replace '.'s with \uff0E
-    return field.replace(/\./g, '\uff0E');
+    return field.replace(/\./g, "\uff0E");
 };
 
 helpers.serializeData = function (data) {
     const serialized = {};
     for (const [field, value] of Object.entries(data)) {
-        if (field !== '') {
+        if (field !== "") {
             serialized[helpers.fieldToString(field)] = value;
         }
     }
@@ -39,7 +39,7 @@ helpers.serializeData = function (data) {
 helpers.deserializeData = function (data) {
     const deserialized = {};
     for (const [field, value] of Object.entries(data)) {
-        deserialized[field.replace(/\uff0E/g, '.')] = value;
+        deserialized[field.replace(/\uff0E/g, ".")] = value;
     }
     return deserialized;
 };
@@ -50,18 +50,18 @@ helpers.valueToString = function (value) {
 
 helpers.buildMatchQuery = function (match) {
     let _match = match;
-    if (match.startsWith('*')) {
+    if (match.startsWith("*")) {
         _match = _match.substring(1);
     }
-    if (match.endsWith('*')) {
+    if (match.endsWith("*")) {
         _match = _match.substring(0, _match.length - 1);
     }
     _match = utils.escapeRegexChars(_match);
-    if (!match.startsWith('*')) {
+    if (!match.startsWith("*")) {
         _match = `^${_match}`;
     }
-    if (!match.endsWith('*')) {
-        _match += '$';
+    if (!match.endsWith("*")) {
+        _match += "$";
     }
     return _match;
 };

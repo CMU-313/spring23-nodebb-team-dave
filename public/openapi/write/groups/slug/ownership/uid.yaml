@@ -19,7 +19,7 @@ put:
       description: uid of the user to grant ownership
       example: 1
   responses:
-    '200':
+    "200":
       description: ownership successfully granted
       content:
         application/json:
@@ -35,7 +35,7 @@ delete:
   tags:
     - groups
   summary: rescind group ownership
-  description: 'This operation rescinds ownership privilege from a user. **Note**: Every group needs at least one owner, so if you are attempting to remove the last owner of a group, this call will fail.'
+  description: "This operation rescinds ownership privilege from a user. **Note**: Every group needs at least one owner, so if you are attempting to remove the last owner of a group, this call will fail."
   parameters:
     - in: path
       name: slug
@@ -52,7 +52,7 @@ delete:
       description: uid of the user to rescind ownership from
       example: 2
   responses:
-    '200':
+    "200":
       description: ownership successfully rescinded
       content:
         application/json:

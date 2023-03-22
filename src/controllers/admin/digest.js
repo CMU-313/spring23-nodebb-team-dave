@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const meta = require('../../meta');
-const digest = require('../../user/digest');
-const pagination = require('../../pagination');
+const meta = require("../../meta");
+const digest = require("../../user/digest");
+const pagination = require("../../pagination");
 
 const digestController = module.exports;
 
@@ -14,8 +14,8 @@ digestController.get = async function (req, res) {
     const delivery = await digest.getDeliveryTimes(start, stop);
 
     const pageCount = Math.ceil(delivery.count / resultsPerPage);
-    res.render('admin/manage/digest', {
-        title: '[[admin/menu:manage/digest]]',
+    res.render("admin/manage/digest", {
+        title: "[[admin/menu:manage/digest]]",
         delivery: delivery.users,
         default: meta.config.dailyDigestFreq,
         pagination: pagination.create(page, pageCount),

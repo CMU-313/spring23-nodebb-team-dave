@@ -12,7 +12,7 @@ get:
       description: a valid topic id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic successfully retrieved
       content:
         application/json:
@@ -53,7 +53,7 @@ post:
           required:
             - content
   responses:
-    '200':
+    "200":
       description: post successfully created
       content:
         application/json:
@@ -78,7 +78,7 @@ delete:
       description: a valid topic id
       example: 3
   responses:
-    '200':
+    "200":
       description: Topic successfully purged
       content:
         application/json:

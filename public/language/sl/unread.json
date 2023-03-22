@@ -1,15 +1,15 @@
 {
-    "title": "Neprebrano",
-    "no_unread_topics": "Ni neprebranih tem.",
-    "load_more": "Naloži več",
-    "mark_as_read": "Označi kot prebrano",
-    "selected": "Izbrano",
-    "all": "Vse",
-    "all_categories": "Vse kategorije",
-    "topics_marked_as_read.success": "Teme označene kot prebrane!",
-    "all-topics": "Vse teme",
-    "new-topics": "Nove teme",
-    "watched-topics": "Spremljane teme",
-    "unreplied-topics": "Unreplied Topics",
-    "multiple-categories-selected": "Multiple Selected"
+  "title": "Neprebrano",
+  "no_unread_topics": "Ni neprebranih tem.",
+  "load_more": "Naloži več",
+  "mark_as_read": "Označi kot prebrano",
+  "selected": "Izbrano",
+  "all": "Vse",
+  "all_categories": "Vse kategorije",
+  "topics_marked_as_read.success": "Teme označene kot prebrane!",
+  "all-topics": "Vse teme",
+  "new-topics": "Nove teme",
+  "watched-topics": "Spremljane teme",
+  "unreplied-topics": "Unreplied Topics",
+  "multiple-categories-selected": "Multiple Selected"
 }

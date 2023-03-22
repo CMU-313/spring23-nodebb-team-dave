@@ -19,7 +19,7 @@ put:
       description: The uid of the user that will be the moderator
       example: 2
   responses:
-    '200':
+    "200":
       description: User successfully made moderator
       content:
         application/json:
@@ -51,7 +51,7 @@ delete:
       description: The uid of the user that will be removed from moderators
       example: 2
   responses:
-    '200':
+    "200":
       description: User successfully made moderator
       content:
         application/json:

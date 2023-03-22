@@ -17,7 +17,7 @@ put:
         type: string
       required: true
       description: The specific privilege you would like to grant. Privileges for groups must be prefixed `group:`
-      example: 'groups:ban'
+      example: "groups:ban"
   requestBody:
     content:
       application/json:
@@ -27,9 +27,9 @@ put:
             member:
               type: string
               description: A valid user id or group name
-              example: 'guests'
+              example: "guests"
   responses:
-    '200':
+    "200":
       description: Privilege successfully granted
       content:
         application/json:
@@ -128,7 +128,7 @@ delete:
         type: string
       required: true
       description: The specific privilege you would like to rescind. Privileges for groups must be prefixed `group:`
-      example: 'groups:ban'
+      example: "groups:ban"
   requestBody:
     content:
       application/json:
@@ -138,9 +138,9 @@ delete:
             member:
               type: string
               description: A valid user id or group name
-              example: 'guests'
+              example: "guests"
   responses:
-    '200':
+    "200":
       description: Privilege successfully rescinded
       content:
         application/json:

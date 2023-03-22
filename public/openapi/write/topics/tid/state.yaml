@@ -12,7 +12,7 @@ delete:
       description: a valid topic id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic successfully deleted
       content:
         application/json:
@@ -38,7 +38,7 @@ put:
       description: a valid topic id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic successfully restored
       content:
         application/json:

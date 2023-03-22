@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
     module.sortedSetUnionCard = async function (keys) {
@@ -7,7 +7,7 @@ module.exports = function (module) {
         }
 
         const res = await module.pool.query({
-            name: 'sortedSetUnionCard',
+            name: "sortedSetUnionCard",
             text: `
 SELECT COUNT(DISTINCT z."value") c
   FROM "legacy_object_live" o
@@ -32,10 +32,10 @@ SELECT COUNT(DISTINCT z."value") c
 
     async function getSortedSetUnion(params) {
         const { sets } = params;
-        const start = params.hasOwnProperty('start') ? params.start : 0;
-        const stop = params.hasOwnProperty('stop') ? params.stop : -1;
+        const start = params.hasOwnProperty("start") ? params.start : 0;
+        const stop = params.hasOwnProperty("stop") ? params.stop : -1;
         let weights = params.weights || [];
-        const aggregate = params.aggregate || 'SUM';
+        const aggregate = params.aggregate || "SUM";
 
         if (sets.length < weights.length) {
             weights = weights.slice(0, sets.length);
@@ -50,7 +50,9 @@ SELECT COUNT(DISTINCT z."value") c
         }
 
         const res = await module.pool.query({
-            name: `getSortedSetUnion${aggregate}${params.sort > 0 ? 'Asc' : 'Desc'}WithScores`,
+            name: `getSortedSetUnion${aggregate}${
+                params.sort > 0 ? "Asc" : "Desc"
+            }WithScores`,
             text: `
 WITH A AS (SELECT z."value",
                   ${aggregate}(z."score" * k."weight") "score"
@@ -64,19 +66,19 @@ WITH A AS (SELECT z."value",
 SELECT A."value",
        A."score"
   FROM A
- ORDER BY A."score" ${params.sort > 0 ? 'ASC' : 'DESC'}
+ ORDER BY A."score" ${params.sort > 0 ? "ASC" : "DESC"}
  LIMIT $4::INTEGER
 OFFSET $3::INTEGER`,
             values: [sets, weights, start, limit],
         });
 
         if (params.withScores) {
-            res.rows = res.rows.map(r => ({
+            res.rows = res.rows.map((r) => ({
                 value: r.value,
                 score: parseFloat(r.score),
             }));
         } else {
-            res.rows = res.rows.map(r => r.value);
+            res.rows = res.rows.map((r) => r.value);
         }
         return res.rows;
     }

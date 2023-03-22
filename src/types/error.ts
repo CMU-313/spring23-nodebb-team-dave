@@ -1,4 +1,4 @@
-import { StatusObject } from './status';
+import { StatusObject } from "./status";
 
 export type ErrorObject = {
   status: StatusObject;

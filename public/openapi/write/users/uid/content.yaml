@@ -12,7 +12,7 @@ delete:
       description: uid of the user's content to delete
       example: 7
   responses:
-    '200':
+    "200":
       description: user account content deleted
       content:
         application/json:

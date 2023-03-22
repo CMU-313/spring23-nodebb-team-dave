@@ -19,7 +19,7 @@ get:
       description: a valid message id
       example: 1
   responses:
-    '200':
+    "200":
       description: Message successfully retrieved
       content:
         application/json:
@@ -60,9 +60,9 @@ put:
             message:
               type: string
               description: message content
-              example: 'edited message'
+              example: "edited message"
   responses:
-    '200':
+    "200":
       description: Message successfully edited
       content:
         application/json:
@@ -94,7 +94,7 @@ delete:
       description: a valid message id
       example: 5
   responses:
-    '200':
+    "200":
       description: Message successfully deleted
       content:
         application/json:
@@ -127,7 +127,7 @@ post:
       description: a valid message id
       example: 5
   responses:
-    '200':
+    "200":
       description: message successfully restored
       content:
         application/json:

@@ -1,12 +1,12 @@
 {
-    "administrators": "Administradores",
-    "global-moderators": "Moderadores Globais",
-    "moderators": "Moderators",
-    "no-global-moderators": "Não existem Moderadores Globais",
-    "no-sub-categories": "No subcategories",
-    "subcategories": "%1 subcategories",
-    "no-moderators": "Não existem Moderadores",
-    "add-administrator": "Adicionar Administrador",
-    "add-global-moderator": "Adicionar Moderador Global",
-    "add-moderator": "Adicionar Moderador"
+  "administrators": "Administradores",
+  "global-moderators": "Moderadores Globais",
+  "moderators": "Moderators",
+  "no-global-moderators": "Não existem Moderadores Globais",
+  "no-sub-categories": "No subcategories",
+  "subcategories": "%1 subcategories",
+  "no-moderators": "Não existem Moderadores",
+  "add-administrator": "Adicionar Administrador",
+  "add-global-moderator": "Adicionar Moderador Global",
+  "add-moderator": "Adicionar Moderador"
 }

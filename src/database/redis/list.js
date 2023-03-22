@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 module.exports = function (module) {
-    const helpers = require('./helpers');
+    const helpers = require("./helpers");
 
     module.listPrepend = async function (key, value) {
         if (!key) {
@@ -30,7 +30,7 @@ module.exports = function (module) {
         }
         if (Array.isArray(value)) {
             const batch = module.client.batch();
-            value.forEach(value => batch.lrem(key, 0, value));
+            value.forEach((value) => batch.lrem(key, 0, value));
             await helpers.execBatch(batch);
         } else {
             await module.client.lrem(key, 0, value);

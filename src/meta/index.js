@@ -1,37 +1,36 @@
-'use strict';
+"use strict";
 
-const winston = require('winston');
-const os = require('os');
-const nconf = require('nconf');
+const winston = require("winston");
+const os = require("os");
+const nconf = require("nconf");
 
-const pubsub = require('../pubsub');
-const slugify = require('../slugify');
+const pubsub = require("../pubsub");
+const slugify = require("../slugify");
 
 const Meta = module.exports;
 
 Meta.reloadRequired = false;
 
-Meta.configs = require('./configs');
-Meta.themes = require('./themes');
-Meta.js = require('./js');
-Meta.css = require('./css');
-Meta.settings = require('./settings');
-Meta.logs = require('./logs');
-Meta.errors = require('./errors');
-Meta.tags = require('./tags');
-Meta.dependencies = require('./dependencies');
-Meta.templates = require('./templates');
-Meta.blacklist = require('./blacklist');
-Meta.languages = require('./languages');
-
+Meta.configs = require("./configs");
+Meta.themes = require("./themes");
+Meta.js = require("./js");
+Meta.css = require("./css");
+Meta.settings = require("./settings");
+Meta.logs = require("./logs");
+Meta.errors = require("./errors");
+Meta.tags = require("./tags");
+Meta.dependencies = require("./dependencies");
+Meta.templates = require("./templates");
+Meta.blacklist = require("./blacklist");
+Meta.languages = require("./languages");
 
 /* Assorted */
 Meta.userOrGroupExists = async function (slug) {
     if (!slug) {
-        throw new Error('[[error:invalid-data]]');
+        throw new Error("[[error:invalid-data]]");
     }
-    const user = require('../user');
-    const groups = require('../groups');
+    const user = require("../user");
+    const groups = require("../groups");
     slug = slugify(slug);
     const [userExists, groupExists] = await Promise.all([
         user.existsBySlug(slug),
@@ -40,8 +39,8 @@ Meta.userOrGroupExists = async function (slug) {
     return userExists || groupExists;
 };
 
-if (nconf.get('isPrimary')) {
-    pubsub.on('meta:restart', (data) => {
+if (nconf.get("isPrimary")) {
+    pubsub.on("meta:restart", (data) => {
         if (data.hostname !== os.hostname()) {
             restart();
         }
@@ -49,17 +48,19 @@ if (nconf.get('isPrimary')) {
 }
 
 Meta.restart = function () {
-    pubsub.publish('meta:restart', { hostname: os.hostname() });
+    pubsub.publish("meta:restart", { hostname: os.hostname() });
     restart();
 };
 
 function restart() {
     if (process.send) {
         process.send({
-            action: 'restart',
+            action: "restart",
         });
     } else {
-        winston.error('[meta.restart] Could not restart, are you sure NodeBB was started with `./nodebb start`?');
+        winston.error(
+            "[meta.restart] Could not restart, are you sure NodeBB was started with `./nodebb start`?"
+        );
     }
 }
 
@@ -70,4 +71,4 @@ Meta.getSessionTTLSeconds = function () {
     return ttl;
 };
 
-require('../promisify')(Meta);
+require("../promisify")(Meta);

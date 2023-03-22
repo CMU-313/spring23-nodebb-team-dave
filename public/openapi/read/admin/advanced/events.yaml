@@ -14,13 +14,13 @@ get:
       schema:
         type: string
       description: Start date to filter by
-      example: ''
+      example: ""
     - in: query
       name: end
       schema:
         type: string
       description: End date to filter by
-      example: ''
+      example: ""
     - in: query
       name: perPage
       schema:

@@ -12,7 +12,7 @@ put:
       description: a valid topic id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic successfully ignored
       content:
         application/json:
@@ -38,7 +38,7 @@ delete:
       description: a valid topic id
       example: 1
   responses:
-    '200':
+    "200":
       description: Topic successfully unignored/unwatched
       content:
         application/json:

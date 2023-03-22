@@ -1,139 +1,156 @@
 /* eslint-disable no-redeclare */
 
-'use strict';
+"use strict";
 
-const $ = require('jquery');
-const zxcvbn = require('zxcvbn');
-const utils = require('../utils');
-const slugify = require('../modules/slugify');
+const $ = require("jquery");
+const zxcvbn = require("zxcvbn");
+const utils = require("../utils");
+const slugify = require("../modules/slugify");
 
-$('document').ready(function () {
+$("document").ready(function () {
     setupInputs();
     $('[name="username"]').focus();
 
-    activate('database', $('[name="database"]'));
+    activate("database", $('[name="database"]'));
 
-    if ($('#database-error').length) {
-        $('[name="database"]').parents('.input-row').addClass('error');
-        $('html, body').animate({
-            scrollTop: ($('#database-error').offset().top + 100) + 'px',
-        }, 400);
+    if ($("#database-error").length) {
+        $('[name="database"]').parents(".input-row").addClass("error");
+        $("html, body").animate(
+            {
+                scrollTop: $("#database-error").offset().top + 100 + "px",
+            },
+            400
+        );
     }
 
-    $('#launch').on('click', launchForum);
+    $("#launch").on("click", launchForum);
 
-    if ($('#installing').length) {
+    if ($("#installing").length) {
         setTimeout(function () {
             window.location.reload(true);
         }, 5000);
     }
 
     function setupInputs() {
-        $('form').on('focus', '.form-control', function () {
-            const parent = $(this).parents('.input-row');
+        $("form").on("focus", ".form-control", function () {
+            const parent = $(this).parents(".input-row");
 
-            $('.input-row.active').removeClass('active');
-            parent.addClass('active').removeClass('error');
+            $(".input-row.active").removeClass("active");
+            parent.addClass("active").removeClass("error");
 
-            const help = parent.find('.help-text');
-            help.html(help.attr('data-help'));
+            const help = parent.find(".help-text");
+            help.html(help.attr("data-help"));
         });
 
-        $('form').on('blur change', '[name]', function () {
-            activate($(this).attr('name'), $(this));
+        $("form").on("blur change", "[name]", function () {
+            activate($(this).attr("name"), $(this));
         });
 
-        $('form').submit(validateAll);
+        $("form").submit(validateAll);
     }
 
     function validateAll(ev) {
-        $('form .admin [name]').each(function () {
-            activate($(this).attr('name'), $(this));
+        $("form .admin [name]").each(function () {
+            activate($(this).attr("name"), $(this));
         });
 
-        if ($('form .admin .error').length) {
+        if ($("form .admin .error").length) {
             ev.preventDefault();
-            $('html, body').animate({ scrollTop: '0px' }, 400);
+            $("html, body").animate({ scrollTop: "0px" }, 400);
 
             return false;
         }
-        $('#submit .working').removeClass('hide');
+        $("#submit .working").removeClass("hide");
     }
 
     function activate(type, el) {
         const field = el.val();
-        const parent = el.parents('.input-row');
-        const help = parent.children('.help-text');
+        const parent = el.parents(".input-row");
+        const help = parent.children(".help-text");
 
         function validateUsername(field) {
             if (!utils.isUserNameValid(field) || !slugify(field)) {
-                parent.addClass('error');
-                help.html('Invalid Username.');
+                parent.addClass("error");
+                help.html("Invalid Username.");
             } else {
-                parent.removeClass('error');
+                parent.removeClass("error");
             }
         }
 
         function validatePassword(field) {
             if (!utils.isPasswordValid(field)) {
-                parent.addClass('error');
-                help.html('Invalid Password.');
-            } else if (field.length < $('[name="admin:password"]').attr('data-minimum-length')) {
-                parent.addClass('error');
-                help.html('Password is too short.');
-            } else if (zxcvbn(field).score < parseInt($('[name="admin:password"]').attr('data-minimum-strength'), 10)) {
-                parent.addClass('error');
-                help.html('Password is too weak.');
+                parent.addClass("error");
+                help.html("Invalid Password.");
+            } else if (
+                field.length <
+                $('[name="admin:password"]').attr("data-minimum-length")
+            ) {
+                parent.addClass("error");
+                help.html("Password is too short.");
+            } else if (
+                zxcvbn(field).score <
+                parseInt(
+                    $('[name="admin:password"]').attr("data-minimum-strength"),
+                    10
+                )
+            ) {
+                parent.addClass("error");
+                help.html("Password is too weak.");
             } else {
-                parent.removeClass('error');
+                parent.removeClass("error");
             }
         }
 
         function validateConfirmPassword() {
-            if ($('[name="admin:password"]').val() !== $('[name="admin:passwordConfirm"]').val()) {
-                parent.addClass('error');
-                help.html('Passwords do not match.');
+            if (
+                $('[name="admin:password"]').val() !==
+                $('[name="admin:passwordConfirm"]').val()
+            ) {
+                parent.addClass("error");
+                help.html("Passwords do not match.");
             } else {
-                parent.removeClass('error');
+                parent.removeClass("error");
             }
         }
 
         function validateEmail(field) {
             if (!utils.isEmailValid(field)) {
-                parent.addClass('error');
-                help.html('Invalid Email Address.');
+                parent.addClass("error");
+                help.html("Invalid Email Address.");
             } else {
-                parent.removeClass('error');
+                parent.removeClass("error");
             }
         }
 
         function switchDatabase(field) {
-            $('#database-config').html($('[data-database="' + field + '"]').html());
+            $("#database-config").html(
+                $('[data-database="' + field + '"]').html()
+            );
         }
 
         switch (type) {
-        case 'admin:username':
-            return validateUsername(field);
-        case 'admin:password':
-            return validatePassword(field);
-        case 'admin:passwordConfirm':
-            return validateConfirmPassword(field);
-        case 'admin:email':
-            return validateEmail(field);
-        case 'database':
-            return switchDatabase(field);
+            case "admin:username":
+                return validateUsername(field);
+            case "admin:password":
+                return validatePassword(field);
+            case "admin:passwordConfirm":
+                return validateConfirmPassword(field);
+            case "admin:email":
+                return validateEmail(field);
+            case "database":
+                return switchDatabase(field);
         }
     }
 
     function launchForum() {
-        $('#launch .working').removeClass('hide');
-        $.post('/launch', function () {
+        $("#launch .working").removeClass("hide");
+        $.post("/launch", function () {
             let successCount = 0;
-            const url = $('#launch').attr('data-url');
+            const url = $("#launch").attr("data-url");
             setInterval(function () {
-                $.get(url + '/admin').done(function () {
+                $.get(url + "/admin").done(function () {
                     if (successCount >= 5) {
-                        window.location = 'admin';
+                        window.location = "admin";
                     } else {
                         successCount += 1;
                     }

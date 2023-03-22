@@ -1,20 +1,20 @@
-'use strict';
+"use strict";
 
-const nconf = require('nconf');
-const util = require('util');
-const winston = require('winston');
-const { EventEmitter } = require('events');
-const connection = require('./connection');
+const nconf = require("nconf");
+const util = require("util");
+const winston = require("winston");
+const { EventEmitter } = require("events");
+const connection = require("./connection");
 
 let channelName;
 const PubSub = function () {
     const self = this;
-    channelName = `db:${nconf.get('redis:database')}:pubsub_channel`;
+    channelName = `db:${nconf.get("redis:database")}:pubsub_channel`;
     self.queue = [];
     connection.connect().then((client) => {
         self.subClient = client;
         self.subClient.subscribe(channelName);
-        self.subClient.on('message', (channel, message) => {
+        self.subClient.on("message", (channel, message) => {
             if (channel !== channelName) {
                 return;
             }
@@ -30,7 +30,7 @@ const PubSub = function () {
 
     connection.connect().then((client) => {
         self.pubClient = client;
-        self.queue.forEach(payload => client.publish(channelName, payload));
+        self.queue.forEach((payload) => client.publish(channelName, payload));
         self.queue.length = 0;
     });
 };

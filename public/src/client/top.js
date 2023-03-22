@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-define('forum/top', ['topicList'], function (topicList) {
+define("forum/top", ["topicList"], function (topicList) {
     const Top = {};
 
     Top.init = function () {
-        app.enterRoom('top_topics');
+        app.enterRoom("top_topics");
 
-        topicList.init('top');
+        topicList.init("top");
     };
 
     return Top;

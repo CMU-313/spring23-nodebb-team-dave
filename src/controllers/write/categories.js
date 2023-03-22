@@ -1,22 +1,26 @@
-'use strict';
+"use strict";
 
-const privileges = require('../../privileges');
-const categories = require('../../categories');
-const api = require('../../api');
+const privileges = require("../../privileges");
+const categories = require("../../categories");
+const api = require("../../api");
 
-const helpers = require('../helpers');
+const helpers = require("../helpers");
 
 const Categories = module.exports;
 
 const hasAdminPrivilege = async (uid) => {
     const ok = await privileges.admin.can(`admin:categories`, uid);
     if (!ok) {
-        throw new Error('[[error:no-privileges]]');
+        throw new Error("[[error:no-privileges]]");
     }
 };
 
 Categories.get = async (req, res) => {
-    helpers.formatApiResponse(200, res, await api.categories.get(req, req.params));
+    helpers.formatApiResponse(
+        200,
+        res,
+        await api.categories.get(req, req.params)
+    );
 };
 
 Categories.create = async (req, res) => {
@@ -44,39 +48,45 @@ Categories.delete = async (req, res) => {
 };
 
 Categories.getPrivileges = async (req, res) => {
-    if (!await privileges.admin.can('admin:privileges', req.uid)) {
-        throw new Error('[[error:no-privileges]]');
+    if (!(await privileges.admin.can("admin:privileges", req.uid))) {
+        throw new Error("[[error:no-privileges]]");
     }
 
-    const privilegeSet = await api.categories.getPrivileges(req, req.params.cid);
+    const privilegeSet = await api.categories.getPrivileges(
+        req,
+        req.params.cid
+    );
     helpers.formatApiResponse(200, res, privilegeSet);
 };
 
 Categories.setPrivilege = async (req, res) => {
-    if (!await privileges.admin.can('admin:privileges', req.uid)) {
-        throw new Error('[[error:no-privileges]]');
+    if (!(await privileges.admin.can("admin:privileges", req.uid))) {
+        throw new Error("[[error:no-privileges]]");
     }
 
     await api.categories.setPrivilege(req, {
         ...req.params,
         member: req.body.member,
-        set: req.method === 'PUT',
+        set: req.method === "PUT",
     });
 
-    const privilegeSet = await api.categories.getPrivileges(req, req.params.cid);
+    const privilegeSet = await api.categories.getPrivileges(
+        req,
+        req.params.cid
+    );
     helpers.formatApiResponse(200, res, privilegeSet);
 };
 
 Categories.setModerator = async (req, res) => {
-    if (!await privileges.admin.can('admin:admins-mods', req.uid)) {
-        throw new Error('[[error:no-privileges]]');
+    if (!(await privileges.admin.can("admin:admins-mods", req.uid))) {
+        throw new Error("[[error:no-privileges]]");
     }
     const privilegeList = await privileges.categories.getUserPrivilegeList();
     await api.categories.setPrivilege(req, {
         cid: req.params.cid,
         privilege: privilegeList,
         member: req.params.uid,
-        set: req.method === 'PUT',
+        set: req.method === "PUT",
     });
     helpers.formatApiResponse(200, res);
 };

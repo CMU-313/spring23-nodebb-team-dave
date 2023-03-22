@@ -19,7 +19,7 @@ get:
       description: a valid UNIX timestamp
       example: 0
   responses:
-    '200':
+    "200":
       description: Post history successfully retrieved.
       content:
         application/json:
@@ -51,7 +51,7 @@ put:
       description: a valid UNIX timestamp
       example: 0
   responses:
-    '200':
+    "200":
       description: Post successfully reverted
       content:
         application/json:

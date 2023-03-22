@@ -22,7 +22,7 @@ put:
             - path
             - folderName
   responses:
-    '200':
+    "200":
       description: Folder created
       content:
         application/json:

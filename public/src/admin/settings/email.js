@@ -1,7 +1,10 @@
-'use strict';
+"use strict";
 
-
-define('admin/settings/email', ['ace/ace', 'alerts', 'admin/settings'], function (ace, alerts) {
+define("admin/settings/email", [
+    "ace/ace",
+    "alerts",
+    "admin/settings",
+], function (ace, alerts) {
     const module = {};
     let emailEditor;
 
@@ -11,36 +14,45 @@ define('admin/settings/email', ['ace/ace', 'alerts', 'admin/settings'], function
         handleDigestHourChange();
         handleSmtpServiceChange();
 
-        $(window).on('action:admin.settingsLoaded action:admin.settingsSaved', handleDigestHourChange);
-        $(window).on('action:admin.settingsSaved', function () {
-            socket.emit('admin.user.restartJobs');
+        $(window).on(
+            "action:admin.settingsLoaded action:admin.settingsSaved",
+            handleDigestHourChange
+        );
+        $(window).on("action:admin.settingsSaved", function () {
+            socket.emit("admin.user.restartJobs");
         });
         $('[id="email:smtpTransport:service"]').change(handleSmtpServiceChange);
     };
 
     function configureEmailTester() {
-        $('button[data-action="email.test"]').off('click').on('click', function () {
-            socket.emit('admin.email.test', { template: $('#test-email').val() }, function (err) {
-                if (err) {
-                    console.error(err.message);
-                    return alerts.error(err);
-                }
-                alerts.success('Test Email Sent');
+        $('button[data-action="email.test"]')
+            .off("click")
+            .on("click", function () {
+                socket.emit(
+                    "admin.email.test",
+                    { template: $("#test-email").val() },
+                    function (err) {
+                        if (err) {
+                            console.error(err.message);
+                            return alerts.error(err);
+                        }
+                        alerts.success("Test Email Sent");
+                    }
+                );
+                return false;
             });
-            return false;
-        });
     }
 
     function configureEmailEditor() {
-        $('#email-editor-selector').on('change', updateEmailEditor);
+        $("#email-editor-selector").on("change", updateEmailEditor);
 
-        emailEditor = ace.edit('email-editor');
+        emailEditor = ace.edit("email-editor");
         emailEditor.$blockScrolling = Infinity;
-        emailEditor.setTheme('ace/theme/twilight');
-        emailEditor.getSession().setMode('ace/mode/html');
+        emailEditor.setTheme("ace/theme/twilight");
+        emailEditor.getSession().setMode("ace/mode/html");
 
-        emailEditor.on('change', function () {
-            const emailPath = $('#email-editor-selector').val();
+        emailEditor.on("change", function () {
+            const emailPath = $("#email-editor-selector").val();
             let original;
             ajaxify.data.emails.forEach(function (email) {
                 if (email.path === emailPath) {
@@ -48,34 +60,38 @@ define('admin/settings/email', ['ace/ace', 'alerts', 'admin/settings'], function
                 }
             });
             const newEmail = emailEditor.getValue();
-            $('#email-editor-holder').val(newEmail !== original ? newEmail : '');
+            $("#email-editor-holder").val(
+                newEmail !== original ? newEmail : ""
+            );
         });
 
-        $('button[data-action="email.revert"]').off('click').on('click', function () {
-            ajaxify.data.emails.forEach(function (email) {
-                if (email.path === $('#email-editor-selector').val()) {
-                    emailEditor.getSession().setValue(email.original);
-                    $('#email-editor-holder').val('');
-                }
+        $('button[data-action="email.revert"]')
+            .off("click")
+            .on("click", function () {
+                ajaxify.data.emails.forEach(function (email) {
+                    if (email.path === $("#email-editor-selector").val()) {
+                        emailEditor.getSession().setValue(email.original);
+                        $("#email-editor-holder").val("");
+                    }
+                });
             });
-        });
 
         updateEmailEditor();
     }
 
     function updateEmailEditor() {
         ajaxify.data.emails.forEach(function (email) {
-            if (email.path === $('#email-editor-selector').val()) {
+            if (email.path === $("#email-editor-selector").val()) {
                 emailEditor.getSession().setValue(email.text);
-                $('#email-editor-holder')
-                    .val(email.text !== email.original ? email.text : '')
-                    .attr('data-field', 'email:custom:' + email.path);
+                $("#email-editor-holder")
+                    .val(email.text !== email.original ? email.text : "")
+                    .attr("data-field", "email:custom:" + email.path);
             }
         });
     }
 
     function handleDigestHourChange() {
-        let hour = parseInt($('#digestHour').val(), 10);
+        let hour = parseInt($("#digestHour").val(), 10);
 
         if (isNaN(hour)) {
             hour = 17;
@@ -83,7 +99,7 @@ define('admin/settings/email', ['ace/ace', 'alerts', 'admin/settings'], function
             hour = 0;
         }
 
-        socket.emit('admin.getServerTime', {}, function (err, now) {
+        socket.emit("admin.getServerTime", {}, function (err, now) {
             if (err) {
                 return alerts.error(err);
             }
@@ -92,7 +108,7 @@ define('admin/settings/email', ['ace/ace', 'alerts', 'admin/settings'], function
             const offset = (new Date().getTimezoneOffset() - now.offset) / 60;
             date.setHours(date.getHours() + offset);
 
-            $('#serverTime').text(date.toLocaleTimeString());
+            $("#serverTime").text(date.toLocaleTimeString());
 
             date.setHours(parseInt(hour, 10) - offset, 0, 0, 0);
 
@@ -101,21 +117,28 @@ define('admin/settings/email', ['ace/ace', 'alerts', 'admin/settings'], function
                 date.setDate(date.getDate() + 1);
             }
 
-            $('#nextDigestTime').text(date.toLocaleString());
+            $("#nextDigestTime").text(date.toLocaleString());
         });
     }
 
     function handleSmtpServiceChange() {
-        const isCustom = $('[id="email:smtpTransport:service"]').val() === 'nodebb-custom-smtp';
-        $('[id="email:smtpTransport:custom-service"]')[isCustom ? 'slideDown' : 'slideUp'](isCustom);
+        const isCustom =
+            $('[id="email:smtpTransport:service"]').val() ===
+            "nodebb-custom-smtp";
+        $('[id="email:smtpTransport:custom-service"]')[
+            isCustom ? "slideDown" : "slideUp"
+        ](isCustom);
 
-        const enabledEl = document.getElementById('email:smtpTransport:enabled');
+        const enabledEl = document.getElementById(
+            "email:smtpTransport:enabled"
+        );
         if (enabledEl) {
             if (!enabledEl.checked) {
-                enabledEl.closest('label').classList.toggle('is-checked', true);
+                enabledEl.closest("label").classList.toggle("is-checked", true);
                 enabledEl.checked = true;
                 alerts.alert({
-                    message: '[[admin/settings/email:smtp-transport.auto-enable-toast]]',
+                    message:
+                        "[[admin/settings/email:smtp-transport.auto-enable-toast]]",
                     timeout: 5000,
                 });
             }

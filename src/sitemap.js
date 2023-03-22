@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-const { SitemapStream, streamToPromise } = require('sitemap');
-const nconf = require('nconf');
+const { SitemapStream, streamToPromise } = require("sitemap");
+const nconf = require("nconf");
 
-const db = require('./database');
-const categories = require('./categories');
-const topics = require('./topics');
-const privileges = require('./privileges');
-const meta = require('./meta');
-const plugins = require('./plugins');
-const utils = require('./utils');
+const db = require("./database");
+const categories = require("./categories");
+const topics = require("./topics");
+const privileges = require("./privileges");
+const meta = require("./meta");
+const plugins = require("./plugins");
+const utils = require("./utils");
 
 const sitemap = module.exports;
 sitemap.maps = {
@@ -19,11 +19,11 @@ sitemap.maps = {
 sitemap.render = async function () {
     const topicsPerPage = meta.config.sitemapTopics;
     const returnData = {
-        url: nconf.get('url'),
+        url: nconf.get("url"),
         topics: [],
     };
     const [topicCount, categories, pages] = await Promise.all([
-        db.getObjectField('global', 'topicCount'),
+        db.getObjectField("global", "topicCount"),
         getSitemapCategories(),
         getSitemapPages(),
     ]);
@@ -38,52 +38,70 @@ sitemap.render = async function () {
 };
 
 async function getSitemapPages() {
-    const urls = [{
-        url: '',
-        changefreq: 'weekly',
-        priority: 0.6,
-    }, {
-        url: `${nconf.get('relative_path')}/recent`,
-        changefreq: 'daily',
-        priority: 0.4,
-    }, {
-        url: `${nconf.get('relative_path')}/users`,
-        changefreq: 'daily',
-        priority: 0.4,
-    }, {
-        url: `${nconf.get('relative_path')}/groups`,
-        changefreq: 'daily',
-        priority: 0.4,
-    }];
+    const urls = [
+        {
+            url: "",
+            changefreq: "weekly",
+            priority: 0.6,
+        },
+        {
+            url: `${nconf.get("relative_path")}/recent`,
+            changefreq: "daily",
+            priority: 0.4,
+        },
+        {
+            url: `${nconf.get("relative_path")}/users`,
+            changefreq: "daily",
+            priority: 0.4,
+        },
+        {
+            url: `${nconf.get("relative_path")}/groups`,
+            changefreq: "daily",
+            priority: 0.4,
+        },
+    ];
 
-    const data = await plugins.hooks.fire('filter:sitemap.getPages', { urls: urls });
+    const data = await plugins.hooks.fire("filter:sitemap.getPages", {
+        urls: urls,
+    });
     return data.urls;
 }
 
 sitemap.getPages = async function () {
-    if (sitemap.maps.pages && Date.now() < sitemap.maps.pagesCacheExpireTimestamp) {
+    if (
+        sitemap.maps.pages &&
+        Date.now() < sitemap.maps.pagesCacheExpireTimestamp
+    ) {
         return sitemap.maps.pages;
     }
 
     const urls = await getSitemapPages();
     if (!urls.length) {
-        sitemap.maps.pages = '';
-        sitemap.maps.pagesCacheExpireTimestamp = Date.now() + (1000 * 60 * 60 * 24);
+        sitemap.maps.pages = "";
+        sitemap.maps.pagesCacheExpireTimestamp =
+            Date.now() + 1000 * 60 * 60 * 24;
         return sitemap.maps.pages;
     }
 
     sitemap.maps.pages = await urlsToSitemap(urls);
-    sitemap.maps.pagesCacheExpireTimestamp = Date.now() + (1000 * 60 * 60 * 24);
+    sitemap.maps.pagesCacheExpireTimestamp = Date.now() + 1000 * 60 * 60 * 24;
     return sitemap.maps.pages;
 };
 
 async function getSitemapCategories() {
-    const cids = await categories.getCidsByPrivilege('categories:cid', 0, 'find');
-    return await categories.getCategoriesFields(cids, ['slug']);
+    const cids = await categories.getCidsByPrivilege(
+        "categories:cid",
+        0,
+        "find"
+    );
+    return await categories.getCategoriesFields(cids, ["slug"]);
 }
 
 sitemap.getCategories = async function () {
-    if (sitemap.maps.categories && Date.now() < sitemap.maps.categoriesCacheExpireTimestamp) {
+    if (
+        sitemap.maps.categories &&
+        Date.now() < sitemap.maps.categoriesCacheExpireTimestamp
+    ) {
         return sitemap.maps.categories;
     }
 
@@ -92,21 +110,23 @@ sitemap.getCategories = async function () {
     categoriesData.forEach((category) => {
         if (category) {
             categoryUrls.push({
-                url: `${nconf.get('relative_path')}/category/${category.slug}`,
-                changefreq: 'weekly',
+                url: `${nconf.get("relative_path")}/category/${category.slug}`,
+                changefreq: "weekly",
                 priority: 0.4,
             });
         }
     });
 
     if (!categoryUrls.length) {
-        sitemap.maps.categories = '';
-        sitemap.maps.categoriesCacheExpireTimestamp = Date.now() + (1000 * 60 * 60 * 24);
+        sitemap.maps.categories = "";
+        sitemap.maps.categoriesCacheExpireTimestamp =
+            Date.now() + 1000 * 60 * 60 * 24;
         return sitemap.maps.categories;
     }
 
     sitemap.maps.categories = await urlsToSitemap(categoryUrls);
-    sitemap.maps.categoriesCacheExpireTimestamp = Date.now() + (1000 * 60 * 60 * 24);
+    sitemap.maps.categoriesCacheExpireTimestamp =
+        Date.now() + 1000 * 60 * 60 * 24;
     return sitemap.maps.categories;
 };
 
@@ -119,19 +139,27 @@ sitemap.getTopicPage = async function (page) {
     const start = (parseInt(page, 10) - 1) * numTopics;
     const stop = start + numTopics - 1;
 
-    if (sitemap.maps.topics[page - 1] && Date.now() < sitemap.maps.topics[page - 1].cacheExpireTimestamp) {
+    if (
+        sitemap.maps.topics[page - 1] &&
+        Date.now() < sitemap.maps.topics[page - 1].cacheExpireTimestamp
+    ) {
         return sitemap.maps.topics[page - 1].sm;
     }
 
     const topicUrls = [];
-    let tids = await db.getSortedSetRange('topics:tid', start, stop);
-    tids = await privileges.topics.filterTids('topics:read', tids, 0);
-    const topicData = await topics.getTopicsFields(tids, ['tid', 'title', 'slug', 'lastposttime']);
+    let tids = await db.getSortedSetRange("topics:tid", start, stop);
+    tids = await privileges.topics.filterTids("topics:read", tids, 0);
+    const topicData = await topics.getTopicsFields(tids, [
+        "tid",
+        "title",
+        "slug",
+        "lastposttime",
+    ]);
 
     if (!topicData.length) {
         sitemap.maps.topics[page - 1] = {
-            sm: '',
-            cacheExpireTimestamp: Date.now() + (1000 * 60 * 60 * 24),
+            sm: "",
+            cacheExpireTimestamp: Date.now() + 1000 * 60 * 60 * 24,
         };
         return sitemap.maps.topics[page - 1].sm;
     }
@@ -139,9 +167,9 @@ sitemap.getTopicPage = async function (page) {
     topicData.forEach((topic) => {
         if (topic) {
             topicUrls.push({
-                url: `${nconf.get('relative_path')}/topic/${topic.slug}`,
+                url: `${nconf.get("relative_path")}/topic/${topic.slug}`,
                 lastmodISO: utils.toISOString(topic.lastposttime),
-                changefreq: 'daily',
+                changefreq: "daily",
                 priority: 0.6,
             });
         }
@@ -149,7 +177,7 @@ sitemap.getTopicPage = async function (page) {
 
     sitemap.maps.topics[page - 1] = {
         sm: await urlsToSitemap(topicUrls),
-        cacheExpireTimestamp: Date.now() + (1000 * 60 * 60 * 24),
+        cacheExpireTimestamp: Date.now() + 1000 * 60 * 60 * 24,
     };
 
     return sitemap.maps.topics[page - 1].sm;
@@ -157,10 +185,10 @@ sitemap.getTopicPage = async function (page) {
 
 async function urlsToSitemap(urls) {
     if (!urls.length) {
-        return '';
+        return "";
     }
-    const smStream = new SitemapStream({ hostname: nconf.get('url') });
-    urls.forEach(url => smStream.write(url));
+    const smStream = new SitemapStream({ hostname: nconf.get("url") });
+    urls.forEach((url) => smStream.write(url));
     smStream.end();
     return (await streamToPromise(smStream)).toString();
 }
@@ -177,4 +205,4 @@ sitemap.clearCache = function () {
     });
 };
 
-require('./promisify')(sitemap);
+require("./promisify")(sitemap);

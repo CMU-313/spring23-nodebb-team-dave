@@ -1,6 +1,6 @@
 TopicObject:
   allOf:
-    - $ref: '#/TopicObjectSlim'
+    - $ref: "#/TopicObjectSlim"
     - type: object
       properties:
         lastposttime:
@@ -45,7 +45,8 @@ TopicObject:
               type: string
             userslug:
               type: string
-              description: An URL-safe variant of the username (i.e. lower-cased, spaces
+              description:
+                An URL-safe variant of the username (i.e. lower-cased, spaces
                 removed, etc.)
             reputation:
               type: number
@@ -63,12 +64,14 @@ TopicObject:
               type: string
             icon:text:
               type: string
-              description: A single-letter representation of a username. This is used in the
+              description:
+                A single-letter representation of a username. This is used in the
                 auto-generated icon given to users without
                 an avatar
             icon:bgColor:
               type: string
-              description: A six-character hexadecimal colour code assigned to the user. This
+              description:
+                A six-character hexadecimal colour code assigned to the user. This
                 value is used in conjunction with
                 `icon:text` for the user's auto-generated
                 icon
@@ -117,19 +120,22 @@ TopicObject:
                   description: A friendly name for a given user account
                 userslug:
                   type: string
-                  description: An URL-safe variant of the username (i.e. lower-cased, spaces
+                  description:
+                    An URL-safe variant of the username (i.e. lower-cased, spaces
                     removed, etc.)
                 picture:
                   nullable: true
                   type: string
                 icon:text:
                   type: string
-                  description: A single-letter representation of a username. This is used in the
+                  description:
+                    A single-letter representation of a username. This is used in the
                     auto-generated icon given to users
                     without an avatar
                 icon:bgColor:
                   type: string
-                  description: A six-character hexadecimal colour code assigned to the user. This
+                  description:
+                    A six-character hexadecimal colour code assigned to the user. This
                     value is used in conjunction with
                     `icon:text` for the user's
                     auto-generated icon
@@ -227,7 +233,8 @@ TopicObjectSlim:
           type: number
         pinned:
           type: number
-          description: Whether or not this particular topic is pinned to the top of the
+          description:
+            Whether or not this particular topic is pinned to the top of the
             category
         timestamp:
           type: number

@@ -17,7 +17,7 @@ delete:
           required:
             - path
   responses:
-    '200':
+    "200":
       description: File deleted
       content:
         application/json:
