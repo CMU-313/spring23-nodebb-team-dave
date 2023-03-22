@@ -1,0 +1,16 @@
+name: Continuous Integration
+
+# This action works with pull requests and pushes
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install packages
+        run: npm ci
+      - name: Prettifying code
+        run: npm prettier --write .
