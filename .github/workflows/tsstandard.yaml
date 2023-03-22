@@ -15,6 +15,6 @@ jobs:
       - name: Runing ts-standard on files  
         run: npm install --save-dev ts-standard
       - name: run standard
-        run: standard      
+        run: ts-standard      
 
      
