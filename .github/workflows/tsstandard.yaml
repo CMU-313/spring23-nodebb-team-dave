@@ -24,9 +24,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 'Install Dependencies'
-      - run: 'npm ci'
+      - run: 'npx ci'
       - run: 'lint with ts-standard'
-      - run: 'npm run lint'
+      - run: 'npx run lint'
 
        
 
