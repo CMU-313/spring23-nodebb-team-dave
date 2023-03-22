@@ -3,10 +3,10 @@ name: ts-standard
 on:
   push:
     branches:
-      - ts-standrd
+      - ts-standrd_tool
   pull_request:
     branches:
-      - ts-standrd
+      - ts-standrd_tool
 jobs:
   tests:
     runs-on: 'ubuntu-latest'
