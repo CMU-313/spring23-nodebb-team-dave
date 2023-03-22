@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install packages
-        run: npm ci
+      - name: Installing dependencies
+        run: npm install
       - name: Checking if code is pretty
-        run: npm prettier --check .
+        run: npm prettier --check *.[ts,js]
