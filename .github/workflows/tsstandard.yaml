@@ -3,31 +3,17 @@ name: ts-standard
 on:
   push:
     branches:
-      - main
+      - ts_standrd_tool
   pull_request:
     branches:
-      - main
+      - ts_standrd_tool
 jobs:
-  tests:
-    runs-on: 'ubuntu-latest'
-
-    strategy:
-      matrix:
-        node-version: [18.13.0]
-
+  format:
+    runs-on: ubuntu-latest
     steps:
-      - uses: 'actions/checkout@v3.0.2'
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: 'actions/setup-node@v3.5.0'
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: 'Install Dependencies'
-      - run: 'npx ci'
-      - run: 'lint with ts-standard'
-      - run: 'npx run lint'
-
-       
+      - uses: actions/checkout@v2
+      - name: Runing ts-standard on files  
+        run: npx install --save-dev ts-standard
+        run: standard      
 
      
