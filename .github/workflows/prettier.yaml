@@ -10,5 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Checking if ts files are pretty
-        run: npx prettier --check *.ts
+      - name: Checking if files are pretty
+        run: npx prettier --check .
