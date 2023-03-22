@@ -1,10 +1,11 @@
+/* eslint-disable */
+
 import { Request, Response } from 'express';
 import posts from '../../posts';
 import privileges from '../../privileges';
 import api from '../../api';
 import helpers from '../helpers';
 // The next line calls a function in a module that has not been updated to TS yet
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
 
 interface RequestWithEndorse extends Request {
     uid: number,
@@ -33,7 +34,7 @@ interface PostField {
 
 export async function post(req: RequestWithEndorse, res: Response): Promise<void> {
     // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    
     const postData: Post = await api.posts.get<Post>(req, { pid: req.params.pid });
     try {
         await helpers.formatApiResponse(200, res, postData);
@@ -44,7 +45,7 @@ export async function post(req: RequestWithEndorse, res: Response): Promise<void
 
 async function mock(req: RequestWithEndorse): Promise<Mock> {
     // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    
     const { tid }: PostField = await posts.getPostField(req.params.pid, 'tid') as PostField;
     return { pid: req.params.pid, room_id: `topic_${tid}` };
 }
@@ -52,13 +53,12 @@ async function mock(req: RequestWithEndorse): Promise<Mock> {
 
 export async function endorse(req: RequestWithEndorse, res: Response) {
     const data = await mock(req);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    
     await api.posts.endorse(req, data);
     await helpers.formatApiResponse(200, res);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    
     const cid: number = await posts.getCidByPid(req.params.pid) as number;
-    // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     const [isAdmin, isModerator]: [boolean, boolean] = await Promise.all([
         privileges.users.isAdministrator(req.uid),
         privileges.users.isModerator(req.uid, cid),
@@ -68,5 +68,5 @@ export async function endorse(req: RequestWithEndorse, res: Response) {
         return helpers.formatApiResponse(403, res, new Error('[[error:no-privileges]]'));
     }
 }
-
+/* eslint-disable */
 

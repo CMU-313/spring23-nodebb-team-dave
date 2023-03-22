@@ -1,21 +1,25 @@
-"use strict";
+/* eslint-disable */
+
+'use strict';
+
 // 'use strict';
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+const __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.monitorConfig = exports.io = exports.io_close = exports.io_one = exports.prepare_io_string = exports.init = exports.setup = exports.setup_one = exports.setup_one_log = exports.close = exports.open = exports.express_open = exports.expressLogger = void 0;
-const express_1 = __importDefault(require("express"));
+const express_1 = __importDefault(require('express'));
 /*
  * Logger module: ability to dynamically turn on/off logging for http requests & socket.io events
  */
-const fs = require("fs");
-const path = require("path");
-const winston = require("winston");
-const util = require("util");
-const morgan = require("morgan");
-const file_1 = __importDefault(require("./file"));
-const meta_1 = __importDefault(require("./meta"));
+const fs = require('fs');
+const path = require('path');
+const winston = require('winston');
+const util = require('util');
+const morgan = require('morgan');
+const file_1 = __importDefault(require('./file'));
+const meta_1 = __importDefault(require('./meta'));
+
 const opts = {
     /*
      * state used by Logger
@@ -65,13 +69,11 @@ function open(value) {
             if (stats) {
                 if (stats.isDirectory()) {
                     stream = fs.createWriteStream(path.join(value, 'nodebb.log'), { flags: 'a' });
-                }
-                else {
+                } else {
                     stream = fs.createWriteStream(value, { flags: 'a' });
                 }
             }
-        }
-        else {
+        } else {
             stream = fs.createWriteStream(value, { flags: 'a' });
         }
         if (stream) {
@@ -79,8 +81,7 @@ function open(value) {
                 winston.error(err.stack);
             });
         }
-    }
-    else {
+    } else {
         stream = process.stdout;
     }
     return stream;
@@ -104,12 +105,10 @@ function setup_one_log(value) {
         const stream = open(value);
         if (stream) {
             opts.streams.log.f = stream;
-        }
-        else {
+        } else {
             opts.streams.log.f = process.stdout;
         }
-    }
-    else {
+    } else {
         close(opts.streams.log);
     }
 }
@@ -144,8 +143,7 @@ function prepare_io_string(_type, _uid, _args) {
         */
     try {
         return `io: ${_uid} ${_type} ${util.inspect(Array.prototype.slice.call(_args), { depth: 3 })}\n`;
-    }
-    catch (err) {
+    } catch (err) {
         winston.info('Logger.prepare_io_string: Failed', err);
         return 'error';
     }
@@ -162,8 +160,7 @@ function io_one(socket, uid) {
             }
             try {
                 method.apply(socket, args);
-            }
-            catch (err) {
+            } catch (err) {
                 winston.info(errorMsg, err);
             }
         };
@@ -220,3 +217,4 @@ function monitorConfig(socket, data) {
     io(socket);
 }
 exports.monitorConfig = monitorConfig;
+/* eslint-disable */
