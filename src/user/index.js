@@ -18,28 +18,29 @@ User.reset = require('./reset')
 User.digest = require('./digest')
 User.interstitials = require('./interstitials')
 
-require('./data')(User)
-require('./auth')(User)
-require('./bans')(User)
-require('./create')(User)
-require('./posts')(User)
-require('./topics')(User)
-require('./categories')(User)
-require('./follow')(User)
-require('./profile')(User)
-require('./admin')(User)
-require('./delete')(User)
-require('./settings')(User)
-require('./search')(User)
-require('./jobs')(User)
-require('./picture')(User)
-require('./approval')(User)
-require('./invite')(User)
-require('./password')(User)
-require('./info')(User)
-require('./online')(User)
-require('./blocks')(User)
-require('./uploads')(User)
+require('./data')(User);
+require('./auth')(User);
+require('./bans')(User);
+require('./create')(User);
+require('./posts')(User);
+require('./topics')(User);
+require('./categories')(User);
+require('./follow')(User);
+require('./profile')(User);
+require('./admin')(User);
+require('./delete')(User);
+require('./settings')(User);
+require('./search')(User);
+require('./jobs')(User);
+require('./picture')(User);
+require('./approval')(User);
+require('./invite')(User);
+require('./password')(User);
+require('./info')(User);
+require('./online')(User);
+require('./blocks')(User);
+require('./uploads')(User);
+require('./career')(User);
 
 User.exists = async function (uids) {
   return await (

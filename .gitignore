@@ -83,5 +83,5 @@ theme/.idea
 theme/.vscode
 theme/node_modules/
 
-# Python ignore
-career-model/__pycache__/
+# Career Model: Python Ignores
+__pycache__

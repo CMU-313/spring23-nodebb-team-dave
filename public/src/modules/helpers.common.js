@@ -4,28 +4,30 @@ module.exports = function (utils, Benchpress, relative_path) {
   Benchpress.setGlobal('true', true)
   Benchpress.setGlobal('false', false)
 
-  const helpers = {
-    displayMenuItem,
-    buildMetaTag,
-    buildLinkTag,
-    stringify,
-    escape,
-    stripTags,
-    generateCategoryBackground,
-    generateChildrenCategories,
-    generateTopicClass,
-    membershipBtn,
-    spawnPrivilegeStates,
-    localeToHTML,
-    renderTopicImage,
-    renderTopicEvents,
-    renderEvents,
-    renderDigestAvatar,
-    userAgentIcons,
-    buildAvatar,
-    register,
-    __escape: identity,
-  }
+    const helpers = {
+        displayMenuItem,
+        buildMetaTag,
+        buildLinkTag,
+        stringify,
+        escape,
+        stripTags,
+        generateCategoryBackground,
+        generateChildrenCategories,
+        generateTopicClass,
+        membershipBtn,
+        spawnPrivilegeStates,
+        localeToHTML,
+        renderTopicImage,
+        renderTopicEvents,
+        renderEvents,
+        renderDigestAvatar,
+        userAgentIcons,
+        buildAvatar,
+        register,
+        getPredictionColor,
+        formatPrediction,
+        __escape: identity,
+    };
 
   function identity(str) {
     return str
@@ -333,9 +335,19 @@ module.exports = function (utils, Benchpress, relative_path) {
       return '<img ' + attributes.join(' ') + ' src="' + userObj.picture + '" style="' + styles.join(' ') + '" />'
     }
 
-    styles.push('background-color: ' + userObj['icon:bgColor'] + ';')
-    return '<span ' + attributes.join(' ') + ' style="' + styles.join(' ') + '">' + userObj['icon:text'] + '</span>'
-  }
+        styles.push('background-color: ' + userObj['icon:bgColor'] + ';');
+        return '<span ' + attributes.join(' ') + ' style="' + styles.join(' ') + '">' + userObj['icon:text'] + '</span>';
+    }
+
+    function getPredictionColor(prediction) {
+        if (prediction == 1) 
+            return `"background-color: rgb(0, 255, 0);"`
+        return `"background-color: rgb(255, 0, 0);"`
+    }
+
+    function formatPrediction(prediction) {
+        return prediction;
+    }
 
   function register() {
     Object.keys(helpers).forEach(function (helperName) {
@@ -343,5 +355,6 @@ module.exports = function (utils, Benchpress, relative_path) {
     })
   }
 
-  return helpers
-}
+    return helpers;
+};
+
