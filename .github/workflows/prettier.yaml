@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Prettier
 
 # This action works with pull requests and pushes
 on:
@@ -12,5 +12,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install packages
         run: npm ci
-      - name: Prettifying code
-        run: npm prettier --write .
+      - name: Checking if code is pretty
+        run: npm prettier --check .
