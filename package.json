@@ -185,7 +185,7 @@
     },
     "ts-standard": {
         "ignore": [
-            "/*.js",
+            "/**/*.js",
             "public/**/*.js",
             "src/**/*.js",
             "test/**/*.js",

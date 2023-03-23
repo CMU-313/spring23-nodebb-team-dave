@@ -46,7 +46,9 @@ module.exports = {
   root: true,
   ignorePatterns: findCompiledJS(),
   rules: {
-    indent: ['error', 4]
+    indent: ['error', 2],
+    semi: 'off',
+    'comma-dangle': 'off'
   },
   overrides: [
     {
@@ -63,6 +65,8 @@ module.exports = {
       },
       rules: {
         'no-use-before-define': 'off',
+        semi: 'off',
+        'comma-dangle': 'off',
         '@typescript-eslint/no-use-before-define': 'error',
         '@typescript-eslint/strict-boolean-expressions': 'off'
       }
