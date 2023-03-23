@@ -66,12 +66,7 @@ jobs:
             }
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
-      - name: Setup config
-        env:
-          DB_CONFIG: ${{ secrets.CONFIG_FILE }}
-        run: |
-          echo ${DB_CONFIG} >> install/db_config.json
-      - name: create-json
+      - name: Create config.json
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: "config.json"
