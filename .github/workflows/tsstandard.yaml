@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Runing ts-standard on files  
+      - name: Install ts-standard
         run: npm install --save-dev ts-standard
-      - name: run standard
-        run: ts-standard      
+      - name: Run ts-standard
+        run: npx ts-standard      
 
      
