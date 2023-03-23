@@ -1,15 +1,78 @@
 name: Fly Deploy
+
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   deploy:
     name: Deploy app
+
+    permissions:
+      checks: write  # for coverallsapp/github-action to create new checks
+      contents: read
+
     runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: 'redis:2.8.23'
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
+
     steps:
       - uses: actions/checkout@v3
+      - run: cp install/package.json package.json
+      - name: Install Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - name: NPM Install
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+      - name: Setup on Redis
+        if: startsWith(matrix.database, 'redis')
+        env:
+          SETUP: >-
+            {
+              "url": "http://127.0.0.1:4567",
+              "secret": "abcdef",
+              "admin:username": "admin",
+              "admin:email": "test@example.org",
+              "admin:password": "hAN3Eg8W",
+              "admin:password:confirm": "hAN3Eg8W",
+              "database": "redis",
+              "redis:host": "127.0.0.1",
+              "redis:port": 6379,
+              "redis:password": "",
+              "redis:database": 0
+            }
+          CI: >-
+            {
+              "host": "127.0.0.1",
+              "database": 1,
+              "port": 6379
+            }
+        run: |
+          node app --setup="${SETUP}" --ci="${CI}"
       - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Setup config
+        env:
+          DB_CONFIG: ${{ secrets.DB_CONFIG }}
+        run: |
+          echo ${DB_CONFIG} > install/db_config.json
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
