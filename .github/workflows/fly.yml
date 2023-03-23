@@ -42,7 +42,6 @@ jobs:
           useLockFile: false
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Setup on Redis
-        if: startsWith(matrix.database, 'redis')
         env:
           SETUP: >-
             {
