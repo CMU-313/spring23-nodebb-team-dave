@@ -29,14 +29,14 @@ function getPostSharing() {
                 id: 'facebook',
                 name: 'Facebook',
                 class: 'fa-facebook',
-                activated: null,
+                activated: null
             },
             {
                 id: 'twitter',
                 name: 'Twitter',
                 class: 'fa-twitter',
-                activated: null,
-            },
+                activated: null
+            }
         ];
         networks = (yield plugins_1.default.hooks.fire('filter:social.posts', networks));
         // The next line calls a function in a module that has not been updated to TS yet
@@ -63,7 +63,7 @@ function setActivePostSharingNetworks(networkIDs) {
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         yield database_1.default.delete('social:posts.activated');
-        if (!networkIDs.length) {
+        if (networkIDs.length === 0) {
             return;
         }
         // The next line calls a function in a module that has not been updated to TS yet

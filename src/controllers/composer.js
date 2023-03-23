@@ -25,10 +25,10 @@ function get(req, res, callback) {
     return __awaiter(this, void 0, void 0, function* () {
         res.locals.metaTags = Object.assign(Object.assign({}, res.locals.metaTags), { name: 'robots', content: 'noindex' });
         const data = yield plugins_1.default.hooks.fire('filter:composer.build', {
-            req: req,
-            res: res,
+            req,
+            res,
             next: callback,
-            templateData: {},
+            templateData: {}
         });
         if (res.headersSent) {
             return;
@@ -38,7 +38,7 @@ function get(req, res, callback) {
         }
         if (data.templateData.disabled) {
             res.render('', {
-                title: '[[modules:composer.compose]]',
+                title: '[[modules:composer.compose]]'
             });
         }
         else {
@@ -53,14 +53,14 @@ function post(req, res) {
         const { body } = req;
         const data = {
             uid: req.uid,
-            req: req,
+            req,
             timestamp: Date.now(),
             content: body.content,
-            fromQueue: false,
+            fromQueue: false
         };
         req.body.noscript = 'true';
         if (!data.content) {
-            return yield helpers_1.default.noScriptErrors(req, res, '[[error:invalid-data]]', 400);
+            return yield yield helpers_1.default.noScriptErrors(req, res, '[[error:invalid-data]]', 400);
         }
         function queueOrPost(postFn, data) {
             return __awaiter(this, void 0, void 0, function* () {

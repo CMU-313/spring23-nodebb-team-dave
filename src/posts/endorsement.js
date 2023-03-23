@@ -23,7 +23,7 @@ module.exports = function (Posts) {
             const isEndorsing = type === 'endorse';
             const [postData, hasEndorsed] = yield Promise.all([
                 Posts.getPostFields(pid, ['pid', 'endorsed']),
-                Posts.hasEndorsed(pid),
+                Posts.hasEndorsed(pid)
             ]);
             if (isEndorsing && hasEndorsed) {
                 throw new Error('[[error:already-endorsed]]');
@@ -34,8 +34,8 @@ module.exports = function (Posts) {
             postData.endorsed = (postData.endorsed === 'true') ? 'false' : 'true';
             yield Posts.setPostField(pid, 'endorsed', postData.endorsed);
             plugins.hooks.fire(`action:post.${type}`, {
-                pid: pid,
-                current: hasEndorsed ? 'endorsed' : 'unendorsed',
+                pid,
+                current: hasEndorsed ? 'endorsed' : 'unendorsed'
             })
                 .catch((err) => {
                 console.error('Error setting post field:', err);
@@ -43,7 +43,7 @@ module.exports = function (Posts) {
             });
             return {
                 post: postData,
-                isEndorsed: isEndorsing,
+                isEndorsed: isEndorsing
             };
         });
     }

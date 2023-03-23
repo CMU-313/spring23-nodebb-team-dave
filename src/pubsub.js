@@ -39,8 +39,8 @@ function get() {
                 var _a;
                 (_a = process.send) === null || _a === void 0 ? void 0 : _a.call(process, {
                     action: 'pubsub',
-                    event: event,
-                    data: data,
+                    event,
+                    data
                 });
             };
             process.on('message', (message) => {

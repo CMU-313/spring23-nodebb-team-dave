@@ -1,0 +1,20 @@
+name: TS-standard
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install ts-standard
+        run: npm install --save-dev ts-standard
+      - name: Run ts-standard
+        run: npx ts-standard      
+
+     

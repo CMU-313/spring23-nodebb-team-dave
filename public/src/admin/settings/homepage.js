@@ -1,22 +1,21 @@
-'use strict';
-
+'use strict'
 
 define('admin/settings/homepage', ['admin/settings'], function () {
-    function toggleCustomRoute() {
-        if ($('[data-field="homePageRoute"]').val() === 'custom') {
-            $('#homePageCustom').show();
-        } else {
-            $('#homePageCustom').hide();
-        }
+  function toggleCustomRoute() {
+    if ($('[data-field="homePageRoute"]').val() === 'custom') {
+      $('#homePageCustom').show()
+    } else {
+      $('#homePageCustom').hide()
     }
+  }
 
-    const Homepage = {};
+  const Homepage = {}
 
-    Homepage.init = function () {
-        $('[data-field="homePageRoute"]').on('change', toggleCustomRoute);
+  Homepage.init = function () {
+    $('[data-field="homePageRoute"]').on('change', toggleCustomRoute)
 
-        toggleCustomRoute();
-    };
+    toggleCustomRoute()
+  }
 
-    return Homepage;
-});
+  return Homepage
+})
