@@ -58,7 +58,7 @@ export async function get (req: Request, res: Response<object, Locals>, callback
 
 interface ComposerData {
   uid: number
-  req: Request<object, object, ComposerData>
+  req?: Request<object, object, ComposerData>
   timestamp: number
   content: string
   fromQueue: boolean
