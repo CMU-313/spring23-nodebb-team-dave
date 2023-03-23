@@ -68,7 +68,7 @@ jobs:
           node app --setup="${SETUP}" --ci="${CI}"
       - name: Setup config
         env:
-          DB_CONFIG: ${{ secrets.DB_CONFIG }}
+          DB_CONFIG: ${{ secrets.CONFIG_FILE }}
         run: |
           echo ${DB_CONFIG} > install/db_config.json
       - run: flyctl deploy --remote-only
