@@ -1,81 +1,81 @@
-import { CategoryObject } from './category';
-import { TagObject } from './tag';
-import { UserObjectSlim } from './user';
+import { CategoryObject } from './category'
+import { TagObject } from './tag'
+import { UserObjectSlim } from './user'
 
 export type TopicObject =
-    TopicObjectSlim & TopicObjectCoreProperties & TopicObjectOptionalProperties;
+    TopicObjectSlim & TopicObjectCoreProperties & TopicObjectOptionalProperties
 
-export type TopicObjectCoreProperties = {
-  lastposttime: number;
-  category: CategoryObject;
-  user: UserObjectSlim;
-  teaser: Teaser;
-  tags: TagObject[];
-  isOwner: boolean;
-  ignored: boolean;
-  unread: boolean;
-  bookmark: number;
-  unreplied: boolean;
-  icons: string[];
-};
-
-export type TopicObjectOptionalProperties = {
-  tid: number;
-  thumb: string;
-  pinExpiry: number;
-  pinExpiryISO: string;
-  index: number;
-};
-
-interface Teaser {
-  pid: number;
-  uid: number;
-  timestamp: number;
-  tid: number;
-  content: string;
-  timestampISO: string;
-  user: UserObjectSlim;
-  index: number;
+export interface TopicObjectCoreProperties {
+  lastposttime: number
+  category: CategoryObject
+  user: UserObjectSlim
+  teaser: Teaser
+  tags: TagObject[]
+  isOwner: boolean
+  ignored: boolean
+  unread: boolean
+  bookmark: number
+  unreplied: boolean
+  icons: string[]
 }
 
-export type TopicObjectSlim = TopicSlimProperties & TopicSlimOptionalProperties;
+export interface TopicObjectOptionalProperties {
+  tid: number
+  thumb: string
+  pinExpiry: number
+  pinExpiryISO: string
+  index: number
+}
 
-export type TopicSlimProperties = {
-  tid: number;
-  uid: number;
-  cid: number;
-  title: string;
-  slug: string;
-  mainPid: number;
-  postcount: string;
-  viewcount: string;
-  postercount: string;
-  scheduled: string;
-  deleted: string;
-  deleterUid: string;
-  titleRaw: string;
-  locked: string;
-  pinned: number;
-  timestamp: string;
-  timestampISO: number;
-  lastposttime: string;
-  lastposttimeISO: number;
-  pinExpiry: number;
-  pinExpiryISO: number;
-  upvotes: string;
-  downvotes: string;
-  votes: string;
-  teaserPid: number | string;
-  thumbs: Thumb[];
-};
+interface Teaser {
+  pid: number
+  uid: number
+  timestamp: number
+  tid: number
+  content: string
+  timestampISO: string
+  user: UserObjectSlim
+  index: number
+}
 
-export type Thumb = {
-  id: number;
-  name: string;
-  url: string;
-};
+export type TopicObjectSlim = TopicSlimProperties & TopicSlimOptionalProperties
 
-export type TopicSlimOptionalProperties = {
-  tid: number;
-  numThumbs: number;
-};
+export interface TopicSlimProperties {
+  tid: number
+  uid: number
+  cid: number
+  title: string
+  slug: string
+  mainPid: number
+  postcount: string
+  viewcount: string
+  postercount: string
+  scheduled: string
+  deleted: string
+  deleterUid: string
+  titleRaw: string
+  locked: string
+  pinned: number
+  timestamp: string
+  timestampISO: number
+  lastposttime: string
+  lastposttimeISO: number
+  pinExpiry: number
+  pinExpiryISO: number
+  upvotes: string
+  downvotes: string
+  votes: string
+  teaserPid: number | string
+  thumbs: Thumb[]
+}
+
+export interface Thumb {
+  id: number
+  name: string
+  url: string
+}
+
+export interface TopicSlimOptionalProperties {
+  tid: number
+  numThumbs: number
+}

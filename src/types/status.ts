@@ -1,4 +1,4 @@
-export type StatusObject = {
-  code: string;
-  message: string;
-};
+export interface StatusObject {
+  code: string
+  message: string
+}

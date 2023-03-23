@@ -1,30 +1,30 @@
-'use strict';
+'use strict'
 
-const winston = require('winston');
-const nconf = require('nconf');
-const fs = require('fs');
-const util = require('util');
-const path = require('path');
-const rimraf = require('rimraf');
+const winston = require('winston')
+const nconf = require('nconf')
+const fs = require('fs')
+const util = require('util')
+const path = require('path')
+const rimraf = require('rimraf')
 
-const rimrafAsync = util.promisify(rimraf);
+const rimrafAsync = util.promisify(rimraf)
 
-const plugins = require('../plugins');
-const db = require('../database');
-const file = require('../file');
-const minifier = require('./minifier');
+const plugins = require('../plugins')
+const db = require('../database')
+const file = require('../file')
+const minifier = require('./minifier')
 
-const CSS = module.exports;
+const CSS = module.exports
 
 CSS.supportedSkins = [
-    'cerulean', 'cyborg', 'flatly', 'journal', 'lumen', 'paper', 'simplex',
-    'spacelab', 'united', 'cosmo', 'darkly', 'readable', 'sandstone',
-    'slate', 'superhero', 'yeti',
-];
+  'cerulean', 'cyborg', 'flatly', 'journal', 'lumen', 'paper', 'simplex',
+  'spacelab', 'united', 'cosmo', 'darkly', 'readable', 'sandstone',
+  'slate', 'superhero', 'yeti'
+]
 
 const buildImports = {
-    client: function (source) {
-        return `@import "./theme";\n${source}\n${[
+  client: function (source) {
+    return `@import "./theme";\n${source}\n${[
             '@import "../public/vendor/fontawesome/less/regular.less";',
             '@import "../public/vendor/fontawesome/less/solid.less";',
             '@import "../public/vendor/fontawesome/less/brands.less";',
@@ -38,11 +38,11 @@ const buildImports = {
             '@import "../../public/less/generics.less";',
             '@import "../../public/less/mixins.less";',
             '@import "../../public/less/global.less";',
-            '@import "../../public/less/modals.less";',
-        ].map(str => str.replace(/\//g, path.sep)).join('\n')}`;
-    },
-    admin: function (source) {
-        return `${source}\n${[
+            '@import "../../public/less/modals.less";'
+        ].map(str => str.replace(/\//g, path.sep)).join('\n')}`
+  },
+  admin: function (source) {
+    return `${source}\n${[
             '@import "../public/vendor/fontawesome/less/regular.less";',
             '@import "../public/vendor/fontawesome/less/solid.less";',
             '@import "../public/vendor/fontawesome/less/brands.less";',
@@ -53,102 +53,102 @@ const buildImports = {
             '@import "../public/less/generics.less";',
             '@import "../../public/less/jquery-ui.less";',
             '@import (inline) "../node_modules/@adactive/bootstrap-tagsinput/src/bootstrap-tagsinput.css";',
-            '@import (inline) "../public/vendor/mdl/material.css";',
-        ].map(str => str.replace(/\//g, path.sep)).join('\n')}`;
-    },
-};
-
-async function filterMissingFiles(filepaths) {
-    const exists = await Promise.all(
-        filepaths.map(async (filepath) => {
-            const exists = await file.exists(path.join(__dirname, '../../node_modules', filepath));
-            if (!exists) {
-                winston.warn(`[meta/css] File not found! ${filepath}`);
-            }
-            return exists;
-        })
-    );
-    return filepaths.filter((filePath, i) => exists[i]);
+            '@import (inline) "../public/vendor/mdl/material.css";'
+        ].map(str => str.replace(/\//g, path.sep)).join('\n')}`
+  }
 }
 
-async function getImports(files, prefix, extension) {
-    const pluginDirectories = [];
-    let source = '';
-
-    files.forEach((styleFile) => {
-        if (styleFile.endsWith(extension)) {
-            source += `${prefix + path.sep + styleFile}";`;
-        } else {
-            pluginDirectories.push(styleFile);
-        }
-    });
-    await Promise.all(pluginDirectories.map(async (directory) => {
-        const styleFiles = await file.walk(directory);
-        styleFiles.forEach((styleFile) => {
-            source += `${prefix + path.sep + styleFile}";`;
-        });
-    }));
-    return source;
+async function filterMissingFiles (filepaths) {
+  const exists = await Promise.all(
+    filepaths.map(async (filepath) => {
+      const exists = await file.exists(path.join(__dirname, '../../node_modules', filepath))
+      if (!exists) {
+        winston.warn(`[meta/css] File not found! ${filepath}`)
+      }
+      return exists
+    })
+  )
+  return filepaths.filter((filePath, i) => exists[i])
 }
 
-async function getBundleMetadata(target) {
-    const paths = [
-        path.join(__dirname, '../../node_modules'),
-        path.join(__dirname, '../../public/less'),
-        path.join(__dirname, '../../public/vendor/fontawesome/less'),
-    ];
+async function getImports (files, prefix, extension) {
+  const pluginDirectories = []
+  let source = ''
 
-    // Skin support
-    let skin;
-    if (target.startsWith('client-')) {
-        skin = target.split('-')[1];
-
-        if (CSS.supportedSkins.includes(skin)) {
-            target = 'client';
-        }
+  files.forEach((styleFile) => {
+    if (styleFile.endsWith(extension)) {
+      source += `${prefix + path.sep + styleFile}";`
+    } else {
+      pluginDirectories.push(styleFile)
     }
-    let skinImport = [];
-    if (target === 'client') {
-        const themeData = await db.getObjectFields('config', ['theme:type', 'theme:id', 'bootswatchSkin']);
-        const themeId = (themeData['theme:id'] || 'nodebb-theme-persona');
-        const baseThemePath = path.join(nconf.get('themes_path'), (themeData['theme:type'] && themeData['theme:type'] === 'local' ? themeId : 'nodebb-theme-vanilla'));
-        paths.unshift(baseThemePath);
+  })
+  await Promise.all(pluginDirectories.map(async (directory) => {
+    const styleFiles = await file.walk(directory)
+    styleFiles.forEach((styleFile) => {
+      source += `${prefix + path.sep + styleFile}";`
+    })
+  }))
+  return source
+}
 
-        themeData.bootswatchSkin = skin || themeData.bootswatchSkin;
-        if (themeData && themeData.bootswatchSkin) {
-            skinImport.push(`\n@import "./@nodebb/bootswatch/${themeData.bootswatchSkin}/variables.less";`);
-            skinImport.push(`\n@import "./@nodebb/bootswatch/${themeData.bootswatchSkin}/bootswatch.less";`);
-        }
-        skinImport = skinImport.join('');
+async function getBundleMetadata (target) {
+  const paths = [
+    path.join(__dirname, '../../node_modules'),
+    path.join(__dirname, '../../public/less'),
+    path.join(__dirname, '../../public/vendor/fontawesome/less')
+  ]
+
+  // Skin support
+  let skin
+  if (target.startsWith('client-')) {
+    skin = target.split('-')[1]
+
+    if (CSS.supportedSkins.includes(skin)) {
+      target = 'client'
     }
+  }
+  let skinImport = []
+  if (target === 'client') {
+    const themeData = await db.getObjectFields('config', ['theme:type', 'theme:id', 'bootswatchSkin'])
+    const themeId = (themeData['theme:id'] || 'nodebb-theme-persona')
+    const baseThemePath = path.join(nconf.get('themes_path'), (themeData['theme:type'] && themeData['theme:type'] === 'local' ? themeId : 'nodebb-theme-vanilla'))
+    paths.unshift(baseThemePath)
 
-    const [lessImports, cssImports, acpLessImports] = await Promise.all([
-        filterGetImports(plugins.lessFiles, '\n@import ".', '.less'),
-        filterGetImports(plugins.cssFiles, '\n@import (inline) ".', '.css'),
-        target === 'client' ? '' : filterGetImports(plugins.acpLessFiles, '\n@import ".', '.less'),
-    ]);
-
-    async function filterGetImports(files, prefix, extension) {
-        const filteredFiles = await filterMissingFiles(files);
-        return await getImports(filteredFiles, prefix, extension);
+    themeData.bootswatchSkin = skin || themeData.bootswatchSkin
+    if (themeData && themeData.bootswatchSkin) {
+      skinImport.push(`\n@import "./@nodebb/bootswatch/${themeData.bootswatchSkin}/variables.less";`)
+      skinImport.push(`\n@import "./@nodebb/bootswatch/${themeData.bootswatchSkin}/bootswatch.less";`)
     }
+    skinImport = skinImport.join('')
+  }
 
-    let imports = `${skinImport}\n${cssImports}\n${lessImports}\n${acpLessImports}`;
-    imports = buildImports[target](imports);
+  const [lessImports, cssImports, acpLessImports] = await Promise.all([
+    filterGetImports(plugins.lessFiles, '\n@import ".', '.less'),
+    filterGetImports(plugins.cssFiles, '\n@import (inline) ".', '.css'),
+    target === 'client' ? '' : filterGetImports(plugins.acpLessFiles, '\n@import ".', '.less')
+  ])
 
-    return { paths: paths, imports: imports };
+  async function filterGetImports (files, prefix, extension) {
+    const filteredFiles = await filterMissingFiles(files)
+    return await getImports(filteredFiles, prefix, extension)
+  }
+
+  let imports = `${skinImport}\n${cssImports}\n${lessImports}\n${acpLessImports}`
+  imports = buildImports[target](imports)
+
+  return { paths, imports }
 }
 
 CSS.buildBundle = async function (target, fork) {
-    if (target === 'client') {
-        await rimrafAsync(path.join(__dirname, '../../build/public/client*'));
-    }
+  if (target === 'client') {
+    await rimrafAsync(path.join(__dirname, '../../build/public/client*'))
+  }
 
-    const data = await getBundleMetadata(target);
-    const minify = process.env.NODE_ENV !== 'development';
-    const bundle = await minifier.css.bundle(data.imports, data.paths, minify, fork);
+  const data = await getBundleMetadata(target)
+  const minify = process.env.NODE_ENV !== 'development'
+  const bundle = await minifier.css.bundle(data.imports, data.paths, minify, fork)
 
-    const filename = `${target}.css`;
-    await fs.promises.writeFile(path.join(__dirname, '../../build/public', filename), bundle.code);
-    return bundle.code;
-};
+  const filename = `${target}.css`
+  await fs.promises.writeFile(path.join(__dirname, '../../build/public', filename), bundle.code)
+  return bundle.code
+}

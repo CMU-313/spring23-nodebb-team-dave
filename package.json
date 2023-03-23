@@ -183,6 +183,20 @@
     "engines": {
         "node": ">=16"
     },
+    "ts-standard": {
+        "ignore": [
+            "/*.js",
+            "public/**/*.js",
+            "src/**/*.js",
+            "test/**/*.js",
+            "src/controllers/composer.ts",
+            "src/logger.ts",
+            "src/posts/endorsement.ts",
+            "src/pubsub.ts",
+            "src/social.ts",
+            "src/types/*.ts"
+        ]
+    },
     "maintainers": [
         {
             "name": "Andrew Rodrigues",
