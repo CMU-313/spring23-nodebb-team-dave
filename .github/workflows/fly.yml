@@ -70,8 +70,8 @@ jobs:
         env:
           DB_CONFIG: ${{ secrets.CONFIG_FILE }}
         run: |
-          echo ${DB_CONFIG} > install/db_config.json
+          echo ${DB_CONFIG} >> install/db_config.json
+          cat install/db_config.json
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          
