@@ -40,6 +40,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
+      - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Setup on Redis
         if: startsWith(matrix.database, 'redis')
         env:
@@ -65,7 +66,6 @@ jobs:
             }
         run: |
           node app --setup="${SETUP}" --ci="${CI}"
-      - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Setup config
         env:
           DB_CONFIG: ${{ secrets.DB_CONFIG }}
