@@ -26,7 +26,7 @@ usersController.index = async function (req, res) {
   }
 }
 
-async function getUsers (req, res) {
+async function getUsers(req, res) {
   const sortDirection = req.query.sortDirection || 'desc'
   const reverse = sortDirection === 'desc'
 
@@ -40,7 +40,7 @@ async function getUsers (req, res) {
   const start = Math.max(0, page - 1) * resultsPerPage
   const stop = start + resultsPerPage - 1
 
-  function buildSet () {
+  function buildSet() {
     const sortToSet = {
       postcount: 'users:postcount',
       reputation: 'users:reputation',
@@ -69,14 +69,14 @@ async function getUsers (req, res) {
     return set.length > 1 ? set : set[0]
   }
 
-  async function getCount (set) {
+  async function getCount(set) {
     if (Array.isArray(set)) {
       return await db.sortedSetIntersectCard(set)
     }
     return await db.sortedSetCard(set)
   }
 
-  async function getUids (set) {
+  async function getUids(set) {
     let uids = []
     if (Array.isArray(set)) {
       const weights = set.map((s, index) => (index ? 0 : 1))
@@ -160,8 +160,8 @@ usersController.search = async function (req, res) {
   await render(req, res, searchData)
 }
 
-async function loadUserInfo (callerUid, uids) {
-  async function getIPs () {
+async function loadUserInfo(callerUid, uids) {
+  async function getIPs() {
     return await Promise.all(uids.map(uid => db.getSortedSetRevRange(`uid:${uid}:ip`, 0, -1)))
   }
   const [isAdmin, userData, lastonline, ips] = await Promise.all([
@@ -202,7 +202,7 @@ usersController.registrationQueue = async function (req, res) {
   res.render('admin/manage/registration', data)
 }
 
-async function getInvites () {
+async function getInvites() {
   const invitations = await user.getAllInvites()
   const uids = invitations.map(invite => invite.uid)
   let usernames = await user.getUsersFields(uids, ['username'])
@@ -212,7 +212,7 @@ async function getInvites () {
     invites.username = usernames[index]
   })
 
-  async function getUsernamesByEmails (emails) {
+  async function getUsernamesByEmails(emails) {
     const uids = await db.sortedSetScores('email:uid', emails.map(email => String(email).toLowerCase()))
     const usernames = await user.getUsersFields(uids, ['username'])
     return usernames.map(user => user.username)
@@ -229,7 +229,7 @@ async function getInvites () {
   return invitations
 }
 
-async function render (req, res, data) {
+async function render(req, res, data) {
   data.pagination = pagination.create(data.page, data.pageCount, req.query)
 
   const { registrationType } = meta.config

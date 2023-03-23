@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/account/settings', [
-  'forum/account/header', 'components', 'translator', 'api', 'alerts'
+  'forum/account/header', 'components', 'translator', 'api', 'alerts',
 ], function (header, components, translator, api, alerts) {
   const AccountSettings = {}
 
@@ -42,7 +42,7 @@ define('forum/account/settings', [
     components.get('user/sessions').find('.timeago').timeago()
   }
 
-  function loadSettings () {
+  function loadSettings() {
     const settings = {}
 
     $('.account').find('input, textarea, select').each(function (id, input) {
@@ -54,19 +54,19 @@ define('forum/account/settings', [
       }
 
       switch (input.attr('type')) {
-        case 'checkbox':
-          settings[setting] = input.is(':checked') ? 1 : 0
-          break
-        default:
-          settings[setting] = input.val()
-          break
+      case 'checkbox':
+        settings[setting] = input.is(':checked') ? 1 : 0
+        break
+      default:
+        settings[setting] = input.val()
+        break
       }
     })
 
     return settings
   }
 
-  function saveSettings (settings) {
+  function saveSettings(settings) {
     api.put(`/users/${ajaxify.data.uid}/settings`, { settings }).then((newSettings) => {
       alerts.success('[[success:settings-saved]]')
       let languageChanged = false
@@ -96,7 +96,7 @@ define('forum/account/settings', [
     })
   }
 
-  function toggleCustomRoute () {
+  function toggleCustomRoute() {
     if ($('[data-property="homePageRoute"]').val() === 'custom') {
       $('#homePageCustom').show()
     } else {
@@ -105,7 +105,7 @@ define('forum/account/settings', [
     }
   }
 
-  function reskin (skinName) {
+  function reskin(skinName) {
     const clientEl = Array.prototype.filter.call(document.querySelectorAll('link[rel="stylesheet"]'), function (el) {
       return el.href.indexOf(config.relative_path + '/assets/client') !== -1
     })[0] || null

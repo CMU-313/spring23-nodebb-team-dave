@@ -5,7 +5,7 @@ define('forum/search', [
   'autocomplete',
   'storage',
   'hooks',
-  'alerts'
+  'alerts',
 ], function (searchModule, autocomplete, storage, hooks, alerts) {
   const Search = {}
 
@@ -35,10 +35,10 @@ define('forum/search', [
     fillOutForm()
   }
 
-  function getSearchDataFromDOM () {
+  function getSearchDataFromDOM() {
     const form = $('#advanced-search')
     const searchData = {
-      in: $('#search-in').val()
+      in: $('#search-in').val(),
     }
     searchData.term = $('#search-input').val()
     if (searchData.in === 'posts' || searchData.in === 'titlesposts' || searchData.in === 'titles') {
@@ -58,20 +58,20 @@ define('forum/search', [
 
     hooks.fire('action:search.getSearchDataFromDOM', {
       form,
-      data: searchData
+      data: searchData,
     })
 
     return searchData
   }
 
-  function updateFormItemVisiblity (searchIn) {
+  function updateFormItemVisiblity(searchIn) {
     const hide = searchIn.indexOf('posts') === -1 && searchIn.indexOf('titles') === -1
     $('.post-search-item').toggleClass('hide', hide)
   }
 
-  function fillOutForm () {
+  function fillOutForm() {
     const params = utils.params({
-      disableToType: true
+      disableToType: true,
     })
 
     const searchData = searchModule.getSearchPreferences()
@@ -134,12 +134,12 @@ define('forum/search', [
       }
 
       hooks.fire('action:search.fillOutForm', {
-        form: formData
+        form: formData,
       })
     }
   }
 
-  function handleSavePreferences () {
+  function handleSavePreferences() {
     $('#save-preferences').on('click', function () {
       storage.setItem('search-preferences', JSON.stringify(getSearchDataFromDOM()))
       alerts.success('[[search:search-preferences-saved]]')
@@ -156,11 +156,11 @@ define('forum/search', [
     })
   }
 
-  function enableAutoComplete () {
+  function enableAutoComplete() {
     const userEl = $('#posted-by-user')
     userEl.tagsinput({
       confirmKeys: [13, 44],
-      trimValue: true
+      trimValue: true,
     })
     if (app.user.privileges['search:users']) {
       autocomplete.user(userEl.siblings('.bootstrap-tagsinput').find('input'))
@@ -169,7 +169,7 @@ define('forum/search', [
     const tagEl = $('#has-tags')
     tagEl.tagsinput({
       confirmKeys: [13, 44],
-      trimValue: true
+      trimValue: true,
     })
     if (app.user.privileges['search:tags']) {
       autocomplete.tag(tagEl.siblings('.bootstrap-tagsinput').find('input'))

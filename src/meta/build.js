@@ -61,7 +61,7 @@ const aliasMap = Object.keys(aliases).reduce((prev, key) => {
   return prev
 }, {})
 
-async function beforeBuild (targets) {
+async function beforeBuild(targets) {
   const db = require('../database')
   process.stdout.write(`${chalk.green('  started')}\n`)
   try {
@@ -79,7 +79,7 @@ async function beforeBuild (targets) {
 
 const allTargets = Object.keys(targetHandlers).filter(name => typeof targetHandlers[name] === 'function')
 
-async function buildTargets (targets, parallel, options) {
+async function buildTargets(targets, parallel, options) {
   const length = Math.max(...targets.map(name => name.length))
   const jsTargets = targets.filter(target => targetHandlers.javascript.includes(target))
   const otherTargets = targets.filter(target => !targetHandlers.javascript.includes(target))
@@ -90,7 +90,7 @@ async function buildTargets (targets, parallel, options) {
   await execAsync('npx tsc')
   winston.info('[build] TypeScript building complete')
 
-  async function buildJSTargets () {
+  async function buildJSTargets() {
     await Promise.all(
       jsTargets.map(
         target => step(target, parallel, `${_.padStart(target, length)} `)
@@ -119,7 +119,7 @@ async function buildTargets (targets, parallel, options) {
   }
 }
 
-async function step (target, parallel, targetStr) {
+async function step(target, parallel, targetStr) {
   const startTime = Date.now()
   winston.info(`[build] ${targetStr} build started`)
   try {
@@ -174,9 +174,9 @@ exports.build = async function (targets, options) {
 
   // map multitargets to their sets
   targets = _.uniq(_.flatMap(targets, target => (
-    Array.isArray(targetHandlers[target])
-      ? targetHandlers[target]
-      : target
+    Array.isArray(targetHandlers[target]) ?
+      targetHandlers[target] :
+      target
   )))
 
   winston.verbose(`[build] building the following targets: ${targets.join(', ')}`)
@@ -211,7 +211,7 @@ exports.build = async function (targets, options) {
   }
 }
 
-function getWebpackConfig () {
+function getWebpackConfig() {
   return require(process.env.NODE_ENV !== 'development' ? '../../webpack.prod' : '../../webpack.dev')
 }
 

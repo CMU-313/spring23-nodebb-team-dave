@@ -144,9 +144,9 @@ privsTopics.canDelete = async function (tid, uid) {
 
   const { preventTopicDeleteAfterReplies } = meta.config
   if (!isModerator && preventTopicDeleteAfterReplies && (topicData.postcount - 1) >= preventTopicDeleteAfterReplies) {
-    const langKey = preventTopicDeleteAfterReplies > 1
-      ? `[[error:cant-delete-topic-has-replies, ${meta.config.preventTopicDeleteAfterReplies}]]`
-      : '[[error:cant-delete-topic-has-reply]]'
+    const langKey = preventTopicDeleteAfterReplies > 1 ?
+      `[[error:cant-delete-topic-has-replies, ${meta.config.preventTopicDeleteAfterReplies}]]` :
+      '[[error:cant-delete-topic-has-reply]]'
     throw new Error(langKey)
   }
 

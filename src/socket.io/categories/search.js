@@ -49,7 +49,7 @@ module.exports = function (SocketCategories) {
     return result.categories
   }
 
-  async function findMatchedCids (uid, data) {
+  async function findMatchedCids(uid, data) {
     const result = await categories.search({
       uid,
       query: data.search,
@@ -76,9 +76,9 @@ module.exports = function (SocketCategories) {
     }
   }
 
-  async function loadCids (uid, parentCid) {
+  async function loadCids(uid, parentCid) {
     let resultCids = []
-    async function getCidsRecursive (cids) {
+    async function getCidsRecursive(cids) {
       const categoryData = await categories.getCategoriesFields(cids, ['subCategoriesPerPage'])
       const cidToData = _.zipObject(cids, categoryData)
       await Promise.all(cids.map(async (cid) => {

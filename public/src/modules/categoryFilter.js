@@ -78,21 +78,21 @@ define('categoryFilter', ['categorySearch', 'api', 'hooks'], function (categoryS
     })
   }
 
-  function updateFilterButton (el, selectedCids) {
+  function updateFilterButton(el, selectedCids) {
     if (selectedCids.length > 1) {
       renderButton({
         icon: 'fa-plus',
         name: '[[unread:multiple-categories-selected]]',
-        bgColor: '#ddd'
+        bgColor: '#ddd',
       })
     } else if (selectedCids.length === 1) {
       api.get(`/categories/${selectedCids[0]}`, {}).then(renderButton)
     } else {
       renderButton()
     }
-    function renderButton (category) {
+    function renderButton(category) {
       app.parseAndTranslate('partials/category-filter-content', {
-        selectedCategory: category
+        selectedCategory: category,
       }, function (html) {
         el.find('button').replaceWith($('<div/>').html(html).find('button'))
       })

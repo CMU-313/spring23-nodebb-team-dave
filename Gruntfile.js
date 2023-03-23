@@ -154,7 +154,7 @@ module.exports = function (grunt) {
     done()
   })
 
-  function run () {
+  function run() {
     if (worker) {
       worker.kill()
     }

@@ -7,7 +7,7 @@ const utils = require('../utils')
 const rewards = module.exports
 
 rewards.save = async function (data) {
-  async function save (data) {
+  async function save(data) {
     if (!Object.keys(data.rewards).length) {
       return
     }
@@ -44,7 +44,7 @@ rewards.get = async function () {
   })
 }
 
-async function saveConditions (data) {
+async function saveConditions(data) {
   const rewardsPerCondition = {}
   await db.delete('conditions:active')
   const conditions = []
@@ -60,8 +60,8 @@ async function saveConditions (data) {
   await Promise.all(Object.keys(rewardsPerCondition).map(c => db.setAdd(`condition:${c}:rewards`, rewardsPerCondition[c])))
 }
 
-async function getActiveRewards () {
-  async function load (id) {
+async function getActiveRewards() {
+  async function load(id) {
     const [main, rewards] = await Promise.all([
       db.getObject(`rewards:id:${id}`),
       db.getObject(`rewards:id:${id}:rewards`)

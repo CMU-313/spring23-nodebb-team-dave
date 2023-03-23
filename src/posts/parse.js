@@ -157,7 +157,7 @@ module.exports = function (Posts) {
     })
   }
 
-  function sanitizeSignature (signature) {
+  function sanitizeSignature(signature) {
     signature = translator.escape(signature)
     const tagsToStrip = []
 

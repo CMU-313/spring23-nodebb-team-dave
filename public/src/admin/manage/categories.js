@@ -7,7 +7,7 @@ define('admin/manage/categories', [
   'api',
   'Sortable',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (translator, Benchpress, categorySelector, api, Sortable, bootbox, alerts) {
   Sortable = Sortable.default
   const Categories = {}
@@ -20,7 +20,7 @@ define('admin/manage/categories', [
       onSelect: function (selectedCategory) {
         ajaxify.go('/admin/manage/categories' + (selectedCategory.cid ? '?cid=' + selectedCategory.cid : ''))
       },
-      localCategories: []
+      localCategories: [],
     })
     Categories.render(ajaxify.data.categoriesTree)
 
@@ -68,9 +68,9 @@ define('admin/manage/categories', [
               } else {
                 return false
               }
-            }
-          }
-        }
+            },
+          },
+        },
       })
     })
 
@@ -82,7 +82,7 @@ define('admin/manage/categories', [
       toggleAll(true)
     })
 
-    function toggleAll (expand) {
+    function toggleAll(expand) {
       const el = $('.categories .toggle')
       el.find('i').toggleClass('fa-chevron-down', expand).toggleClass('fa-chevron-right', !expand)
       el.closest('[data-cid]').find('> ul[data-cid]').toggleClass('hidden', !expand)
@@ -98,22 +98,22 @@ define('admin/manage/categories', [
           save: {
             label: '[[global:save]]',
             className: 'btn-primary',
-            callback: submit
-          }
-        }
+            callback: submit,
+          },
+        },
       })
       const options = {
         localCategories: [
           {
             cid: 0,
             name: '[[admin/manage/categories:parent-category-none]]',
-            icon: 'fa-none'
-          }
-        ]
+            icon: 'fa-none',
+          },
+        ],
       }
       const parentSelector = categorySelector.init(modal.find('#parentCidGroup [component="category-selector"]'), options)
       const cloneFromSelector = categorySelector.init(modal.find('#cloneFromCidGroup [component="category-selector"]'), options)
-      function submit () {
+      function submit() {
         const formData = modal.find('form').serializeObject()
         formData.description = ''
         formData.icon = 'fa-comments'
@@ -153,7 +153,7 @@ define('admin/manage/categories', [
         title: '[[admin/manage/categories:alert.created]]',
         message: '[[admin/manage/categories:alert.create-success]]',
         type: 'success',
-        timeout: 2000
+        timeout: 2000,
       })
 
       ajaxify.go('admin/manage/categories/' + data.cid)
@@ -179,7 +179,7 @@ define('admin/manage/categories', [
   Categories.toggle = function (cids, disabled) {
     const listEl = document.querySelector('.categories ul')
     Promise.all(cids.map(cid => api.put('/categories/' + cid, {
-      disabled: disabled ? 1 : 0
+      disabled: disabled ? 1 : 0,
     }).then(() => {
       const categoryEl = listEl.querySelector(`li[data-cid="${cid}"]`)
       categoryEl.classList[disabled ? 'add' : 'remove']('disabled')
@@ -187,11 +187,11 @@ define('admin/manage/categories', [
     }).catch(alerts.error)))
   }
 
-  function itemDidAdd (e) {
+  function itemDidAdd(e) {
     newCategoryId = e.to.dataset.cid
   }
 
-  function itemDragDidEnd (e) {
+  function itemDragDidEnd(e) {
     const isCategoryUpdate = parseInt(newCategoryId, 10) !== -1
 
     // Update needed?
@@ -202,7 +202,7 @@ define('admin/manage/categories', [
       // this makes sure order is correct when drag & drop is used on pages > 1
       const baseIndex = (ajaxify.data.pagination.currentPage - 1) * ajaxify.data.categoriesPerPage
       modified[cid] = {
-        order: baseIndex + e.newIndex + 1
+        order: baseIndex + e.newIndex + 1,
       }
 
       if (isCategoryUpdate) {
@@ -242,7 +242,7 @@ define('admin/manage/categories', [
      * @param container {object} parent jquery element for the list
      * @param parentId {number} parent category identifier
      */
-  function renderList (categories, container, parentCategory) {
+  function renderList(categories, container, parentCategory) {
     // Translate category names if needed
     let count = 0
     const parentId = parentCategory.cid
@@ -263,11 +263,11 @@ define('admin/manage/categories', [
       continueRender()
     }
 
-    function continueRender () {
+    function continueRender() {
       app.parseAndTranslate('admin/partials/categories/category-rows', {
         cid: parentCategory.cid,
         categories,
-        parentCategory
+        parentCategory,
       }, function (html) {
         if (container.find('.category-row').length) {
           container.find('.category-row').after(html)
@@ -294,7 +294,7 @@ define('admin/manage/categories', [
           dataIdAttr: 'data-cid',
           ghostClass: 'placeholder',
           onAdd: itemDidAdd,
-          onEnd: itemDragDidEnd
+          onEnd: itemDragDidEnd,
         })
       })
     }

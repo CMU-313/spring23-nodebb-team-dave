@@ -65,7 +65,7 @@ require('./headers')(middleware)
 require('./expose')(middleware)
 middleware.assert = require('./assert')
 
-middleware.stripLeadingSlashes = function stripLeadingSlashes (req, res, next) {
+middleware.stripLeadingSlashes = function stripLeadingSlashes(req, res, next) {
   const target = req.originalUrl.replace(relative_path, '')
   if (target.startsWith('//')) {
     return res.redirect(relative_path + target.replace(/^\/+/, '/'))
@@ -101,7 +101,7 @@ middleware.pluginHooks = helpers.try(async (req, res, next) => {
   }
 })
 
-middleware.validateFiles = function validateFiles (req, res, next) {
+middleware.validateFiles = function validateFiles(req, res, next) {
   if (!Array.isArray(req.files.files) || !req.files.files.length) {
     return next(new Error(['[[error:invalid-files]]']))
   }
@@ -109,12 +109,12 @@ middleware.validateFiles = function validateFiles (req, res, next) {
   next()
 }
 
-middleware.prepareAPI = function prepareAPI (req, res, next) {
+middleware.prepareAPI = function prepareAPI(req, res, next) {
   res.locals.isAPI = true
   next()
 }
 
-middleware.routeTouchIcon = function routeTouchIcon (req, res) {
+middleware.routeTouchIcon = function routeTouchIcon(req, res) {
   if (meta.config['brand:touchIcon'] && validator.isURL(meta.config['brand:touchIcon'])) {
     return res.redirect(meta.config['brand:touchIcon'])
   }
@@ -146,7 +146,7 @@ middleware.exposeUid = helpers.try(async (req, res, next) => {
   await expose('uid', user.getUidByUserslug, 'userslug', req, res, next)
 })
 
-async function expose (exposedField, method, field, req, res, next) {
+async function expose(exposedField, method, field, req, res, next) {
   if (!req.params.hasOwnProperty(field)) {
     return next()
   }
@@ -154,7 +154,7 @@ async function expose (exposedField, method, field, req, res, next) {
   next()
 }
 
-middleware.privateUploads = function privateUploads (req, res, next) {
+middleware.privateUploads = function privateUploads(req, res, next) {
   if (req.loggedIn || !meta.config.privateUploads) {
     return next()
   }
@@ -170,7 +170,7 @@ middleware.privateUploads = function privateUploads (req, res, next) {
   next()
 }
 
-middleware.busyCheck = function busyCheck (req, res, next) {
+middleware.busyCheck = function busyCheck(req, res, next) {
   if (global.env === 'production' && meta.config.eventLoopCheckEnabled && toobusy()) {
     analytics.increment('errors:503')
     res.status(503).type('text/html').sendFile(path.join(__dirname, '../../public/503.html'))
@@ -179,7 +179,7 @@ middleware.busyCheck = function busyCheck (req, res, next) {
   }
 }
 
-middleware.applyBlacklist = async function applyBlacklist (req, res, next) {
+middleware.applyBlacklist = async function applyBlacklist(req, res, next) {
   try {
     await meta.blacklist.test(req.ip)
     next()
@@ -188,7 +188,7 @@ middleware.applyBlacklist = async function applyBlacklist (req, res, next) {
   }
 }
 
-middleware.delayLoading = function delayLoading (req, res, next) {
+middleware.delayLoading = function delayLoading(req, res, next) {
   // Introduces an artificial delay during load so that brute force attacks are effectively mitigated
 
   // Add IP to cache so if too many requests are made, subsequent requests are blocked for a minute
@@ -214,7 +214,7 @@ middleware.buildSkinAsset = helpers.try(async (req, res, next) => {
   res.status(200).type('text/css').send(css)
 })
 
-middleware.addUploadHeaders = function addUploadHeaders (req, res, next) {
+middleware.addUploadHeaders = function addUploadHeaders(req, res, next) {
   // Trim uploaded files' timestamps when downloading + force download if html
   let basename = path.basename(req.path)
   const extname = path.extname(req.path)

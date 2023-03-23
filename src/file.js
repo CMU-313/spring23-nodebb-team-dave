@@ -116,7 +116,7 @@ file.delete = async function (path) {
   }
 }
 
-file.link = async function link (filePath, destPath, relative) {
+file.link = async function link(filePath, destPath, relative) {
   if (relative && process.platform !== 'win32') {
     filePath = path.relative(path.dirname(destPath), filePath)
   }
@@ -128,7 +128,7 @@ file.link = async function link (filePath, destPath, relative) {
   }
 }
 
-file.linkDirs = async function linkDirs (sourceDir, destDir, relative) {
+file.linkDirs = async function linkDirs(sourceDir, destDir, relative) {
   if (relative && process.platform !== 'win32') {
     sourceDir = path.relative(path.dirname(destDir), sourceDir)
   }

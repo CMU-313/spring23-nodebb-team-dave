@@ -7,7 +7,7 @@ define('forum/category/tools', [
   'components',
   'api',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (topicSelect, threadTools, components, api, bootbox, alerts) {
   const CategoryTools = {}
 
@@ -123,7 +123,7 @@ define('forum/category/tools', [
     socket.on('event:topic_moved', onTopicMoved)
   }
 
-  function categoryCommand (method, path, command, onComplete) {
+  function categoryCommand(method, path, command, onComplete) {
     if (!onComplete) {
       onComplete = function () {}
     }
@@ -142,19 +142,19 @@ define('forum/category/tools', [
     }
 
     switch (command) {
-      case 'delete':
-      case 'restore':
-      case 'purge':
-        bootbox.confirm(`[[topic:thread_tools.${command}_confirm]]`, execute)
-        break
+    case 'delete':
+    case 'restore':
+    case 'purge':
+      bootbox.confirm(`[[topic:thread_tools.${command}_confirm]]`, execute)
+      break
 
-      case 'pin':
-        threadTools.requestPinExpiry(body, execute.bind(null, true))
-        break
+    case 'pin':
+      threadTools.requestPinExpiry(body, execute.bind(null, true))
+      break
 
-      default:
-        execute(true)
-        break
+    default:
+      execute(true)
+      break
     }
   }
 
@@ -169,21 +169,21 @@ define('forum/category/tools', [
     socket.removeListener('event:topic_moved', onTopicMoved)
   }
 
-  function closeDropDown () {
+  function closeDropDown() {
     $('.thread-tools.open').find('.dropdown-toggle').trigger('click')
   }
 
-  function onCommandComplete () {
+  function onCommandComplete() {
     closeDropDown()
     topicSelect.unselectAll()
   }
 
-  function onDeletePurgeComplete () {
+  function onDeletePurgeComplete() {
     closeDropDown()
     updateDropdownOptions()
   }
 
-  function updateDropdownOptions () {
+  function updateDropdownOptions() {
     const tids = topicSelect.getSelectedTids()
     const isAnyDeleted = isAny(isTopicDeleted, tids)
     const areAllDeleted = areAll(isTopicDeleted, tids)
@@ -205,7 +205,7 @@ define('forum/category/tools', [
     components.get('topic/merge').toggleClass('hidden', isAnyScheduled)
   }
 
-  function isAny (method, tids) {
+  function isAny(method, tids) {
     for (let i = 0; i < tids.length; i += 1) {
       if (method(tids[i])) {
         return true
@@ -214,7 +214,7 @@ define('forum/category/tools', [
     return false
   }
 
-  function areAll (method, tids) {
+  function areAll(method, tids) {
     for (let i = 0; i < tids.length; i += 1) {
       if (!method(tids[i])) {
         return false
@@ -223,54 +223,54 @@ define('forum/category/tools', [
     return true
   }
 
-  function isTopicDeleted (tid) {
+  function isTopicDeleted(tid) {
     return getTopicEl(tid).hasClass('deleted')
   }
 
-  function isTopicLocked (tid) {
+  function isTopicLocked(tid) {
     return getTopicEl(tid).hasClass('locked')
   }
 
-  function isTopicPinned (tid) {
+  function isTopicPinned(tid) {
     return getTopicEl(tid).hasClass('pinned')
   }
 
-  function isTopicScheduled (tid) {
+  function isTopicScheduled(tid) {
     return getTopicEl(tid).hasClass('scheduled')
   }
 
-  function getTopicEl (tid) {
+  function getTopicEl(tid) {
     return components.get('category/topic', 'tid', tid)
   }
 
-  function setDeleteState (data) {
+  function setDeleteState(data) {
     const topic = getTopicEl(data.tid)
     topic.toggleClass('deleted', data.isDeleted)
     topic.find('[component="topic/locked"]').toggleClass('hide', !data.isDeleted)
   }
 
-  function setPinnedState (data) {
+  function setPinnedState(data) {
     const topic = getTopicEl(data.tid)
     topic.toggleClass('pinned', data.isPinned)
     topic.find('[component="topic/pinned"]').toggleClass('hide', !data.isPinned)
     ajaxify.refresh()
   }
 
-  function setLockedState (data) {
+  function setLockedState(data) {
     const topic = getTopicEl(data.tid)
     topic.toggleClass('locked', data.isLocked)
     topic.find('[component="topic/locked"]').toggleClass('hide', !data.isLocked)
   }
 
-  function onTopicMoved (data) {
+  function onTopicMoved(data) {
     getTopicEl(data.tid).remove()
   }
 
-  function onTopicPurged (data) {
+  function onTopicPurged(data) {
     getTopicEl(data.tid).remove()
   }
 
-  function handlePinnedTopicSort () {
+  function handlePinnedTopicSort() {
     if (!ajaxify.data.topics || !ajaxify.data.template.category) {
       return
     }
@@ -293,7 +293,7 @@ define('forum/category/tools', [
         update: function (ev, ui) {
           socket.emit('topics.orderPinnedTopics', {
             tid: ui.item.attr('data-tid'),
-            order: baseIndex + ui.item.index()
+            order: baseIndex + ui.item.index(),
           }, function (err) {
             if (err) {
               return alerts.error(err)
@@ -302,7 +302,7 @@ define('forum/category/tools', [
               $(el).attr('data-index', baseIndex + index)
             })
           })
-        }
+        },
       })
     })
   }

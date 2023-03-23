@@ -13,7 +13,7 @@ module.exports = function (User) {
     await toggleFollow('unfollow', uid, unfollowuid)
   }
 
-  async function toggleFollow (type, uid, theiruid) {
+  async function toggleFollow(type, uid, theiruid) {
     if (parseInt(uid, 10) <= 0 || parseInt(theiruid, 10) <= 0) {
       throw new Error('[[error:invalid-uid]]')
     }
@@ -67,7 +67,7 @@ module.exports = function (User) {
     return await getFollow(uid, 'followers', start, stop)
   }
 
-  async function getFollow (uid, type, start, stop) {
+  async function getFollow(uid, type, start, stop) {
     if (parseInt(uid, 10) <= 0) {
       return []
     }

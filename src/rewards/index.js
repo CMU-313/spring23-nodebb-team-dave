@@ -25,15 +25,15 @@ rewards.checkConditionAndRewardUser = async function (params) {
   await giveRewards(uid, eligibleRewards)
 }
 
-async function isConditionActive (condition) {
+async function isConditionActive(condition) {
   return await db.isSetMember('conditions:active', condition)
 }
 
-async function getIDsByCondition (condition) {
+async function getIDsByCondition(condition) {
   return await db.getSetMembers(`condition:${condition}:rewards`)
 }
 
-async function filterCompletedRewards (uid, rewards) {
+async function filterCompletedRewards(uid, rewards) {
   const data = await db.getSortedSetRangeByScoreWithScores(`uid:${uid}:rewards`, 0, -1, 1, '+inf')
   const userRewards = {}
 
@@ -51,15 +51,15 @@ async function filterCompletedRewards (uid, rewards) {
   })
 }
 
-async function getRewardDataByIDs (ids) {
+async function getRewardDataByIDs(ids) {
   return await db.getObjects(ids.map(id => `rewards:id:${id}`))
 }
 
-async function getRewardsByRewardData (rewards) {
+async function getRewardsByRewardData(rewards) {
   return await db.getObjects(rewards.map(reward => `rewards:id:${reward.id}:rewards`))
 }
 
-async function checkCondition (reward, method) {
+async function checkCondition(reward, method) {
   if (method.constructor && method.constructor.name !== 'AsyncFunction') {
     method = util.promisify(method)
   }
@@ -68,7 +68,7 @@ async function checkCondition (reward, method) {
   return bool
 }
 
-async function giveRewards (uid, rewards) {
+async function giveRewards(uid, rewards) {
   const rewardData = await getRewardsByRewardData(rewards)
   for (let i = 0; i < rewards.length; i++) {
     /* eslint-disable no-await-in-loop */

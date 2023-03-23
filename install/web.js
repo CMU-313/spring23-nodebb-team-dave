@@ -85,7 +85,7 @@ web.install = async function (port) {
   }
 }
 
-async function runWebpack () {
+async function runWebpack() {
   const util = require('util')
   const webpackCfg = require('../webpack.installer')
   const compiler = webpack(webpackCfg)
@@ -93,13 +93,13 @@ async function runWebpack () {
   await webpackRun()
 }
 
-function launchExpress (port) {
+function launchExpress(port) {
   server = app.listen(port, () => {
     winston.info('Web installer listening on http://%s:%s', '0.0.0.0', port)
   })
 }
 
-function setupRoutes () {
+function setupRoutes() {
   app.get('/', welcome)
   app.post('/', install)
   app.post('/launch', launch)
@@ -107,11 +107,11 @@ function setupRoutes () {
   app.get('/sping', ping)
 }
 
-function ping (req, res) {
+function ping(req, res) {
   res.status(200).send(req.path === '/sping' ? 'healthy' : '200')
 }
 
-function welcome (req, res) {
+function welcome(req, res) {
   const dbs = ['mongo', 'redis', 'postgres']
   const databases = dbs.map((databaseName) => {
     const questions = require(`../src/database/${databaseName}`).questions.filter(question => question && !question.hideOnWebInstall)
@@ -139,7 +139,7 @@ function welcome (req, res) {
   })
 }
 
-function install (req, res) {
+function install(req, res) {
   if (installing) {
     return welcome(req, res)
   }
@@ -180,7 +180,7 @@ function install (req, res) {
   })
 }
 
-async function launch (req, res) {
+async function launch(req, res) {
   try {
     res.json({})
     server.close()
@@ -229,7 +229,7 @@ async function launch (req, res) {
 }
 
 // this is necessary because otherwise the compiled templates won't be available on a clean install
-async function compileTemplate () {
+async function compileTemplate() {
   const sourceFile = path.join(__dirname, '../src/views/install/index.tpl')
   const destTpl = path.join(viewsDir, 'install/index.tpl')
   const destJs = path.join(viewsDir, 'install/index.js')
@@ -247,7 +247,7 @@ async function compileTemplate () {
   ])
 }
 
-async function compileLess () {
+async function compileLess() {
   try {
     const installSrc = path.join(__dirname, '../public/less/install.less')
     const style = await fs.promises.readFile(installSrc)
@@ -259,14 +259,14 @@ async function compileLess () {
   }
 }
 
-async function copyCSS () {
+async function copyCSS() {
   const src = await fs.promises.readFile(
     path.join(__dirname, '../node_modules/bootstrap/dist/css/bootstrap.min.css'), 'utf8'
   )
   await fs.promises.writeFile(path.join(__dirname, '../public/bootstrap.min.css'), src)
 }
 
-async function loadDefaults () {
+async function loadDefaults() {
   const setupDefaultsPath = path.join(__dirname, '../setup.json')
   try {
     // eslint-disable-next-line no-bitwise

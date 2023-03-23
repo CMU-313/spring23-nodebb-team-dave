@@ -9,7 +9,7 @@ define('forum/account/info', ['forum/account/header', 'alerts', 'forum/account/s
     sessions.prepareSessionRevocation()
   }
 
-  function handleModerationNote () {
+  function handleModerationNote() {
     $('[component="account/save-moderation-note"]').on('click', function () {
       const note = $('[component="account/moderation-note"]').val()
       socket.emit('user.setModerationNote', { uid: ajaxify.data.uid, note }, function (err) {
@@ -23,7 +23,7 @@ define('forum/account/info', ['forum/account/header', 'alerts', 'forum/account/s
           note: utils.escapeHTML(note),
           user: app.user,
           timestamp,
-          timestampISO: utils.toISOString(timestamp)
+          timestampISO: utils.toISOString(timestamp),
         }]
         app.parseAndTranslate('account/info', 'moderationNotes', { moderationNotes: data }, function (html) {
           $('[component="account/moderation-note/list"]').prepend(html)

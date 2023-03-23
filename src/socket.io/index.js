@@ -61,7 +61,7 @@ Sockets.init = async function (server) {
   Sockets.server = io
 }
 
-function onConnection (socket) {
+function onConnection(socket) {
   socket.ip = (socket.request.headers['x-forwarded-for'] || socket.request.connection.remoteAddress || '').split(',')[0]
   socket.request.ip = socket.ip
   logger.io_one(socket, socket.uid)
@@ -78,12 +78,12 @@ function onConnection (socket) {
   })
 }
 
-function onDisconnect (socket) {
+function onDisconnect(socket) {
   require('./uploads').clear(socket.id)
   plugins.hooks.fire('action:sockets.disconnect', { socket })
 }
 
-async function onConnect (socket) {
+async function onConnect(socket) {
   try {
     await validateSession(socket, '[[error:invalid-session]]')
   } catch (e) {
@@ -107,7 +107,7 @@ async function onConnect (socket) {
   plugins.hooks.fire('action:sockets.connect', { socket })
 }
 
-async function onMessage (socket, payload) {
+async function onMessage(socket, payload) {
   if (!payload.data.length) {
     return winston.warn('[socket.io] Empty payload')
   }
@@ -170,7 +170,7 @@ async function onMessage (socket, payload) {
   }
 }
 
-function requireModules () {
+function requireModules() {
   const modules = [
     'admin', 'categories', 'groups', 'meta', 'modules',
     'notifications', 'plugins', 'posts', 'topics', 'user',
@@ -182,7 +182,7 @@ function requireModules () {
   })
 }
 
-async function checkMaintenance (socket) {
+async function checkMaintenance(socket) {
   const meta = require('../meta')
   if (!meta.config.maintenanceMode) {
     return
@@ -199,7 +199,7 @@ const getSessionAsync = util.promisify(
   (sid, callback) => db.sessionStore.get(sid, (err, sessionObj) => callback(err, sessionObj || null))
 )
 
-async function validateSession (socket, errorMsg) {
+async function validateSession(socket, errorMsg) {
   const req = socket.request
   const { sessionId } = await plugins.hooks.fire('filter:sockets.sessionId', {
     sessionId: req.signedCookies ? req.signedCookies[nconf.get('sessionKey')] : null,
@@ -225,7 +225,7 @@ async function validateSession (socket, errorMsg) {
 
 const cookieParserAsync = util.promisify((req, callback) => cookieParser(req, {}, err => callback(err)))
 
-async function authorize (socket, callback) {
+async function authorize(socket, callback) {
   const { request } = socket
 
   if (!request) {

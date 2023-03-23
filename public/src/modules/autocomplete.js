@@ -3,7 +3,7 @@
 define('autocomplete', ['api', 'alerts'], function (api, alerts) {
   const module = {}
   const _default = {
-    delay: 200
+    delay: 200,
   }
 
   module.init = (params) => {
@@ -18,7 +18,7 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
         select: function (event, ui) {
           handleOnSelect(input, onSelect, event, ui)
         },
-        source
+        source,
       })
     })
   }
@@ -56,8 +56,8 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
                   picture: user.picture,
                   banned: user.banned,
                   'icon:text': user['icon:text'],
-                  'icon:bgColor': user['icon:bgColor']
-                }
+                  'icon:bgColor': user['icon:bgColor'],
+                },
               }
             })
             response(names)
@@ -65,7 +65,7 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
 
           $('.ui-autocomplete a').attr('data-ajaxify', 'false')
         })
-      }
+      },
     })
   }
 
@@ -75,7 +75,7 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
       onSelect,
       source: (request, response) => {
         socket.emit('groups.search', {
-          query: request.term
+          query: request.term,
         }, function (err, results) {
           if (err) {
             return alerts.error(err)
@@ -85,14 +85,14 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
               return group && {
                 label: group.name,
                 value: group.name,
-                group
+                group,
               }
             })
             response(names)
           }
           $('.ui-autocomplete a').attr('data-ajaxify', 'false')
         })
-      }
+      },
     })
   }
 
@@ -104,7 +104,7 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
       source: (request, response) => {
         socket.emit('topics.autocompleteTags', {
           query: request.term,
-          cid: ajaxify.data.cid || 0
+          cid: ajaxify.data.cid || 0,
         }, function (err, tags) {
           if (err) {
             return alerts.error(err)
@@ -114,11 +114,11 @@ define('autocomplete', ['api', 'alerts'], function (api, alerts) {
           }
           $('.ui-autocomplete a').attr('data-ajaxify', 'false')
         })
-      }
+      },
     })
   }
 
-  function handleOnSelect (input, onselect, event, ui) {
+  function handleOnSelect(input, onselect, event, ui) {
     onselect = onselect || function () { }
     const e = jQuery.Event('keypress')
     e.which = 13

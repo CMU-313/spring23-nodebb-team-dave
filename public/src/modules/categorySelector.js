@@ -1,7 +1,7 @@
 'use strict'
 
 define('categorySelector', [
-  'categorySearch', 'bootbox', 'hooks'
+  'categorySearch', 'bootbox', 'hooks',
 ], function (categorySearch, bootbox, hooks) {
   const categorySelector = {}
 
@@ -20,7 +20,7 @@ define('categorySelector', [
 
     const selector = {
       el,
-      selectedCategory: null
+      selectedCategory: null,
     }
     el.on('click', '[data-cid]', function () {
       const categoryEl = $(this)
@@ -35,7 +35,7 @@ define('categorySelector', [
       const categoryEl = selector.el.find('[data-cid="' + cid + '"]')
       selector.selectedCategory = {
         cid,
-        name: categoryEl.attr('data-name')
+        name: categoryEl.attr('data-name'),
       }
 
       if (categoryEl.length) {
@@ -69,13 +69,13 @@ define('categorySelector', [
           save: {
             label: '[[global:select]]',
             className: 'btn-primary',
-            callback: submit
-          }
-        }
+            callback: submit,
+          },
+        },
       })
 
       const selector = categorySelector.init(modal.find('[component="category-selector"]'), options)
-      function submit (ev) {
+      function submit(ev) {
         ev.preventDefault()
         if (selector.selectedCategory) {
           options.onSubmit(selector.selectedCategory)

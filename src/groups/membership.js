@@ -12,7 +12,7 @@ module.exports = function (Groups) {
   }
 
   Groups.getMemberUsers = async function (groupNames, start, stop) {
-    async function get (groupName) {
+    async function get(groupName) {
       const uids = await Groups.getMembers(groupName, start, stop)
       return await user.getUsersFields(uids, ['uid', 'username', 'picture', 'userslug'])
     }
@@ -82,7 +82,7 @@ module.exports = function (Groups) {
     return groups.map(groupName => cachedData[`${uid}:${groupName}`])
   }
 
-  function filterNonCached (cachedData, uid, groupName) {
+  function filterNonCached(cachedData, uid, groupName) {
     const isMember = Groups.cache.get(`${uid}:${groupName}`)
     const isInCache = isMember !== undefined
     if (isInCache) {
@@ -147,7 +147,7 @@ module.exports = function (Groups) {
     return results
   }
 
-  async function getGroupNames (keys) {
+  async function getGroupNames(keys) {
     const isArray = Array.isArray(keys)
     keys = isArray ? keys : [keys]
 

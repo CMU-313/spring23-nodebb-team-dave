@@ -25,7 +25,7 @@ module.exports = function (Messaging) {
     return roomData
   }
 
-  function modifyRoomData (rooms) {
+  function modifyRoomData(rooms) {
     rooms.forEach((data) => {
       if (data) {
         data.roomName = data.roomName || ''
@@ -117,7 +117,7 @@ module.exports = function (Messaging) {
     return (await Messaging.getRoomData(roomId)).groupChat
   }
 
-  async function updateGroupChatField (roomIds) {
+  async function updateGroupChatField(roomIds) {
     const userCounts = await db.sortedSetsCard(roomIds.map(roomId => `chat:room:${roomId}:uids`))
     const groupChats = roomIds.filter((roomId, index) => userCounts[index] > 2)
     const privateChats = roomIds.filter((roomId, index) => userCounts[index] <= 2)
@@ -153,8 +153,8 @@ module.exports = function (Messaging) {
     await Promise.all([
       db.sortedSetsRemove(roomKeys, uid),
       db.sortedSetRemove([
-                `uid:${uid}:chat:rooms`,
-                `uid:${uid}:chat:rooms:unread`
+        `uid:${uid}:chat:rooms`,
+        `uid:${uid}:chat:rooms:unread`
       ], roomIds)
     ])
 
@@ -165,7 +165,7 @@ module.exports = function (Messaging) {
     await updateGroupChatField(roomIds)
   }
 
-  async function updateOwner (roomId) {
+  async function updateOwner(roomId) {
     const uids = await db.getSortedSetRange(`chat:room:${roomId}:uids`, 0, 0)
     const newOwner = uids[0] || 0
     await db.setObjectField(`chat:room:${roomId}`, 'owner', newOwner)

@@ -36,14 +36,14 @@ module.exports = function (User) {
     }
   }
 
-  async function lock (value, error) {
+  async function lock(value, error) {
     const count = await db.incrObjectField('locks', value)
     if (count > 1) {
       throw new Error(error)
     }
   }
 
-  async function create (data) {
+  async function create(data) {
     const timestamp = data.timestamp || Date.now()
 
     let userData = {
@@ -126,7 +126,7 @@ module.exports = function (User) {
     return userData.uid
   }
 
-  async function storePassword (uid, password) {
+  async function storePassword(uid, password) {
     if (!password) {
       return
     }

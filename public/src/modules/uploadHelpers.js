@@ -17,9 +17,9 @@ define('uploadHelpers', ['alerts'], function (alerts) {
           uploadHelpers.ajaxSubmit({
             uploadForm: formEl,
             upload,
-            callback: options.callback
+            callback: options.callback,
           })
-        }
+        },
       })
     }
 
@@ -30,9 +30,9 @@ define('uploadHelpers', ['alerts'], function (alerts) {
           uploadHelpers.ajaxSubmit({
             uploadForm: formEl,
             upload,
-            callback: options.callback
+            callback: options.callback,
           })
-        }
+        },
       })
     }
   }
@@ -42,7 +42,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
     const postContainer = options.container
     const drop = options.container.find('.imagedrop')
 
-    postContainer.on('dragenter', function onDragEnter () {
+    postContainer.on('dragenter', function onDragEnter() {
       if (draggingDocument) {
         return
       }
@@ -57,7 +57,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
       })
     })
 
-    drop.on('drop', function onDragDrop (e) {
+    drop.on('drop', function onDragDrop(e) {
       e.preventDefault()
       const files = e.originalEvent.dataTransfer.files
 
@@ -71,7 +71,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
         }
         options.callback({
           files,
-          formData
+          formData,
         })
       }
 
@@ -79,7 +79,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
       return false
     })
 
-    function cancel (e) {
+    function cancel(e) {
       e.preventDefault()
       return false
     }
@@ -124,7 +124,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
         options.callback({
           files,
           fileNames,
-          formData
+          formData,
         })
       }
     })
@@ -147,7 +147,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
     options.uploadForm.off('submit').on('submit', function () {
       $(this).ajaxSubmit({
         headers: {
-          'x-csrf-token': config.csrf_token
+          'x-csrf-token': config.csrf_token,
         },
         resetForm: true,
         clearForm: true,
@@ -167,7 +167,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
         uploadProgress: function (event, position, total, percent) {
           alerts.alert({
             alert_id,
-            message: '[[modules:composer.uploading, ' + percent + '%]]'
+            message: '[[modules:composer.uploading, ' + percent + '%]]',
           })
         },
 
@@ -185,7 +185,7 @@ define('uploadHelpers', ['alerts'], function (alerts) {
         complete: function () {
           options.uploadForm[0].reset()
           setTimeout(alerts.remove, 100, alert_id)
-        }
+        },
       })
 
       return false

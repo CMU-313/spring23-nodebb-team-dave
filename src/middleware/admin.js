@@ -95,12 +95,12 @@ middleware.renderHeader = async (req, res, data) => {
   return await req.app.renderAsync('admin/header', templateValues)
 }
 
-async function getAdminScripts () {
+async function getAdminScripts() {
   const scripts = await plugins.hooks.fire('filter:admin.scripts.get', [])
   return scripts.map(script => ({ src: script }))
 }
 
-async function getLatestVersion () {
+async function getLatestVersion() {
   try {
     const result = await versions.getLatestVersion()
     return result

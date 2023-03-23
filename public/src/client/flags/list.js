@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/flags/list', [
-  'components', 'Chart', 'categoryFilter', 'autocomplete', 'api', 'alerts'
+  'components', 'Chart', 'categoryFilter', 'autocomplete', 'api', 'alerts',
 ], function (components, Chart, categoryFilter, autocomplete, api, alerts) {
   const Flags = {}
 
@@ -14,9 +14,9 @@ define('forum/flags/list', [
 
     selectedCids = []
     if (ajaxify.data.filters.hasOwnProperty('cid')) {
-      selectedCids = Array.isArray(ajaxify.data.filters.cid)
-        ? ajaxify.data.filters.cid
-        : [ajaxify.data.filters.cid]
+      selectedCids = Array.isArray(ajaxify.data.filters.cid) ?
+        ajaxify.data.filters.cid :
+        [ajaxify.data.filters.cid]
     }
 
     categoryFilter.init($('[component="category/dropdown"]'), {
@@ -24,7 +24,7 @@ define('forum/flags/list', [
       selectedCids,
       onHidden: function (data) {
         selectedCids = data.selectedCids
-      }
+      },
     })
 
     components.get('flags/list')
@@ -200,10 +200,10 @@ define('forum/flags/list', [
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(151,187,205,1)',
-            data: ajaxify.data.analytics
-          }
-        ]
-      }
+            data: ajaxify.data.analytics,
+          },
+        ],
+      },
     }
 
     dailyCanvas.width = $(dailyCanvas).parent().width()
@@ -214,17 +214,17 @@ define('forum/flags/list', [
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              precision: 0
-            }
-          }]
-        }
-      }
+              precision: 0,
+            },
+          }],
+        },
+      },
     })
   }
 

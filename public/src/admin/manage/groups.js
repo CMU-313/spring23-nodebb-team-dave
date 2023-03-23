@@ -5,7 +5,7 @@ define('admin/manage/groups', [
   'slugify',
   'api',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (categorySelector, slugify, api, bootbox, alerts) {
   const Groups = {}
 
@@ -35,7 +35,7 @@ define('admin/manage/groups', [
         name: createGroupName.val(),
         description: $('#create-group-desc').val(),
         private: $('#create-group-private').is(':checked') ? 1 : 0,
-        hidden: $('#create-group-hidden').is(':checked') ? 1 : 0
+        hidden: $('#create-group-hidden').is(':checked') ? 1 : 0,
       }
 
       api.post('/groups', submitObj).then((response) => {
@@ -59,35 +59,35 @@ define('admin/manage/groups', [
       const groupName = el.parents('tr[data-groupname]').attr('data-groupname')
 
       switch (action) {
-        case 'delete':
-          bootbox.confirm('[[admin/manage/groups:alerts.confirm-delete]]', function (confirm) {
-            if (confirm) {
-              api.del(`/groups/${slugify(groupName)}`, {}).then(ajaxify.refresh).catch(alerts.error)
-            }
-          })
-          break
+      case 'delete':
+        bootbox.confirm('[[admin/manage/groups:alerts.confirm-delete]]', function (confirm) {
+          if (confirm) {
+            api.del(`/groups/${slugify(groupName)}`, {}).then(ajaxify.refresh).catch(alerts.error)
+          }
+        })
+        break
       }
     })
 
     enableCategorySelectors()
   }
 
-  function enableCategorySelectors () {
+  function enableCategorySelectors() {
     $('.groups-list [component="category-selector"]').each(function () {
       const nameEncoded = $(this).parents('[data-name-encoded]').attr('data-name-encoded')
       categorySelector.init($(this), {
         onSelect: function (selectedCategory) {
           ajaxify.go('admin/manage/privileges/' + selectedCategory.cid + '?group=' + nameEncoded)
         },
-        showLinks: true
+        showLinks: true,
       })
     })
   }
 
-  function handleSearch () {
+  function handleSearch() {
     const queryEl = $('#group-search')
 
-    function doSearch () {
+    function doSearch() {
       if (!queryEl.val()) {
         return ajaxify.refresh()
       }
@@ -96,8 +96,8 @@ define('admin/manage/groups', [
       socket.emit('groups.search', {
         query: queryEl.val(),
         options: {
-          sort: 'date'
-        }
+          sort: 'date',
+        },
       }, function (err, groups) {
         if (err) {
           return alerts.error(err)
@@ -105,7 +105,7 @@ define('admin/manage/groups', [
 
         app.parseAndTranslate('admin/manage/groups', 'groups', {
           groups,
-          categories: ajaxify.data.categories
+          categories: ajaxify.data.categories,
         }, function (html) {
           groupsEl.find('[data-groupname]').remove()
           groupsEl.find('tbody').append(html)

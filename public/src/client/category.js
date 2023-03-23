@@ -8,7 +8,7 @@ define('forum/category', [
   'sort',
   'categorySelector',
   'hooks',
-  'alerts'
+  'alerts',
 ], function (infinitescroll, share, navigator, topicList, sort, categorySelector, hooks, alerts) {
   const Category = {}
 
@@ -46,14 +46,14 @@ define('forum/category', [
       parentCid: ajaxify.data.cid,
       onSelect: function (category) {
         ajaxify.go('/category/' + category.cid)
-      }
+      },
     })
 
     hooks.fire('action:topics.loaded', { topics: ajaxify.data.topics })
     hooks.fire('action:category.loaded', { cid: ajaxify.data.cid })
   }
 
-  function handleScrollToTopicIndex () {
+  function handleScrollToTopicIndex() {
     let topicIndex = ajaxify.data.topicIndex
     if (topicIndex && utils.isNumber(topicIndex)) {
       topicIndex = Math.max(0, parseInt(topicIndex, 10))
@@ -63,7 +63,7 @@ define('forum/category', [
     }
   }
 
-  function handleIgnoreWatch (cid) {
+  function handleIgnoreWatch(cid) {
     $('[component="category/watching"], [component="category/ignoring"], [component="category/notwatching"]').on('click', function () {
       const $this = $(this)
       const state = $this.attr('data-state')
@@ -87,12 +87,12 @@ define('forum/category', [
     })
   }
 
-  function handleLoadMoreSubcategories () {
+  function handleLoadMoreSubcategories() {
     $('[component="category/load-more-subcategories"]').on('click', function () {
       const btn = $(this)
       socket.emit('categories.loadMoreSubCategories', {
         cid: ajaxify.data.cid,
-        start: ajaxify.data.nextSubCategoryStart
+        start: ajaxify.data.nextSubCategoryStart,
       }, function (err, data) {
         if (err) {
           return alerts.error(err)
@@ -134,7 +134,7 @@ define('forum/category', [
     return bottomIndex
   }
 
-  function loadTopicsAfter (after, direction, callback) {
+  function loadTopicsAfter(after, direction, callback) {
     callback = callback || function () {}
 
     hooks.fire('action:topics.loading')
@@ -144,7 +144,7 @@ define('forum/category', [
       after,
       direction,
       query: params,
-      categoryTopicSort: config.categoryTopicSort
+      categoryTopicSort: config.categoryTopicSort,
     }, function (data, done) {
       hooks.fire('action:topics.loaded', { topics: data.topics })
       callback(data, done)

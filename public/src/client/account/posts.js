@@ -22,7 +22,7 @@ define('forum/account/posts', ['forum/account/header', 'forum/infinitescroll', '
     }
   }
 
-  function loadMore (direction) {
+  function loadMore(direction) {
     if (direction < 0) {
       return
     }
@@ -39,7 +39,7 @@ define('forum/account/posts', ['forum/account/header', 'forum/infinitescroll', '
     })
   }
 
-  function onPostsLoaded (posts, callback) {
+  function onPostsLoaded(posts, callback) {
     app.parseAndTranslate(template, 'posts', { posts }, function (html) {
       $('[component="posts"]').append(html)
       html.find('img:not(.not-responsive)').addClass('img-responsive')

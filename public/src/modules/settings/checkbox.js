@@ -10,7 +10,7 @@ define('settings/checkbox', function () {
     },
     create: function () {
       return Settings.helper.createElement('input', {
-        type: 'checkbox'
+        type: 'checkbox',
       })
     },
     set: function (element, value) {
@@ -32,7 +32,7 @@ define('settings/checkbox', function () {
         return value ? 1 : 0
       }
       return value
-    }
+    },
   }
 
   return SettingsCheckbox

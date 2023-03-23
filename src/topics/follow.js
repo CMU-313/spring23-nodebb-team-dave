@@ -34,7 +34,7 @@ module.exports = function (Topics) {
     await setWatching(ignore, unfollow, 'action:topic.ignore', tid, uid)
   }
 
-  async function setWatching (method1, method2, hook, tid, uid) {
+  async function setWatching(method1, method2, hook, tid, uid) {
     if (!(parseInt(uid, 10) > 0)) {
       throw new Error('[[error:not-logged-in]]')
     }
@@ -47,28 +47,28 @@ module.exports = function (Topics) {
     plugins.hooks.fire(hook, { uid, tid })
   }
 
-  async function follow (tid, uid) {
+  async function follow(tid, uid) {
     await addToSets(`tid:${tid}:followers`, `uid:${uid}:followed_tids`, tid, uid)
   }
 
-  async function unfollow (tid, uid) {
+  async function unfollow(tid, uid) {
     await removeFromSets(`tid:${tid}:followers`, `uid:${uid}:followed_tids`, tid, uid)
   }
 
-  async function ignore (tid, uid) {
+  async function ignore(tid, uid) {
     await addToSets(`tid:${tid}:ignorers`, `uid:${uid}:ignored_tids`, tid, uid)
   }
 
-  async function unignore (tid, uid) {
+  async function unignore(tid, uid) {
     await removeFromSets(`tid:${tid}:ignorers`, `uid:${uid}:ignored_tids`, tid, uid)
   }
 
-  async function addToSets (set1, set2, tid, uid) {
+  async function addToSets(set1, set2, tid, uid) {
     await db.setAdd(set1, uid)
     await db.sortedSetAdd(set2, Date.now(), tid)
   }
 
-  async function removeFromSets (set1, set2, tid, uid) {
+  async function removeFromSets(set1, set2, tid, uid) {
     await db.setRemove(set1, uid)
     await db.sortedSetRemove(set2, tid)
   }
@@ -103,7 +103,7 @@ module.exports = function (Topics) {
     return followData
   }
 
-  async function isIgnoringOrFollowing (set, tids, uid) {
+  async function isIgnoringOrFollowing(set, tids, uid) {
     if (!Array.isArray(tids)) {
       return
     }

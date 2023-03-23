@@ -28,7 +28,7 @@ define('forum/tags', ['forum/infinitescroll', 'alerts'], function (infinitescrol
     }
 
     infinitescroll.loadMore('topics.loadMoreTags', {
-      after: $('.tag-list').attr('data-nextstart')
+      after: $('.tag-list').attr('data-nextstart'),
     }, function (data, done) {
       if (data && data.tags && data.tags.length) {
         onTagsLoaded(data.tags, false, done)
@@ -39,9 +39,9 @@ define('forum/tags', ['forum/infinitescroll', 'alerts'], function (infinitescrol
     })
   }
 
-  function resetSearch () {
+  function resetSearch() {
     socket.emit('topics.loadMoreTags', {
-      after: 0
+      after: 0,
     }, function (err, data) {
       if (err) {
         return alerts.error(err)
@@ -50,7 +50,7 @@ define('forum/tags', ['forum/infinitescroll', 'alerts'], function (infinitescrol
     })
   }
 
-  function onTagsLoaded (tags, replace, callback) {
+  function onTagsLoaded(tags, replace, callback) {
     callback = callback || function () {}
     app.parseAndTranslate('tags', 'tags', { tags }, function (html) {
       $('.tag-list')[replace ? 'html' : 'append'](html)

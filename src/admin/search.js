@@ -9,7 +9,7 @@ const winston = require('winston')
 const file = require('../file')
 const { Translator } = require('../translator')
 
-function filterDirectories (directories) {
+function filterDirectories(directories) {
   return directories.map(
     // get the relative path
     // convert dir to use forward slashes
@@ -28,12 +28,12 @@ function filterDirectories (directories) {
   )
 }
 
-async function getAdminNamespaces () {
+async function getAdminNamespaces() {
   const directories = await file.walk(path.resolve(nconf.get('views_dir'), 'admin'))
   return filterDirectories(directories)
 }
 
-function sanitize (html) {
+function sanitize(html) {
   // reduce the template to just meaningful text
   // remove all tags and strip out scripts, etc completely
   return sanitizeHTML(html, {
@@ -42,7 +42,7 @@ function sanitize (html) {
   })
 }
 
-function simplify (translations) {
+function simplify(translations) {
   return translations
     // remove all mustaches
     .replace(/(?:\{{1,2}[^}]*?\}{1,2})/g, '')
@@ -51,14 +51,14 @@ function simplify (translations) {
     .replace(/[\t ]+/g, ' ')
 }
 
-function nsToTitle (namespace) {
+function nsToTitle(namespace) {
   return namespace.replace('admin/', '').split('/').map(str => str[0].toUpperCase() + str.slice(1)).join(' > ')
     .replace(/[^a-zA-Z> ]/g, ' ')
 }
 
 const fallbackCache = {}
 
-async function initFallback (namespace) {
+async function initFallback(namespace) {
   const template = await fs.promises.readFile(path.resolve(nconf.get('views_dir'), `${namespace}.tpl`), 'utf8')
 
   const title = nsToTitle(namespace)
@@ -74,7 +74,7 @@ async function initFallback (namespace) {
   }
 }
 
-async function fallback (namespace) {
+async function fallback(namespace) {
   if (fallbackCache[namespace]) {
     return fallbackCache[namespace]
   }
@@ -84,12 +84,12 @@ async function fallback (namespace) {
   return params
 }
 
-async function initDict (language) {
+async function initDict(language) {
   const namespaces = await getAdminNamespaces()
   return await Promise.all(namespaces.map(ns => buildNamespace(language, ns)))
 }
 
-async function buildNamespace (language, namespace) {
+async function buildNamespace(language, namespace) {
   const translator = Translator.create(language)
   try {
     const translations = await translator.getTranslation(namespace)
@@ -103,11 +103,11 @@ async function buildNamespace (language, namespace) {
     let title = namespace
     title = title.match(/admin\/(.+?)\/(.+?)$/)
     title = `[[admin/menu:section-${
-            title[1] === 'development' ? 'advanced' : title[1]
-        }]]${title[2]
-? (` > [[admin/menu:${
-            title[1]}/${title[2]}]]`)
-: ''}`
+      title[1] === 'development' ? 'advanced' : title[1]
+    }]]${title[2] ?
+      (` > [[admin/menu:${
+        title[1]}/${title[2]}]]`) :
+      ''}`
 
     title = await translator.translate(title)
     return {
@@ -126,7 +126,7 @@ async function buildNamespace (language, namespace) {
 
 const cache = {}
 
-async function getDictionary (language) {
+async function getDictionary(language) {
   if (cache[language]) {
     return cache[language]
   }

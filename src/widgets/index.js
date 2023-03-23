@@ -34,7 +34,7 @@ widgets.render = async function (uid, options) {
   return returnData
 }
 
-async function renderLocation (location, data, uid, options) {
+async function renderLocation(location, data, uid, options) {
   const widgetsAtLocation = (data[options.template][location] || []).concat(data.global[location] || [])
 
   if (!widgetsAtLocation.length) {
@@ -45,7 +45,7 @@ async function renderLocation (location, data, uid, options) {
   return renderedWidgets
 }
 
-async function renderWidget (widget, uid, options) {
+async function renderWidget(widget, uid, options) {
   if (!widget || !widget.data || (!!widget.data['hide-mobile'] && options.req.useragent.isMobile)) {
     return
   }
@@ -141,7 +141,7 @@ widgets.getArea = async function (template, location) {
   return parseWidgetData(result)
 }
 
-function parseWidgetData (data) {
+function parseWidgetData(data) {
   const widgets = JSON.parse(data)
   widgets.forEach((widget) => {
     if (widget) {

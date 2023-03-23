@@ -162,8 +162,8 @@ Notifications.push = async function (notification, uids) {
   }, 1000)
 }
 
-async function pushToUids (uids, notification) {
-  async function sendNotification (uids) {
+async function pushToUids(uids, notification) {
+  async function sendNotification(uids) {
     if (!uids.length) {
       return
     }
@@ -183,7 +183,7 @@ async function pushToUids (uids, notification) {
     }
   }
 
-  async function sendEmail (uids) {
+  async function sendEmail(uids) {
     // Update CTA messaging (as not all notification types need custom text)
     if (['new-reply', 'new-chat'].includes(notification.type)) {
       notification['cta-type'] = notification.type
@@ -213,7 +213,7 @@ async function pushToUids (uids, notification) {
     })
   }
 
-  async function getUidsBySettings (uids) {
+  async function getUidsBySettings(uids) {
     const uidsToNotify = []
     const uidsToEmail = []
     const usersSettings = await User.getMultipleUserSettings(uids)
@@ -399,30 +399,30 @@ Notifications.merge = async function (notifications) {
       }
 
       switch (mergeId) {
-        case 'notifications:upvoted_your_post_in':
-        case 'notifications:user_started_following_you':
-        case 'notifications:user_posted_to':
-        case 'notifications:user_flagged_post_in':
-        case 'notifications:user_flagged_user': {
-          const usernames = _.uniq(set.map(notifObj => notifObj && notifObj.user && notifObj.user.username))
-          const numUsers = usernames.length
+      case 'notifications:upvoted_your_post_in':
+      case 'notifications:user_started_following_you':
+      case 'notifications:user_posted_to':
+      case 'notifications:user_flagged_post_in':
+      case 'notifications:user_flagged_user': {
+        const usernames = _.uniq(set.map(notifObj => notifObj && notifObj.user && notifObj.user.username))
+        const numUsers = usernames.length
 
-          const title = utils.decodeHTMLEntities(notifications[modifyIndex].topicTitle || '')
-          let titleEscaped = title.replace(/%/g, '&#37;').replace(/,/g, '&#44;')
-          titleEscaped = titleEscaped ? (`, ${titleEscaped}`) : ''
+        const title = utils.decodeHTMLEntities(notifications[modifyIndex].topicTitle || '')
+        let titleEscaped = title.replace(/%/g, '&#37;').replace(/,/g, '&#44;')
+        titleEscaped = titleEscaped ? (`, ${titleEscaped}`) : ''
 
-          if (numUsers === 2) {
-            notifications[modifyIndex].bodyShort = `[[${mergeId}_dual, ${usernames.join(', ')}${titleEscaped}]]`
-          } else if (numUsers > 2) {
-            notifications[modifyIndex].bodyShort = `[[${mergeId}_multiple, ${usernames[0]}, ${numUsers - 1}${titleEscaped}]]`
-          }
+        if (numUsers === 2) {
+          notifications[modifyIndex].bodyShort = `[[${mergeId}_dual, ${usernames.join(', ')}${titleEscaped}]]`
+        } else if (numUsers > 2) {
+          notifications[modifyIndex].bodyShort = `[[${mergeId}_multiple, ${usernames[0]}, ${numUsers - 1}${titleEscaped}]]`
+        }
 
-          notifications[modifyIndex].path = set[set.length - 1].path
-        } break
+        notifications[modifyIndex].path = set[set.length - 1].path
+      } break
 
-        case 'new_register':
-          notifications[modifyIndex].bodyShort = `[[notifications:${mergeId}_multiple, ${set.length}]]`
-          break
+      case 'new_register':
+        notifications[modifyIndex].bodyShort = `[[notifications:${mergeId}_multiple, ${set.length}]]`
+        break
       }
 
       // Filter out duplicates

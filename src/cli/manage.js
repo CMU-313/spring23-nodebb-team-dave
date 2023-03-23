@@ -14,7 +14,7 @@ const analytics = require('../analytics')
 const reset = require('./reset')
 const { pluginNamePattern, themeNamePattern, paths } = require('../constants')
 
-async function install (plugin, options) {
+async function install(plugin, options) {
   if (!options) {
     options = {}
   }
@@ -50,7 +50,7 @@ async function install (plugin, options) {
   }
 }
 
-async function activate (plugin) {
+async function activate(plugin) {
   if (themeNamePattern.test(plugin)) {
     await reset.reset({
       theme: plugin
@@ -94,7 +94,7 @@ async function activate (plugin) {
   }
 }
 
-async function listPlugins () {
+async function listPlugins() {
   await db.init()
   const installed = await plugins.showInstalled()
   const installedList = installed.map(plugin => plugin.name)
@@ -128,7 +128,7 @@ async function listPlugins () {
   process.exit()
 }
 
-async function listEvents (count = 10) {
+async function listEvents(count = 10) {
   await db.init()
   const eventData = await events.getEvents('', 0, count - 1)
   console.log(chalk.bold(`\nDisplaying last ${count} administrative events...`))
@@ -138,7 +138,7 @@ async function listEvents (count = 10) {
   process.exit()
 }
 
-async function info () {
+async function info() {
   console.log('')
   const { version } = require('../../package.json')
   console.log(`  version:  ${version}`)
@@ -154,19 +154,19 @@ async function info () {
   const info = await db.info(db.client)
 
   switch (nconf.get('database')) {
-    case 'redis':
-      console.log(`        version: ${info.redis_version}`)
-      console.log(`        disk sync:  ${info.rdb_last_bgsave_status}`)
-      break
+  case 'redis':
+    console.log(`        version: ${info.redis_version}`)
+    console.log(`        disk sync:  ${info.rdb_last_bgsave_status}`)
+    break
 
-    case 'mongo':
-      console.log(`        version: ${info.version}`)
-      console.log(`        engine:  ${info.storageEngine}`)
-      break
-    case 'postgres':
-      console.log(`        version: ${info.version}`)
-      console.log(`        uptime:  ${info.uptime}`)
-      break
+  case 'mongo':
+    console.log(`        version: ${info.version}`)
+    console.log(`        engine:  ${info.storageEngine}`)
+    break
+  case 'postgres':
+    console.log(`        version: ${info.version}`)
+    console.log(`        uptime:  ${info.uptime}`)
+    break
   }
 
   const analyticsData = await analytics.getHourlyStatsForSet('analytics:pageviews', Date.now(), 24)
@@ -191,7 +191,7 @@ async function info () {
   process.exit()
 }
 
-async function buildWrapper (targets, options) {
+async function buildWrapper(targets, options) {
   try {
     await build.build(targets, options)
     process.exit(0)

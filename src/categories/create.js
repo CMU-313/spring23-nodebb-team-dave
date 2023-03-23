@@ -97,8 +97,8 @@ module.exports = function (Categories) {
 
     cache.del([
       'categories:cid',
-            `cid:${parentCid}:children`,
-            `cid:${parentCid}:children:all`
+      `cid:${parentCid}:children`,
+      `cid:${parentCid}:children:all`
     ])
     if (data.cloneFromCid && parseInt(data.cloneFromCid, 10)) {
       category = await Categories.copySettingsFrom(data.cloneFromCid, category.cid, !data.parentCid)
@@ -112,7 +112,7 @@ module.exports = function (Categories) {
     return category
   }
 
-  async function duplicateCategoriesChildren (parentCid, cid, uid) {
+  async function duplicateCategoriesChildren(parentCid, cid, uid) {
     let children = await Categories.getChildren([cid], uid)
     if (!children.length) {
       return
@@ -154,10 +154,10 @@ module.exports = function (Categories) {
       await db.sortedSetRemove(`cid:${oldParent}:children`, toCid)
       await db.sortedSetAdd(`cid:${newParent}:children`, source.order, toCid)
       cache.del([
-                `cid:${oldParent}:children`,
-                `cid:${oldParent}:children:all`,
-                `cid:${newParent}:children`,
-                `cid:${newParent}:children:all`
+        `cid:${oldParent}:children`,
+        `cid:${oldParent}:children:all`,
+        `cid:${newParent}:children`,
+        `cid:${newParent}:children:all`
       ])
     }
 
@@ -192,7 +192,7 @@ module.exports = function (Categories) {
     return destination
   }
 
-  async function copyTagWhitelist (fromCid, toCid) {
+  async function copyTagWhitelist(fromCid, toCid) {
     const data = await db.getSortedSetRangeWithScores(`cid:${fromCid}:tag:whitelist`, 0, -1)
     await db.delete(`cid:${toCid}:tag:whitelist`)
     await db.sortedSetAdd(`cid:${toCid}:tag:whitelist`, data.map(item => item.score), data.map(item => item.value))
@@ -224,7 +224,7 @@ module.exports = function (Categories) {
     }
   }
 
-  async function copyPrivileges (privileges, fromCid, toCid) {
+  async function copyPrivileges(privileges, fromCid, toCid) {
     const toGroups = privileges.map(privilege => `group:cid:${toCid}:privileges:${privilege}:members`)
     const fromGroups = privileges.map(privilege => `group:cid:${fromCid}:privileges:${privilege}:members`)
 
@@ -235,7 +235,7 @@ module.exports = function (Categories) {
     })
   }
 
-  async function copyPrivilegesByGroup (privilegeList, fromCid, toCid, group) {
+  async function copyPrivilegesByGroup(privilegeList, fromCid, toCid, group) {
     const fromGroups = privilegeList.map(privilege => `group:cid:${fromCid}:privileges:${privilege}:members`)
     const toGroups = privilegeList.map(privilege => `group:cid:${toCid}:privileges:${privilege}:members`)
     const [fromChecks, toChecks] = await Promise.all([

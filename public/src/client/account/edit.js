@@ -7,7 +7,7 @@ define('forum/account/edit', [
   'api',
   'hooks',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (header, picture, translator, api, hooks, bootbox, alerts) {
   const AccountEdit = {}
 
@@ -28,7 +28,7 @@ define('forum/account/edit', [
     handleGroupSort()
   }
 
-  function updateProfile () {
+  function updateProfile() {
     const userData = $('form[component="profile/edit/form"]').serializeObject()
     userData.uid = ajaxify.data.uid
     userData.groupTitle = userData.groupTitle || ''
@@ -51,14 +51,14 @@ define('forum/account/edit', [
     return false
   }
 
-  function handleImageChange () {
+  function handleImageChange() {
     $('#changePictureBtn').on('click', function () {
       picture.openChangeModal()
       return false
     })
   }
 
-  function handleAccountDelete () {
+  function handleAccountDelete() {
     $('#deleteAccountBtn').on('click', function () {
       translator.translate('[[user:delete_account_confirm]]', function (translated) {
         const modal = bootbox.confirm(translated + '<p><input type="password" class="form-control" id="confirm-password" /></p>', function (confirm) {
@@ -70,9 +70,9 @@ define('forum/account/edit', [
           confirmBtn.html('<i class="fa fa-spinner fa-spin"></i>')
           confirmBtn.prop('disabled', true)
           api.del(`/users/${ajaxify.data.uid}/account`, {
-            password: $('#confirm-password').val()
+            password: $('#confirm-password').val(),
           }, function (err) {
-            function restoreButton () {
+            function restoreButton() {
               translator.translate('[[modules:bootbox.confirm]]', function (confirmText) {
                 confirmBtn.text(confirmText)
                 confirmBtn.prop('disabled', false)
@@ -99,7 +99,7 @@ define('forum/account/edit', [
     })
   }
 
-  function handleEmailConfirm () {
+  function handleEmailConfirm() {
     $('#confirm-email').on('click', function () {
       const btn = $(this).attr('disabled', true)
       socket.emit('user.emailConfirm', {}, function (err) {
@@ -112,11 +112,11 @@ define('forum/account/edit', [
     })
   }
 
-  function getCharsLeft (el, max) {
+  function getCharsLeft(el, max) {
     return el.length ? '(' + el.val().length + '/' + max + ')' : ''
   }
 
-  function updateSignature () {
+  function updateSignature() {
     const el = $('#signature')
     $('#signatureCharCountLeft').html(getCharsLeft(el, ajaxify.data.maximumSignatureLength))
 
@@ -125,7 +125,7 @@ define('forum/account/edit', [
     })
   }
 
-  function updateAboutMe () {
+  function updateAboutMe() {
     const el = $('#aboutme')
     $('#aboutMeCharCountLeft').html(getCharsLeft(el, ajaxify.data.maximumAboutMeLength))
 
@@ -134,8 +134,8 @@ define('forum/account/edit', [
     })
   }
 
-  function handleGroupSort () {
-    function move (direction) {
+  function handleGroupSort() {
+    function move(direction) {
       const selected = $('#groupTitle').val()
       if (!ajaxify.data.allowMultipleBadges || (Array.isArray(selected) && selected.length > 1)) {
         return

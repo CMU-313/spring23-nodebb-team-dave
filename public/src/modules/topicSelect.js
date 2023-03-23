@@ -30,7 +30,7 @@ define('topicSelect', ['components'], function (components) {
     })
   }
 
-  function toggleSelect (select, isSelected) {
+  function toggleSelect(select, isSelected) {
     select.toggleClass('fa-check-square-o', isSelected)
     select.toggleClass('fa-square-o', !isSelected)
     select.parents('[component="category/topic"]').toggleClass('selected', isSelected)
@@ -54,7 +54,7 @@ define('topicSelect', ['components'], function (components) {
     }
   }
 
-  function selectRange (clickedTid) {
+  function selectRange(clickedTid) {
     if (!lastSelected) {
       lastSelected = $('[component="category/topic"]').first().find('[component="topic/select"]')
     }
@@ -66,7 +66,7 @@ define('topicSelect', ['components'], function (components) {
     selectIndexRange(clickedIndex, lastIndex, !isClickedSelected)
   }
 
-  function selectIndexRange (start, end, isSelected) {
+  function selectIndexRange(start, end, isSelected) {
     if (start > end) {
       const tmp = start
       start = end
@@ -79,7 +79,7 @@ define('topicSelect', ['components'], function (components) {
     }
   }
 
-  function getIndex (tid) {
+  function getIndex(tid) {
     return components.get('category/topic', 'tid', tid).index('[component="category/topic"]')
   }
 

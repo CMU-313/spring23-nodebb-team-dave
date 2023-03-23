@@ -2,7 +2,7 @@
 
 define('forum/account/profile', [
   'forum/account/header',
-  'bootbox'
+  'bootbox',
 ], function (header, bootbox) {
   const Account = {}
 
@@ -21,11 +21,11 @@ define('forum/account/profile', [
     socket.on('event:user_status_change', onUserStatusChange)
   }
 
-  function processPage () {
+  function processPage() {
     $('[component="posts"] [component="post/content"] img:not(.not-responsive), [component="aboutme"] img:not(.not-responsive)').addClass('img-responsive')
   }
 
-  function onUserStatusChange (data) {
+  function onUserStatusChange(data) {
     if (parseInt(ajaxify.data.theirid, 10) !== parseInt(data.uid, 10)) {
       return
     }

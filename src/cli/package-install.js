@@ -9,7 +9,7 @@ const { paths, pluginNamePattern } = require('../constants')
 
 const pkgInstall = module.exports
 
-function sortDependencies (dependencies) {
+function sortDependencies(dependencies) {
   return Object.entries(dependencies)
     .sort((a, b) => (a < b ? -1 : 1))
     .reduce((memo, pkg) => {
@@ -93,7 +93,7 @@ pkgInstall.getPackageManager = () => {
   }
 }
 
-function getPackageManagerByLockfile () {
+function getPackageManagerByLockfile() {
   for (const [packageManager, lockfile] of Object.entries({ npm: 'package-lock.json', yarn: 'yarn.lock', pnpm: 'pnpm-lock.yaml' })) {
     try {
       fs.accessSync(path.resolve(__dirname, `../../${lockfile}`), fs.constants.R_OK)
@@ -110,18 +110,18 @@ pkgInstall.installAll = () => {
   const packageManager = pkgInstall.getPackageManager()
   if (supportedPackageManagerList.indexOf(packageManager) >= 0) {
     switch (packageManager) {
-      case 'yarn':
-        command = `yarn${prod ? ' --production' : ''}`
-        break
-      case 'pnpm':
-        command = 'pnpm install' // pnpm checks NODE_ENV
-        break
-      case 'cnpm':
-        command = `cnpm install ${prod ? ' --production' : ''}`
-        break
-      default:
-        command += prod ? ' --omit=dev' : ''
-        break
+    case 'yarn':
+      command = `yarn${prod ? ' --production' : ''}`
+      break
+    case 'pnpm':
+      command = 'pnpm install' // pnpm checks NODE_ENV
+      break
+    case 'cnpm':
+      command = `cnpm install ${prod ? ' --production' : ''}`
+      break
+    default:
+      command += prod ? ' --omit=dev' : ''
+      break
     }
   }
 

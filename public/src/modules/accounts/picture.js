@@ -4,13 +4,13 @@ define('accounts/picture', [
   'pictureCropper',
   'api',
   'bootbox',
-  'alerts'
+  'alerts',
 ], (pictureCropper, api, bootbox, alerts) => {
   const Picture = {}
 
   Picture.openChangeModal = () => {
     socket.emit('user.getProfilePictures', {
-      uid: ajaxify.data.uid
+      uid: ajaxify.data.uid,
     }, function (err, pictures) {
       if (err) {
         return alerts.error(err)
@@ -33,8 +33,8 @@ define('accounts/picture', [
           username: ajaxify.data.username,
           picture: ajaxify.data.picture,
           'icon:text': ajaxify.data['icon:text'],
-          'icon:bgColor': ajaxify.data['icon:bgColor']
-        }
+          'icon:bgColor': ajaxify.data['icon:bgColor'],
+        },
       }, function (html) {
         const modal = bootbox.dialog({
           className: 'picture-switcher',
@@ -45,17 +45,17 @@ define('accounts/picture', [
             close: {
               label: '[[global:close]]',
               callback: onCloseModal,
-              className: 'btn-link'
+              className: 'btn-link',
             },
             update: {
               label: '[[global:save_changes]]',
-              callback: saveSelection
-            }
-          }
+              callback: saveSelection,
+            },
+          },
         })
 
         modal.on('shown.bs.modal', updateImages)
-        modal.on('click', '.list-group-item', function selectImageType () {
+        modal.on('click', '.list-group-item', function selectImageType() {
           modal.find('.list-group-item').removeClass('active')
           $(this).addClass('active')
         })
@@ -66,7 +66,7 @@ define('accounts/picture', [
 
         handleImageUpload(modal)
 
-        function updateImages () {
+        function updateImages() {
           // Check to see which one is the active picture
           if (!ajaxify.data.picture) {
             modal.find('.list-group-item .user-icon').parents('.list-group-item').addClass('active')
@@ -88,7 +88,7 @@ define('accounts/picture', [
           }
         }
 
-        function saveSelection () {
+        function saveSelection() {
           const type = modal.find('.list-group-item.active').attr('data-type')
           const iconBgColor = document.querySelector('.modal.picture-switcher input[type="radio"]:checked').value || 'transparent'
 
@@ -98,7 +98,7 @@ define('accounts/picture', [
           }).catch(alerts.error)
         }
 
-        function onCloseModal () {
+        function onCloseModal() {
           modal.modal('hide')
         }
       })
@@ -125,8 +125,8 @@ define('accounts/picture', [
     }
   }
 
-  function handleImageUpload (modal) {
-    function onUploadComplete (urlOnServer) {
+  function handleImageUpload(modal) {
+    function onUploadComplete(urlOnServer) {
       urlOnServer = (!urlOnServer.startsWith('http') ? config.relative_path : '') + urlOnServer + '?' + Date.now()
 
       Picture.updateHeader(urlOnServer)
@@ -141,7 +141,7 @@ define('accounts/picture', [
       }
     }
 
-    function onRemoveComplete () {
+    function onRemoveComplete() {
       if (ajaxify.data.uploadedpicture === ajaxify.data.picture) {
         ajaxify.refresh()
         Picture.updateHeader()
@@ -161,7 +161,7 @@ define('accounts/picture', [
         allowSkippingCrop: false,
         title: '[[user:upload_picture]]',
         description: '[[user:upload_a_picture]]',
-        accept: ajaxify.data.allowedProfileImageExtensions
+        accept: ajaxify.data.allowedProfileImageExtensions,
       }, function (url) {
         onUploadComplete(url)
       })
@@ -188,7 +188,7 @@ define('accounts/picture', [
             aspectRatio: 1,
             allowSkippingCrop: false,
             paramName: 'uid',
-            paramValue: ajaxify.data.theirid
+            paramValue: ajaxify.data.theirid,
           }, onUploadComplete)
 
           return false
@@ -200,7 +200,7 @@ define('accounts/picture', [
 
     modal.find('[data-action="remove-uploaded"]').on('click', function () {
       socket.emit('user.removeUploadedPicture', {
-        uid: ajaxify.data.theirid
+        uid: ajaxify.data.theirid,
       }, function (err) {
         modal.modal('hide')
         if (err) {
@@ -211,7 +211,7 @@ define('accounts/picture', [
     })
   }
 
-  function changeUserPicture (type, bgColor) {
+  function changeUserPicture(type, bgColor) {
     return api.put(`/users/${ajaxify.data.theirid}/picture`, { type, bgColor })
   }
 

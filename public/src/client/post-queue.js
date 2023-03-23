@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/post-queue', [
-  'categoryFilter', 'categorySelector', 'api', 'alerts', 'bootbox'
+  'categoryFilter', 'categorySelector', 'api', 'alerts', 'bootbox',
 ], function (categoryFilter, categorySelector, api, alerts, bootbox) {
   const PostQueue = {}
 
@@ -9,13 +9,13 @@ define('forum/post-queue', [
     $('[data-toggle="tooltip"]').tooltip()
 
     categoryFilter.init($('[component="category/dropdown"]'), {
-      privilege: 'moderate'
+      privilege: 'moderate',
     })
 
     handleBulkActions()
 
     $('.posts-list').on('click', '[data-action]', async function () {
-      function getMessage () {
+      function getMessage() {
         return new Promise((resolve) => {
           const modal = bootbox.dialog({
             title: '[[post-queue:notify-user]]',
@@ -28,9 +28,9 @@ define('forum/post-queue', [
                   if (val) {
                     resolve(val)
                   }
-                }
-              }
-            }
+                },
+              },
+            },
           })
         })
       }
@@ -46,7 +46,7 @@ define('forum/post-queue', [
 
       socket.emit('posts.' + action, {
         id,
-        message: action === 'notify' ? await getMessage() : undefined
+        message: action === 'notify' ? await getMessage() : undefined,
       }, function (err) {
         if (err) {
           return alerts.error(err)
@@ -78,14 +78,14 @@ define('forum/post-queue', [
             api.get(`/categories/${selectedCategory.cid}`, {}),
             socket.emit('posts.editQueuedContent', {
               id,
-              cid: selectedCategory.cid
-            })
+              cid: selectedCategory.cid,
+            }),
           ]).then(function (result) {
             const category = result[0]
             app.parseAndTranslate('post-queue', 'posts', {
               posts: [{
-                category
-              }]
+                category,
+              }],
             }, function (html) {
               if ($this.find('.category-text').length) {
                 $this.find('.category-text').text(html.find('.topic-category .category-text').text())
@@ -95,7 +95,7 @@ define('forum/post-queue', [
               }
             })
           }).catch(alerts.error)
-        }
+        },
       })
       return false
     })
@@ -103,13 +103,13 @@ define('forum/post-queue', [
     $('[component="post/content"] img:not(.not-responsive)').addClass('img-responsive')
   }
 
-  function confirmReject (msg) {
+  function confirmReject(msg) {
     return new Promise((resolve) => {
       bootbox.confirm(msg, resolve)
     })
   }
 
-  function handleContentEdit (displayClass, editableClass, inputSelector) {
+  function handleContentEdit(displayClass, editableClass, inputSelector) {
     $('.posts-list').on('click', displayClass, function () {
       const el = $(this)
       const inputEl = el.parent().find(editableClass)
@@ -128,7 +128,7 @@ define('forum/post-queue', [
       socket.emit('posts.editQueuedContent', {
         id,
         title: titleEdit ? textarea.val() : undefined,
-        content: titleEdit ? undefined : textarea.val()
+        content: titleEdit ? undefined : textarea.val(),
       }, function (err, data) {
         if (err) {
           return alerts.error(err)
@@ -150,7 +150,7 @@ define('forum/post-queue', [
     })
   }
 
-  function handleBulkActions () {
+  function handleBulkActions() {
     $('[component="post-queue/bulk-actions"]').on('click', '[data-action]', async function () {
       const bulkAction = $(this).attr('data-action')
       let queueEls = $('.posts-list [data-id]')

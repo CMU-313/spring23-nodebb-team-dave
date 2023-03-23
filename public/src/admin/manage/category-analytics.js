@@ -31,9 +31,9 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(186,139,175,1)',
-            data: ajaxify.data.analytics['pageviews:hourly']
-          }
-        ]
+            data: ajaxify.data.analytics['pageviews:hourly'],
+          },
+        ],
       },
       'pageviews:daily': {
         labels: dailyLabels,
@@ -46,9 +46,9 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(151,187,205,1)',
-            data: ajaxify.data.analytics['pageviews:daily']
-          }
-        ]
+            data: ajaxify.data.analytics['pageviews:daily'],
+          },
+        ],
       },
       'topics:daily': {
         labels: dailyLabels.slice(-7),
@@ -61,9 +61,9 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(171,70,66,1)',
-            data: ajaxify.data.analytics['topics:daily']
-          }
-        ]
+            data: ajaxify.data.analytics['topics:daily'],
+          },
+        ],
       },
       'posts:daily': {
         labels: dailyLabels.slice(-7),
@@ -76,10 +76,10 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(161,181,108,1)',
-            data: ajaxify.data.analytics['posts:daily']
-          }
-        ]
-      }
+            data: ajaxify.data.analytics['posts:daily'],
+          },
+        ],
+      },
     }
 
     hourlyCanvas.width = $(hourlyCanvas).parent().width()
@@ -94,17 +94,17 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              precision: 0
-            }
-          }]
-        }
-      }
+              precision: 0,
+            },
+          }],
+        },
+      },
     })
 
     new Chart(dailyCanvas.getContext('2d'), {
@@ -114,17 +114,17 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              precision: 0
-            }
-          }]
-        }
-      }
+              precision: 0,
+            },
+          }],
+        },
+      },
     })
 
     new Chart(topicsCanvas.getContext('2d'), {
@@ -134,17 +134,17 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              precision: 0
-            }
-          }]
-        }
-      }
+              precision: 0,
+            },
+          }],
+        },
+      },
     })
 
     new Chart(postsCanvas.getContext('2d'), {
@@ -154,17 +154,17 @@ define('admin/manage/category-analytics', ['Chart'], function (Chart) {
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              precision: 0
-            }
-          }]
-        }
-      }
+              precision: 0,
+            },
+          }],
+        },
+      },
     })
   }
 

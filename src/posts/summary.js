@@ -61,7 +61,7 @@ module.exports = function (Posts) {
     return result.posts
   }
 
-  async function parsePosts (posts, options) {
+  async function parsePosts(posts, options) {
     return await Promise.all(posts.map(async (post) => {
       if (!post.content || !options.parse) {
         post.content = post.content ? validator.escape(String(post.content)) : post.content
@@ -75,7 +75,7 @@ module.exports = function (Posts) {
     }))
   }
 
-  async function getTopicAndCategories (tids) {
+  async function getTopicAndCategories(tids) {
     const topicsData = await topics.getTopicsFields(tids, [
       'uid', 'tid', 'title', 'cid', 'tags', 'slug',
       'deleted', 'scheduled', 'postcount', 'mainPid', 'teaserPid'
@@ -88,7 +88,7 @@ module.exports = function (Posts) {
     return { topics: topicsData, categories: categoriesData }
   }
 
-  function toObject (key, data) {
+  function toObject(key, data) {
     const obj = {}
     for (let i = 0; i < data.length; i += 1) {
       obj[data[i][key]] = data[i]
@@ -96,7 +96,7 @@ module.exports = function (Posts) {
     return obj
   }
 
-  function stripTags (content) {
+  function stripTags(content) {
     if (content) {
       return utils.stripHTMLTags(content, utils.stripTags)
     }

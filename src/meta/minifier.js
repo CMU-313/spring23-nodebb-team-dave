@@ -45,7 +45,7 @@ Minifier.killAll = function () {
   free.length = 0
 }
 
-function getChild () {
+function getChild() {
   if (free.length) {
     return free.shift()
   }
@@ -61,19 +61,19 @@ function getChild () {
   return proc
 }
 
-function freeChild (proc) {
+function freeChild(proc) {
   proc.removeAllListeners()
   free.push(proc)
 }
 
-function removeChild (proc) {
+function removeChild(proc) {
   const i = pool.indexOf(proc)
   if (i !== -1) {
     pool.splice(i, 1)
   }
 }
 
-function forkAction (action) {
+function forkAction(action) {
   return new Promise((resolve, reject) => {
     const proc = getChild()
     proc.on('message', (message) => {
@@ -129,7 +129,7 @@ if (process.env.minifier_child) {
   })
 }
 
-async function executeAction (action, fork) {
+async function executeAction(action, fork) {
   if (fork && (pool.length - free.length) < Minifier.maxThreads) {
     return await forkAction(action)
   }
@@ -139,7 +139,7 @@ async function executeAction (action, fork) {
   return await actions[action.act](action)
 }
 
-actions.concat = async function concat (data) {
+actions.concat = async function concat(data) {
   if (data.files && data.files.length) {
     const files = await async.mapLimit(data.files, 1000, async ref => await fs.promises.readFile(ref.srcPath, 'utf8'))
     const output = files.join('\n;')
@@ -147,7 +147,7 @@ actions.concat = async function concat (data) {
   }
 }
 
-actions.minifyJS_batch = async function minifyJS_batch (data) {
+actions.minifyJS_batch = async function minifyJS_batch(data) {
   await async.eachLimit(data.files, 100, async (fileObj) => {
     const source = await fs.promises.readFile(fileObj.srcPath, 'utf8')
     const filesToMinify = [
@@ -166,7 +166,7 @@ actions.minifyJS_batch = async function minifyJS_batch (data) {
   })
 }
 
-actions.minifyJS = async function minifyJS (data) {
+actions.minifyJS = async function minifyJS(data) {
   const filesToMinify = await async.mapLimit(data.files, 1000, async (fileObj) => {
     const source = await fs.promises.readFile(fileObj.srcPath, 'utf8')
     return {
@@ -182,7 +182,7 @@ actions.minifyJS = async function minifyJS (data) {
   })
 }
 
-async function minifyAndSave (data) {
+async function minifyAndSave(data) {
   const scripts = {}
   data.files.forEach((ref) => {
     if (ref && ref.filename && ref.source) {
@@ -225,7 +225,7 @@ Minifier.js.minifyBatch = async function (scripts, fork) {
   }, fork)
 }
 
-actions.buildCSS = async function buildCSS (data) {
+actions.buildCSS = async function buildCSS(data) {
   const lessOutput = await less.render(data.source, {
     paths: data.paths,
     javascriptEnabled: false

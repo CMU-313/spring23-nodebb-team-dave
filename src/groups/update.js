@@ -89,7 +89,7 @@ module.exports = function (Groups) {
     })
   }
 
-  async function updateVisibility (groupName, hidden) {
+  async function updateVisibility(groupName, hidden) {
     if (hidden) {
       await db.sortedSetRemoveBulk([
         ['groups:visible:createtime', groupName],
@@ -114,7 +114,7 @@ module.exports = function (Groups) {
     await showHide(groupName, 'show')
   }
 
-  async function showHide (groupName, hidden) {
+  async function showHide(groupName, hidden) {
     hidden = hidden === 'hidden'
     await Promise.all([
       db.setObjectField(`group:${groupName}`, 'hidden', hidden ? 1 : 0),
@@ -122,7 +122,7 @@ module.exports = function (Groups) {
     ])
   }
 
-  async function updatePrivacy (groupName, isPrivate) {
+  async function updatePrivacy(groupName, isPrivate) {
     const groupData = await Groups.getGroupFields(groupName, ['private'])
     const currentlyPrivate = groupData.private === 1
     if (!currentlyPrivate || currentlyPrivate === isPrivate) {
@@ -142,7 +142,7 @@ module.exports = function (Groups) {
     await db.delete(`group:${groupName}:pending`)
   }
 
-  async function checkNameChange (currentName, newName) {
+  async function checkNameChange(currentName, newName) {
     if (Groups.isPrivilegeGroup(newName)) {
       throw new Error('[[error:invalid-group-name]]')
     }
@@ -214,7 +214,7 @@ module.exports = function (Groups) {
     Groups.cache.reset()
   }
 
-  async function updateMemberGroupTitles (oldName, newName) {
+  async function updateMemberGroupTitles(oldName, newName) {
     await batch.processSortedSet(`group:${oldName}:members`, async (uids) => {
       let usersData = await user.getUsersData(uids)
       usersData = usersData.filter(userData => userData && userData.groupTitleArray.includes(oldName))
@@ -228,7 +228,7 @@ module.exports = function (Groups) {
     }, {})
   }
 
-  async function renameGroupsMember (keys, oldName, newName) {
+  async function renameGroupsMember(keys, oldName, newName) {
     const isMembers = await db.isMemberOfSortedSets(keys, oldName)
     keys = keys.filter((key, index) => isMembers[index])
     if (!keys.length) {
@@ -239,7 +239,7 @@ module.exports = function (Groups) {
     await db.sortedSetsAdd(keys, scores, newName)
   }
 
-  async function updateNavigationItems (oldName, newName) {
+  async function updateNavigationItems(oldName, newName) {
     const navigation = require('../navigation/admin')
     const navItems = await navigation.get()
     navItems.forEach((navItem) => {
@@ -251,7 +251,7 @@ module.exports = function (Groups) {
     await navigation.save(navItems)
   }
 
-  async function updateWidgets (oldName, newName) {
+  async function updateWidgets(oldName, newName) {
     const admin = require('../widgets/admin')
     const widgets = require('../widgets')
 
@@ -273,7 +273,7 @@ module.exports = function (Groups) {
     }
   }
 
-  async function updateConfig (oldName, newName) {
+  async function updateConfig(oldName, newName) {
     if (meta.config.groupsExemptFromPostQueue.includes(oldName)) {
       meta.config.groupsExemptFromPostQueue.splice(
         meta.config.groupsExemptFromPostQueue.indexOf(oldName), 1, newName

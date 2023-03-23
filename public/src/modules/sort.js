@@ -12,7 +12,7 @@ define('sort', ['components', 'api'], function (components, api) {
     $('body')
       .off('click', '[component="thread/sort"] a')
       .on('click', '[component="thread/sort"] a', function () {
-        function refresh (newSetting, params) {
+        function refresh(newSetting, params) {
           config[field] = newSetting
           const qs = decodeURIComponent($.param(params))
           ajaxify.go(gotoOnSave + (qs ? '?' + qs : ''))

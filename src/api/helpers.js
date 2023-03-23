@@ -70,7 +70,7 @@ exports.doTopicAction = async function (action, event, caller, { tids }) {
   }))
 }
 
-async function logTopicAction (action, req, tid, title) {
+async function logTopicAction(action, req, tid, title) {
   // Only log certain actions to system event log
   const actionsToLog = ['delete', 'restore', 'purge']
   if (!actionsToLog.includes(action)) {
@@ -125,7 +125,7 @@ exports.postCommand = async function (caller, command, eventName, notification, 
   return await executeCommand(caller, command, eventName, notification, filteredData.data)
 }
 
-async function executeCommand (caller, command, eventName, notification, data) {
+async function executeCommand(caller, command, eventName, notification, data) {
   const result = await posts[command](data.pid, caller.uid)
   if (result && eventName) {
     websockets.in(`uid_${caller.uid}`).emit(`posts.${command}`, result)

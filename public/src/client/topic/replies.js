@@ -30,7 +30,7 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts'], function
           'downvote:disabled': ajaxify.data['downvote:disabled'],
           'reputation:disabled': ajaxify.data['reputation:disabled'],
           loggedIn: !!app.user.uid,
-          hideReplies: config.hasOwnProperty('showNestedReplies') ? !config.showNestedReplies : true
+          hideReplies: config.hasOwnProperty('showNestedReplies') ? !config.showNestedReplies : true,
         }
         app.parseAndTranslate('topic', 'posts', tplData, function (html) {
           const repliesEl = $('<div>', { component: 'post/replies' }).html(html).hide()
@@ -79,7 +79,7 @@ define('forum/topic/replies', ['forum/topic/posts', 'hooks', 'alerts'], function
     incrementCount(post, -1)
   }
 
-  function incrementCount (post, inc) {
+  function incrementCount(post, inc) {
     const replyCount = $('[component="post"][data-pid="' + post.toPid + '"]').find('[component="post/reply-count"]').first()
     const countEl = replyCount.find('[component="post/reply-count/text"]')
     const avatars = replyCount.find('[component="post/reply-count/avatars"]')

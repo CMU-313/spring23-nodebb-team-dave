@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/register', [
-  'translator', 'slugify', 'api', 'bootbox', 'forum/login', 'zxcvbn', 'jquery-form'
+  'translator', 'slugify', 'api', 'bootbox', 'forum/login', 'zxcvbn', 'jquery-form',
 ], function (translator, slugify, api, bootbox, Login, zxcvbn) {
   const Register = {}
   let validationError = false
@@ -45,7 +45,7 @@ define('forum/register', [
       }
     })
 
-    function validateForm (callback) {
+    function validateForm(callback) {
       validationError = false
       validatePassword(password.val(), password_confirm.val())
       validatePasswordConfirm(password.val(), password_confirm.val())
@@ -69,7 +69,7 @@ define('forum/register', [
 
         registerBtn.parents('form').ajaxSubmit({
           headers: {
-            'x-csrf-token': config.csrf_token
+            'x-csrf-token': config.csrf_token,
           },
           success: function (data) {
             registerBtn.removeClass('disabled')
@@ -101,7 +101,7 @@ define('forum/register', [
                 registerBtn.removeClass('disabled')
               }
             })
-          }
+          },
         })
       })
     })
@@ -110,7 +110,7 @@ define('forum/register', [
     $('#username').focus()
   }
 
-  function validateUsername (username, callback) {
+  function validateUsername(username, callback) {
     callback = callback || function () {}
 
     const username_notify = $('#username-notify')
@@ -125,7 +125,7 @@ define('forum/register', [
     } else {
       Promise.allSettled([
         api.head(`/users/bySlug/${username}`, {}),
-        api.head(`/groups/${username}`, {})
+        api.head(`/groups/${username}`, {}),
       ]).then((results) => {
         if (results.every(obj => obj.status === 'rejected')) {
           showSuccess(username_notify, successIcon)
@@ -138,7 +138,7 @@ define('forum/register', [
     }
   }
 
-  function validatePassword (password, password_confirm) {
+  function validatePassword(password, password_confirm) {
     const password_notify = $('#password-notify')
     const password_confirm_notify = $('#password-confirm-notify')
 
@@ -159,7 +159,7 @@ define('forum/register', [
     }
   }
 
-  function validatePasswordConfirm (password, password_confirm) {
+  function validatePasswordConfirm(password, password_confirm) {
     const password_notify = $('#password-notify')
     const password_confirm_notify = $('#password-confirm-notify')
 
@@ -174,7 +174,7 @@ define('forum/register', [
     }
   }
 
-  function showError (element, msg) {
+  function showError(element, msg) {
     translator.translate(msg, function (msg) {
       element.html(msg)
       element.parent()
@@ -185,7 +185,7 @@ define('forum/register', [
     validationError = true
   }
 
-  function showSuccess (element, msg) {
+  function showSuccess(element, msg) {
     translator.translate(msg, function (msg) {
       element.html(msg)
       element.parent()
@@ -195,7 +195,7 @@ define('forum/register', [
     })
   }
 
-  function handleLanguageOverride () {
+  function handleLanguageOverride() {
     if (!app.user.uid && config.defaultLang !== config.userLang) {
       const formEl = $('[component="register/local"]')
       const langEl = $('<input type="hidden" name="userLang" value="' + config.userLang + '" />')

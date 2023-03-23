@@ -16,7 +16,7 @@ const utils = require('../../src/utils')
 
 describe('email confirmation (library methods)', () => {
   let uid
-  async function dummyEmailerHook (data) {
+  async function dummyEmailerHook(data) {
     // pretend to handle sending emails
   }
 

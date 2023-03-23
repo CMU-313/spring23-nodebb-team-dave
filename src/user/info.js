@@ -76,7 +76,7 @@ module.exports = function (User) {
     })
   }
 
-  async function getFlagMetadata (flags) {
+  async function getFlagMetadata(flags) {
     const pids = flags.map(flagObj => parseInt(flagObj.value, 10))
     const postData = await posts.getPostsFields(pids, ['tid'])
     const tids = postData.map(post => post.tid)
@@ -98,7 +98,7 @@ module.exports = function (User) {
     return flags
   }
 
-  async function formatBanMuteData (keys, noReasonLangKey) {
+  async function formatBanMuteData(keys, noReasonLangKey) {
     const data = await db.getObjects(keys)
     const uids = data.map(d => d.fromUid)
     const usersData = await User.getUsersFields(uids, ['uid', 'username', 'userslug', 'picture'])

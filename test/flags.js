@@ -439,13 +439,13 @@ describe('Flags', () => {
 
         history.forEach((change) => {
           switch (change.attribute) {
-            case 'state':
-              assert.strictEqual('[[flags:state-wip]]', change.value)
-              break
+          case 'state':
+            assert.strictEqual('[[flags:state-wip]]', change.value)
+            break
 
-            case 'assignee':
-              assert.strictEqual(1, change.value)
-              break
+          case 'assignee':
+            assert.strictEqual(1, change.value)
+            break
           }
         })
 

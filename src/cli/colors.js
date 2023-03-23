@@ -18,13 +18,13 @@ const colors = [
   { command: 'green', option: 'blue', arg: 'red' }
 ]
 
-function humanReadableArgName (arg) {
+function humanReadableArgName(arg) {
   const nameOutput = arg.name() + (arg.variadic === true ? '...' : '')
 
   return arg.required ? `<${nameOutput}>` : `[${nameOutput}]`
 }
 
-function getControlCharacterSpaces (term) {
+function getControlCharacterSpaces(term) {
   const matches = term.match(/.\[\d+m/g)
   return matches ? matches.length * 5 : 0
 }
@@ -43,7 +43,7 @@ Command.prototype.depth = function () {
 }
 
 module.exports = {
-  commandUsage (cmd) {
+  commandUsage(cmd) {
     const depth = cmd.depth()
 
     // Usage
@@ -71,7 +71,7 @@ module.exports = {
 
     return `${parentCmdNames}${chalk[colors[depth].command](cmdName)} ${cmdUsage}`
   },
-  subcommandTerm (cmd) {
+  subcommandTerm(cmd) {
     const depth = cmd.depth()
 
     // Legacy. Ignores custom usage string, and nested commands.
@@ -82,32 +82,32 @@ module.exports = {
         chalk[colors[depth].option](cmd.options.length ? ' [options]' : '') + // simplistic check for non-help option
         chalk[colors[depth].arg](args ? ` ${args}` : '')
   },
-  longestOptionTermLength (cmd, helper) {
+  longestOptionTermLength(cmd, helper) {
     return helper.visibleOptions(cmd).reduce((max, option) => Math.max(
       max,
       helper.optionTerm(option).length - getControlCharacterSpaces(helper.optionTerm(option))
     ), 0)
   },
-  longestSubcommandTermLength (cmd, helper) {
+  longestSubcommandTermLength(cmd, helper) {
     return helper.visibleCommands(cmd).reduce((max, command) => Math.max(
       max,
       helper.subcommandTerm(command).length - getControlCharacterSpaces(helper.subcommandTerm(command))
     ), 0)
   },
-  longestArgumentTermLength (cmd, helper) {
+  longestArgumentTermLength(cmd, helper) {
     return helper.visibleArguments(cmd).reduce((max, argument) => Math.max(
       max,
       helper.argumentTerm(argument).length - getControlCharacterSpaces(helper.argumentTerm(argument))
     ), 0)
   },
-  formatHelp (cmd, helper) {
+  formatHelp(cmd, helper) {
     const depth = cmd.depth()
 
     const termWidth = helper.padWidth(cmd, helper)
     const helpWidth = helper.helpWidth || 80
     const itemIndentWidth = 2
     const itemSeparatorWidth = 2 // between term and description
-    function formatItem (term, description) {
+    function formatItem(term, description) {
       const padding = ' '.repeat((termWidth + itemSeparatorWidth) - (term.length - getControlCharacterSpaces(term)))
       if (description) {
         const fullText = `${term}${padding}${description}`
@@ -115,7 +115,7 @@ module.exports = {
       }
       return term
     }
-    function formatList (textArray) {
+    function formatList(textArray) {
       return textArray.join('\n').replace(/^/gm, ' '.repeat(itemIndentWidth))
     }
 

@@ -51,17 +51,17 @@ start.start = async function () {
     }
   } catch (err) {
     switch (err.message) {
-      case 'dependencies-out-of-date':
-        winston.error('One or more of NodeBB\'s dependent packages are out-of-date. Please run the following command to update them:')
-        winston.error('    ./nodebb upgrade')
-        break
-      case 'dependencies-missing':
-        winston.error('One or more of NodeBB\'s dependent packages are missing. Please run the following command to update them:')
-        winston.error('    ./nodebb upgrade')
-        break
-      default:
-        winston.error(err.stack)
-        break
+    case 'dependencies-out-of-date':
+      winston.error('One or more of NodeBB\'s dependent packages are out-of-date. Please run the following command to update them:')
+      winston.error('    ./nodebb upgrade')
+      break
+    case 'dependencies-missing':
+      winston.error('One or more of NodeBB\'s dependent packages are missing. Please run the following command to update them:')
+      winston.error('    ./nodebb upgrade')
+      break
+    default:
+      winston.error(err.stack)
+      break
     }
 
     // Either way, bad stuff happened. Abort start.
@@ -69,7 +69,7 @@ start.start = async function () {
   }
 }
 
-async function runUpgrades () {
+async function runUpgrades() {
   const upgrade = require('./upgrade')
   try {
     await upgrade.check()
@@ -82,7 +82,7 @@ async function runUpgrades () {
   }
 }
 
-function printStartupInfo () {
+function printStartupInfo() {
   if (nconf.get('isPrimary')) {
     winston.info('Initializing NodeBB v%s %s', nconf.get('version'), nconf.get('url'))
 
@@ -94,7 +94,7 @@ function printStartupInfo () {
   }
 }
 
-function addProcessHandlers () {
+function addProcessHandlers() {
   process.on('SIGTERM', shutdown)
   process.on('SIGINT', shutdown)
   process.on('SIGHUP', restart)
@@ -115,7 +115,7 @@ function addProcessHandlers () {
   })
 }
 
-function restart () {
+function restart() {
   if (process.send) {
     winston.info('[app] Restarting...')
     process.send({
@@ -127,7 +127,7 @@ function restart () {
   }
 }
 
-async function shutdown (code) {
+async function shutdown(code) {
   winston.info('[app] Shutdown (SIGTERM/SIGINT) Initialised.')
   try {
     await require('./webserver').destroy()

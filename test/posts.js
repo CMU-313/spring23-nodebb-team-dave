@@ -338,7 +338,7 @@ describe('Post\'s', () => {
   })
 
   describe('delete/restore/purge', () => {
-    async function createTopicWithReply () {
+    async function createTopicWithReply() {
       const topicPostData = await topics.post({
         uid: voterUid,
         cid,

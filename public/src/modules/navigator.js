@@ -97,12 +97,12 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
   }
 
   let lastNextIndex = 0
-  async function gotoMyNextPost () {
-    async function getNext (startIndex) {
+  async function gotoMyNextPost() {
+    async function getNext(startIndex) {
       return await socket.emit('topics.getMyNextPostIndex', {
         tid: ajaxify.data.tid,
         index: Math.max(1, startIndex),
-        sort: config.topicPostSort
+        sort: config.topicPostSort,
       })
     }
     if (ajaxify.data.template.topic) {
@@ -121,7 +121,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       } else {
         alerts.alert({
           message: '[[topic:no-more-next-post]]',
-          type: 'info'
+          type: 'info',
         })
 
         lastNextIndex = 1
@@ -129,7 +129,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     }
   }
 
-  function clampTop (newTop) {
+  function clampTop(newTop) {
     const parent = thumb.parent()
     const parentOffset = parent.offset()
     if (newTop < parentOffset.top) {
@@ -140,7 +140,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     return newTop
   }
 
-  function setThumbToIndex (index) {
+  function setThumbToIndex(index) {
     if (!thumb.length || thumb.is(':hidden')) {
       return
     }
@@ -158,7 +158,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     renderPost(index)
   }
 
-  function handleScrollNav () {
+  function handleScrollNav() {
     if (!thumb.length) {
       return
     }
@@ -172,7 +172,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       }
     })
 
-    function calculateIndexFromY (y) {
+    function calculateIndexFromY(y) {
       const newTop = clampTop(y - thumbIconHalfHeight)
       const parentOffset = parent.offset()
       const percent = (newTop - parentOffset.top) / (parent.height() - thumbIconHeight)
@@ -194,7 +194,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       firstMove = true
     })
 
-    function mouseup () {
+    function mouseup() {
       $(window).off('mousemove', mousemove)
       if (mouseDragging) {
         navigator.scrollToIndex(index - 1, true, 0)
@@ -205,7 +205,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       firstMove = false
     }
 
-    function mousemove (ev) {
+    function mousemove(ev) {
       const newTop = clampTop(ev.pageY - thumbIconHalfHeight)
       thumb.offset({ top: newTop, left: thumb.offset().left })
       const index = calculateIndexFromY(ev.pageY)
@@ -219,7 +219,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       return false
     }
 
-    function delayedRenderPost () {
+    function delayedRenderPost() {
       clearRenderInterval()
       renderPostIntervalId = setInterval(function () {
         renderPost(index)
@@ -274,14 +274,14 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     })
   }
 
-  function clearRenderInterval () {
+  function clearRenderInterval() {
     if (renderPostIntervalId) {
       clearInterval(renderPostIntervalId)
       renderPostIntervalId = 0
     }
   }
 
-  function renderPost (index, callback) {
+  function renderPost(index, callback) {
     callback = callback || function () {}
     if (renderPostIndex === index || paginationBlockEl.find('.post-content').is(':hidden')) {
       return
@@ -303,13 +303,13 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     })
   }
 
-  function handleKeys () {
+  function handleKeys() {
     if (!config.usePagination) {
       $(window).off('keydown', onKeyDown).on('keydown', onKeyDown)
     }
   }
 
-  function onKeyDown (ev) {
+  function onKeyDown(ev) {
     if (ev.target.nodeName === 'BODY') {
       if (ev.shiftKey || ev.ctrlKey || ev.altKey) {
         return
@@ -324,7 +324,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     }
   }
 
-  function generateUrl (index) {
+  function generateUrl(index) {
     const pathname = window.location.pathname.replace(config.relative_path, '')
     const parts = pathname.split('/')
     return parts[1] + '/' + parts[2] + '/' + parts[3] + (index ? '/' + index : '')
@@ -355,7 +355,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     toggle(false)
   }
 
-  function toggle (flag) {
+  function toggle(flag) {
     const path = ajaxify.removeRelativePath(window.location.pathname.slice(1))
     if (flag && (!path.startsWith('topic') && !path.startsWith('category'))) {
       return
@@ -474,7 +474,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       }
     }
     $('body,html').animate({
-      scrollTop: $window.scrollTop() - $window.height()
+      scrollTop: $window.scrollTop() - $window.height(),
     })
   }
 
@@ -488,7 +488,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
       }
     }
     $('body,html').animate({
-      scrollTop: $window.scrollTop() + $window.height()
+      scrollTop: $window.scrollTop() + $window.height(),
     })
   }
 
@@ -583,8 +583,8 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
     navigator.scrollActive = true
     let done = false
 
-    function animateScroll () {
-      function reenableScroll () {
+    function animateScroll() {
+      function reenableScroll() {
         // Re-enable onScroll behaviour
         setTimeout(() => { // fixes race condition from jQuery — onAnimateComplete called too quickly
           $(window).on('scroll', navigator.delayedUpdate)
@@ -592,7 +592,7 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
           hooks.fire('action:navigator.scrolled', { scrollTo, highlight, duration, newIndex })
         }, 50)
       }
-      function onAnimateComplete () {
+      function onAnimateComplete() {
         if (done) {
           reenableScroll()
           return
@@ -624,11 +624,11 @@ define('navigator', ['forum/pagination', 'components', 'hooks', 'alerts'], funct
         return
       }
       $('html, body').animate({
-        scrollTop: scrollTop + 'px'
+        scrollTop: scrollTop + 'px',
       }, duration, onAnimateComplete)
     }
 
-    function highlightPost () {
+    function highlightPost() {
       if (highlight) {
         $('[component="post"],[component="category/topic"]').removeClass('highlight')
         scrollTo.addClass('highlight')

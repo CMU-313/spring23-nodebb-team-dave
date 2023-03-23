@@ -8,7 +8,7 @@ const bcrypt = require('bcryptjs')
 
 const fork = require('./meta/debugFork')
 
-function forkChild (message, callback) {
+function forkChild(message, callback) {
   const child = fork(path.join(__dirname, 'password'))
 
   child.on('message', (msg) => {
@@ -40,7 +40,7 @@ exports.compare = async function (password, hash, shaWrapped) {
 }
 
 let fakeHashCache
-async function getFakeHash () {
+async function getFakeHash() {
   if (fakeHashCache) {
     return fakeHashCache
   }
@@ -57,7 +57,7 @@ process.on('message', (msg) => {
   }
 })
 
-async function tryMethod (method, msg) {
+async function tryMethod(method, msg) {
   try {
     const result = await method(msg)
     process.send({ result })
@@ -68,13 +68,13 @@ async function tryMethod (method, msg) {
   }
 }
 
-async function hashPassword (msg) {
+async function hashPassword(msg) {
   const salt = await bcrypt.genSalt(parseInt(msg.rounds, 10))
   const hash = await bcrypt.hash(msg.password, salt)
   return hash
 }
 
-async function compare (msg) {
+async function compare(msg) {
   return await bcrypt.compare(String(msg.password || ''), String(msg.hash || ''))
 }
 

@@ -1,7 +1,7 @@
 'use strict'
 
 define('admin/manage/users', [
-  'translator', 'benchpress', 'autocomplete', 'api', 'slugify', 'bootbox', 'alerts', 'accounts/invite'
+  'translator', 'benchpress', 'autocomplete', 'api', 'slugify', 'bootbox', 'alerts', 'accounts/invite',
 ], function (translator, Benchpress, autocomplete, api, slugify, bootbox, alerts, AccountInvite) {
   const Users = {}
 
@@ -24,7 +24,7 @@ define('admin/manage/users', [
           clickfn: function () {
             window.location.href = config.relative_path + '/api/admin/users/csv'
           },
-          timeout: 0
+          timeout: 0,
         })
       })
       socket.emit('admin.user.exportUsersCSV', {}, function (err) {
@@ -34,14 +34,14 @@ define('admin/manage/users', [
         alerts.alert({
           alert_id: 'export-users-start',
           message: '[[admin/manage/users:export-users-started]]',
-          timeout: (ajaxify.data.userCount / 5000) * 500
+          timeout: (ajaxify.data.userCount / 5000) * 500,
         })
       })
 
       return false
     })
 
-    function getSelectedUids () {
+    function getSelectedUids() {
       const uids = []
 
       $('.users-table [component="user/select/single"]').each(function () {
@@ -53,18 +53,18 @@ define('admin/manage/users', [
       return uids
     }
 
-    function update (className, state) {
+    function update(className, state) {
       $('.users-table [component="user/select/single"]:checked').parents('.user-row').find(className).each(function () {
         $(this).toggleClass('hidden', !state)
       })
     }
 
-    function unselectAll () {
+    function unselectAll() {
       $('.users-table [component="user/select/single"]').prop('checked', false)
       $('.users-table [component="user/select/all"]').prop('checked', false)
     }
 
-    function removeRow (uid) {
+    function removeRow(uid) {
       const checkboxEl = document.querySelector(`.users-table [component="user/select/single"][data-uid="${uid}"]`)
       if (checkboxEl) {
         const rowEl = checkboxEl.closest('.user-row')
@@ -73,7 +73,7 @@ define('admin/manage/users', [
     }
 
     // use onSuccess instead
-    function done (successMessage, className, flag) {
+    function done(successMessage, className, flag) {
       return function (err) {
         if (err) {
           return alerts.error(err)
@@ -86,7 +86,7 @@ define('admin/manage/users', [
       }
     }
 
-    function onSuccess (successMessage, className, flag) {
+    function onSuccess(successMessage, className, flag) {
       alerts.success(successMessage)
       if (className) {
         update(className, flag)
@@ -112,7 +112,7 @@ define('admin/manage/users', [
           const modal = bootbox.dialog({
             message: html,
             title: '[[admin/manage/users:manage-groups]]',
-            onEscape: true
+            onEscape: true,
           })
           modal.on('shown.bs.modal', function () {
             autocomplete.group(modal.find('.group-search'), function (ev, ui) {
@@ -175,7 +175,7 @@ define('admin/manage/users', [
           buttons: {
             close: {
               label: '[[global:close]]',
-              className: 'btn-link'
+              className: 'btn-link',
             },
             submit: {
               label: '[[admin/manage/users:alerts.button-ban-x, ' + uids.length + ']]',
@@ -184,24 +184,24 @@ define('admin/manage/users', [
                   data[cur.name] = cur.value
                   return data
                 }, {})
-                const until = formData.length > 0
-                  ? (
-                      Date.now() +
+                const until = formData.length > 0 ?
+                  (
+                    Date.now() +
                                     (formData.length * 1000 * 60 * 60 * (parseInt(formData.unit, 10) ? 24 : 1))
-                    )
-                  : 0
+                  ) :
+                  0
 
                 Promise.all(uids.map(function (uid) {
                   return api.put('/users/' + uid + '/ban', {
                     until,
-                    reason: formData.reason
+                    reason: formData.reason,
                   })
                 })).then(() => {
                   onSuccess('[[admin/manage/users:alerts.ban-success]]', '.ban', true)
                 }).catch(alerts.error)
-              }
-            }
-          }
+              },
+            },
+          },
         })
       })
     })
@@ -316,7 +316,7 @@ define('admin/manage/users', [
       }
     })
 
-    function handleDelete (confirmMsg, path) {
+    function handleDelete(confirmMsg, path) {
       const uids = getSelectedUids()
       if (!uids.length) {
         return
@@ -347,7 +347,7 @@ define('admin/manage/users', [
       })
     }
 
-    function handleUserCreate () {
+    function handleUserCreate() {
       $('[data-action="create"]').on('click', function () {
         Benchpress.render('admin/partials/create_user_modal', {}).then(function (html) {
           const modal = bootbox.dialog({
@@ -357,7 +357,7 @@ define('admin/manage/users', [
             buttons: {
               cancel: {
                 label: '[[admin/manage/users:alerts.button-cancel]]',
-                className: 'btn-link'
+                className: 'btn-link',
               },
               create: {
                 label: '[[admin/manage/users:alerts.button-create]]',
@@ -365,9 +365,9 @@ define('admin/manage/users', [
                 callback: function () {
                   createUser.call(this)
                   return false
-                }
-              }
-            }
+                },
+              },
+            },
           })
           modal.on('shown.bs.modal', function () {
             modal.find('#create-user-name').focus()
@@ -377,7 +377,7 @@ define('admin/manage/users', [
       })
     }
 
-    function createUser () {
+    function createUser() {
       const modal = this
       const username = document.getElementById('create-user-name').value
       const email = document.getElementById('create-user-email').value
@@ -393,7 +393,7 @@ define('admin/manage/users', [
       const user = {
         username,
         email,
-        password
+        password,
       }
 
       api.post('/users', user)
@@ -414,20 +414,20 @@ define('admin/manage/users', [
     AccountInvite.handle()
   }
 
-  function handleSearch () {
-    function doSearch () {
+  function handleSearch() {
+    function doSearch() {
       $('.fa-spinner').removeClass('hidden')
       loadSearchPage({
         searchBy: $('#user-search-by').val(),
         query: $('#user-search').val(),
-        page: 1
+        page: 1,
       })
     }
     $('#user-search').on('keyup', utils.debounce(doSearch, 250))
     $('#user-search-by').on('change', doSearch)
   }
 
-  function loadSearchPage (query) {
+  function loadSearchPage(query) {
     const params = utils.params()
     params.searchBy = query.searchBy
     params.query = query.query
@@ -439,7 +439,7 @@ define('admin/manage/users', [
       const url = config.relative_path + '/admin/manage/users?' + qs
       if (history.pushState) {
         history.pushState({
-          url
+          url,
         }, null, window.location.protocol + '//' + window.location.host + url)
       }
     }).fail(function (xhrErr) {
@@ -449,7 +449,7 @@ define('admin/manage/users', [
     })
   }
 
-  function renderSearchResults (data) {
+  function renderSearchResults(data) {
     Benchpress.render('partials/paginator', { pagination: data.pagination }).then(function (html) {
       $('.pagination-container').replaceWith(html)
     })
@@ -477,7 +477,7 @@ define('admin/manage/users', [
     })
   }
 
-  function buildSearchQuery (params) {
+  function buildSearchQuery(params) {
     if ($('#user-search').val()) {
       params.query = $('#user-search').val()
       params.searchBy = $('#user-search-by').val()
@@ -489,7 +489,7 @@ define('admin/manage/users', [
     return decodeURIComponent($.param(params))
   }
 
-  function handleSort () {
+  function handleSort() {
     $('.users-table thead th').on('click', function () {
       const $this = $(this)
       const sortBy = $this.attr('data-sort')
@@ -509,7 +509,7 @@ define('admin/manage/users', [
     })
   }
 
-  function getFilters () {
+  function getFilters() {
     const filters = []
     $('#filter-by').find('[data-filter-by]').each(function () {
       if ($(this).find('.fa-check').length) {
@@ -519,7 +519,7 @@ define('admin/manage/users', [
     return filters
   }
 
-  function handleFilter () {
+  function handleFilter() {
     let currentFilters = getFilters()
     $('#filter-by').on('click', 'li', function () {
       const $this = $(this)

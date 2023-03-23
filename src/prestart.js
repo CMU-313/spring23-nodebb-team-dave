@@ -9,7 +9,7 @@ const chalk = require('chalk')
 const pkg = require('../package.json')
 const { paths } = require('./constants')
 
-function setupWinston () {
+function setupWinston() {
   if (!winston.format) {
     return
   }
@@ -44,7 +44,7 @@ function setupWinston () {
   })
 }
 
-function loadConfig (configFile) {
+function loadConfig(configFile) {
   nconf.file({
     file: configFile
   })
@@ -107,7 +107,7 @@ function loadConfig (configFile) {
   }
 }
 
-function versionCheck () {
+function versionCheck() {
   const version = process.version.slice(1)
   const range = pkg.engines.node
   const semver = require('semver')

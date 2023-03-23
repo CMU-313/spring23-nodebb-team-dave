@@ -29,7 +29,7 @@ module.exports = function (module) {
     return await getSortedSetRevIntersect(params)
   }
 
-  async function getSortedSetRevIntersect (params) {
+  async function getSortedSetRevIntersect(params) {
     const { sets } = params
     const start = params.hasOwnProperty('start') ? params.start : 0
     const stop = params.hasOwnProperty('stop') ? params.stop : -1

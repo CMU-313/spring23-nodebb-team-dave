@@ -19,7 +19,7 @@ const { paths } = require('../constants')
 const buildLanguagesPath = path.join(paths.baseDir, 'build/public/language')
 const coreLanguagesPath = path.join(paths.baseDir, 'public/language')
 
-async function getTranslationMetadata () {
+async function getTranslationMetadata() {
   const paths = await file.walk(coreLanguagesPath)
   let languages = []
   let namespaces = []
@@ -58,7 +58,7 @@ async function getTranslationMetadata () {
   return result
 }
 
-async function writeLanguageFile (language, namespace, translations) {
+async function writeLanguageFile(language, namespace, translations) {
   const dev = process.env.NODE_ENV === 'development'
   const filePath = path.join(buildLanguagesPath, language, `${namespace}.json`)
 
@@ -69,7 +69,7 @@ async function writeLanguageFile (language, namespace, translations) {
 // for each language and namespace combination,
 // run through core and all plugins to generate
 // a full translation hash
-async function buildTranslations (ref) {
+async function buildTranslations(ref) {
   const { namespaces } = ref
   const { languages } = ref
   const plugins = _.values(Plugins.pluginsData).filter(plugin => typeof plugin.languages === 'string')
@@ -85,7 +85,7 @@ async function buildTranslations (ref) {
   await Promise.all(promises)
 }
 
-async function buildNamespaceLanguage (lang, namespace, plugins) {
+async function buildNamespaceLanguage(lang, namespace, plugins) {
   const translations = {}
   // core first
   await assignFileToTranslations(translations, path.join(coreLanguagesPath, lang, `${namespace}.json`))
@@ -97,7 +97,7 @@ async function buildNamespaceLanguage (lang, namespace, plugins) {
   }
 }
 
-async function addPlugin (translations, pluginData, lang, namespace) {
+async function addPlugin(translations, pluginData, lang, namespace) {
   // if plugin doesn't have this namespace no need to continue
   if (pluginData.languageData && !pluginData.languageData.namespaces.includes(namespace)) {
     return
@@ -124,7 +124,7 @@ async function addPlugin (translations, pluginData, lang, namespace) {
   }
 }
 
-async function assignFileToTranslations (translations, path) {
+async function assignFileToTranslations(translations, path) {
   try {
     const fileData = await fs.promises.readFile(path, 'utf8')
     Object.assign(translations, JSON.parse(fileData))
@@ -135,7 +135,7 @@ async function assignFileToTranslations (translations, path) {
   }
 }
 
-exports.build = async function buildLanguages () {
+exports.build = async function buildLanguages() {
   await rimrafAsync(buildLanguagesPath)
   const data = await getTranslationMetadata()
   await buildTranslations(data)

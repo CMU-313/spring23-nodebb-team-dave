@@ -43,9 +43,9 @@ require('./uploads')(User)
 
 User.exists = async function (uids) {
   return await (
-    Array.isArray(uids)
-      ? db.isSortedSetMembers('users:joindate', uids)
-      : db.isSortedSetMember('users:joindate', uids)
+    Array.isArray(uids) ?
+      db.isSortedSetMembers('users:joindate', uids) :
+      db.isSortedSetMember('users:joindate', uids)
   )
 }
 
@@ -189,7 +189,7 @@ User.isPrivilegedOrSelf = async function (callerUid, uid) {
   await isSelfOrMethod(callerUid, uid, User.isPrivileged)
 }
 
-async function isSelfOrMethod (callerUid, uid, method) {
+async function isSelfOrMethod(callerUid, uid, method) {
   if (parseInt(callerUid, 10) === parseInt(uid, 10)) {
     return
   }

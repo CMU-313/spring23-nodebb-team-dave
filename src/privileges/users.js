@@ -19,7 +19,7 @@ privsUsers.isGlobalModerator = async function (uid) {
   return await isGroupMember(uid, 'Global Moderators')
 }
 
-async function isGroupMember (uid, groupName) {
+async function isGroupMember(uid, groupName) {
   return await groups[Array.isArray(uid) ? 'isMembers' : 'isMember'](uid, groupName)
 }
 
@@ -32,7 +32,7 @@ privsUsers.isModerator = async function (uid, cid) {
   return await isModeratorOfCategory(cid, uid)
 }
 
-async function isModeratorOfCategories (cids, uid) {
+async function isModeratorOfCategories(cids, uid) {
   if (parseInt(uid, 10) <= 0) {
     return await filterIsModerator(cids, uid, cids.map(() => false))
   }
@@ -49,7 +49,7 @@ async function isModeratorOfCategories (cids, uid) {
   return await filterIsModerator(cids, uid, isModerator)
 }
 
-async function isModeratorsOfCategory (cid, uids) {
+async function isModeratorsOfCategory(cid, uids) {
   const [check1, check2, check3] = await Promise.all([
     privsUsers.isGlobalModerator(uids),
     groups.isMembers(uids, `cid:${cid}:privileges:moderate`),
@@ -59,12 +59,12 @@ async function isModeratorsOfCategory (cid, uids) {
   return await filterIsModerator(cid, uids, isModerator)
 }
 
-async function isModeratorOfCategory (cid, uid) {
+async function isModeratorOfCategory(cid, uid) {
   const result = await isModeratorOfCategories([cid], uid)
   return result ? result[0] : false
 }
 
-async function filterIsModerator (cid, uid, isModerator) {
+async function filterIsModerator(cid, uid, isModerator) {
   const data = await plugins.hooks.fire('filter:user.isModerator', { uid, cid, isModerator })
   if ((Array.isArray(uid) || Array.isArray(cid)) && !Array.isArray(data.isModerator)) {
     throw new Error('filter:user.isModerator - i/o mismatch')
@@ -144,7 +144,7 @@ privsUsers.hasBanPrivilege = async uid => await hasGlobalPrivilege('ban', uid)
 privsUsers.hasMutePrivilege = async uid => await hasGlobalPrivilege('mute', uid)
 privsUsers.hasInvitePrivilege = async uid => await hasGlobalPrivilege('invite', uid)
 
-async function hasGlobalPrivilege (privilege, uid) {
+async function hasGlobalPrivilege(privilege, uid) {
   const privsGlobal = require('./global')
   const privilegeName = privilege.split('-').map(word => word.slice(0, 1).toUpperCase() + word.slice(1)).join('')
   let payload = { uid }

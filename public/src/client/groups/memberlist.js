@@ -14,7 +14,7 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     handleMemberInfiniteScroll()
   }
 
-  function handleMemberAdd () {
+  function handleMemberAdd() {
     $('[component="groups/members/add"]').on('click', function () {
       app.parseAndTranslate('admin/partials/groups/add-members', {}, function (html) {
         const foundUsers = []
@@ -31,9 +31,9 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
                 addUserToGroup(users, function () {
                   modal.modal('hide')
                 })
-              }
-            }
-          }
+              },
+            },
+          },
         })
         modal.on('click', '[data-username]', function () {
           const isSelected = $(this).attr('data-selected') === '1'
@@ -47,7 +47,7 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
         modal.find('input').on('keyup', function () {
           api.get('/api/users', {
             query: $(this).val(),
-            paginate: false
+            paginate: false,
           }, function (err, result) {
             if (err) {
               return alerts.error(err)
@@ -64,8 +64,8 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     })
   }
 
-  function addUserToGroup (users, callback) {
-    function done () {
+  function addUserToGroup(users, callback) {
+    function done() {
       users = users.filter(function (user) {
         return !$('[component="groups/members"] [data-uid="' + user.uid + '"]').length
       })
@@ -87,13 +87,13 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     }
   }
 
-  function handleMemberSearch () {
+  function handleMemberSearch() {
     const searchEl = $('[component="groups/members/search"]')
     searchEl.on('keyup', utils.debounce(function () {
       const query = searchEl.val()
       socket.emit('groups.searchMembers', {
         groupName,
-        query
+        query,
       }, function (err, results) {
         if (err) {
           return alerts.error(err)
@@ -106,7 +106,7 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     }, 250))
   }
 
-  function handleMemberInfiniteScroll () {
+  function handleMemberInfiniteScroll() {
     $('[component="groups/members"] tbody').on('scroll', function () {
       const $this = $(this)
       const bottom = ($this[0].scrollHeight - $this.innerHeight()) * 0.9
@@ -117,7 +117,7 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     })
   }
 
-  function loadMoreMembers () {
+  function loadMoreMembers() {
     const members = $('[component="groups/members"]')
     if (members.attr('loading')) {
       return
@@ -126,7 +126,7 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     members.attr('loading', 1)
     socket.emit('groups.loadMoreMembers', {
       groupName,
-      after: members.attr('data-nextstart')
+      after: members.attr('data-nextstart'),
     }, function (err, data) {
       if (err) {
         return alerts.error(err)
@@ -143,7 +143,7 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     })
   }
 
-  function onMembersLoaded (users, callback) {
+  function onMembersLoaded(users, callback) {
     users = users.filter(function (user) {
       return !$('[component="groups/members"] [data-uid="' + user.uid + '"]').length
     })
@@ -154,12 +154,12 @@ define('forum/groups/memberlist', ['api', 'bootbox', 'alerts'], function (api, b
     })
   }
 
-  function parseAndTranslate (users, callback) {
+  function parseAndTranslate(users, callback) {
     app.parseAndTranslate(templateName, 'group.members', {
       group: {
         members: users,
-        isOwner: ajaxify.data.group.isOwner
-      }
+        isOwner: ajaxify.data.group.isOwner,
+      },
     }, callback)
   }
 

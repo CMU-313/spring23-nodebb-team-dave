@@ -30,7 +30,7 @@ SELECT COUNT(DISTINCT z."value") c
     return await getSortedSetUnion(params)
   }
 
-  async function getSortedSetUnion (params) {
+  async function getSortedSetUnion(params) {
     const { sets } = params
     const start = params.hasOwnProperty('start') ? params.start : 0
     const stop = params.hasOwnProperty('stop') ? params.stop : -1

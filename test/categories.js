@@ -871,7 +871,7 @@ describe('Categories', () => {
   describe('getTopicIds', () => {
     const plugins = require('../src/plugins')
     it('should get topic ids with filter', (done) => {
-      function method (data, callback) {
+      function method(data, callback) {
         data.tids = [1, 2, 3]
         callback(null, data)
       }

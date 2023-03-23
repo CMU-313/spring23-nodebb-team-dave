@@ -127,13 +127,13 @@ module.exports = function (User) {
       }
       await deleteFromReferenceList(invite.inviter, invite.email)
       await db.deleteAll([
-                `invitation:invited:${invite.email}`,
-                `invitation:token:${token}`
+        `invitation:invited:${invite.email}`,
+        `invitation:token:${token}`
       ])
     }
   }
 
-  async function deleteFromReferenceList (uid, email) {
+  async function deleteFromReferenceList(uid, email) {
     await Promise.all([
       db.setRemove(`invitation:uid:${uid}`, email),
       db.delete(`invitation:uid:${uid}:invited:${email}`)
@@ -144,7 +144,7 @@ module.exports = function (User) {
     }
   }
 
-  async function prepareInvitation (uid, email, groupsToJoin) {
+  async function prepareInvitation(uid, email, groupsToJoin) {
     const inviterExists = await User.exists(uid)
     if (!inviterExists) {
       throw new Error('[[error:invalid-uid]]')

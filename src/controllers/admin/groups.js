@@ -59,7 +59,7 @@ groupsController.get = async function (req, res, next) {
   })
 }
 
-async function getGroupNames () {
+async function getGroupNames() {
   const groupNames = await db.getSortedSetRange('groups:createtime', 0, -1)
   return groupNames.filter(name => (
     name !== 'registered-users' &&

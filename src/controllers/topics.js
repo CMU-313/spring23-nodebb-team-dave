@@ -20,7 +20,7 @@ const url = nconf.get('url')
 const relative_path = nconf.get('relative_path')
 const upload_url = nconf.get('upload_url')
 
-topicsController.get = async function getTopic (req, res, next) {
+topicsController.get = async function getTopic(req, res, next) {
   const tid = req.params.topic_id
 
   if (
@@ -123,16 +123,16 @@ topicsController.get = async function getTopic (req, res, next) {
   res.render('topic', topicData)
 }
 
-function generateQueryString (query) {
+function generateQueryString(query) {
   const qString = qs.stringify(query)
   return qString.length ? `?${qString}` : ''
 }
 
-function calculatePageFromIndex (postIndex, settings) {
+function calculatePageFromIndex(postIndex, settings) {
   return 1 + Math.floor((postIndex - 1) / settings.postsPerPage)
 }
 
-function calculateStartStop (page, postIndex, settings) {
+function calculateStartStop(page, postIndex, settings) {
   let startSkip = 0
 
   if (!settings.usePagination) {
@@ -147,7 +147,7 @@ function calculateStartStop (page, postIndex, settings) {
   return { start: Math.max(0, start), stop: Math.max(0, stop) }
 }
 
-async function incrementViewCount (req, tid) {
+async function incrementViewCount(req, tid) {
   const allow = req.uid > 0 || (meta.config.guestsIncrementTopicViews && req.uid === 0)
   if (allow) {
     req.session.tids_viewed = req.session.tids_viewed || {}
@@ -160,7 +160,7 @@ async function incrementViewCount (req, tid) {
   }
 }
 
-async function markAsRead (req, tid) {
+async function markAsRead(req, tid) {
   if (req.loggedIn) {
     const markedRead = await topics.markAsRead([tid], req.uid)
     const promises = [topics.markTopicNotificationsRead([tid], req.uid)]
@@ -171,7 +171,7 @@ async function markAsRead (req, tid) {
   }
 }
 
-async function buildBreadcrumbs (topicData) {
+async function buildBreadcrumbs(topicData) {
   const breadcrumbs = [
     {
       text: topicData.category.name,
@@ -186,7 +186,7 @@ async function buildBreadcrumbs (topicData) {
   topicData.breadcrumbs = parentCrumbs.concat(breadcrumbs)
 }
 
-async function addOldCategory (topicData, userPrivileges) {
+async function addOldCategory(topicData, userPrivileges) {
   if (userPrivileges.isAdminOrMod && topicData.oldCid) {
     topicData.oldCategory = await categories.getCategoryFields(
       topicData.oldCid, ['cid', 'name', 'icon', 'bgColor', 'color', 'slug']
@@ -194,7 +194,7 @@ async function addOldCategory (topicData, userPrivileges) {
   }
 }
 
-async function addTags (topicData, req, res) {
+async function addTags(topicData, req, res) {
   const postIndex = parseInt(req.params.post_index, 10) || 0
   const postAtIndex = topicData.posts.find(p => parseInt(p.index, 10) === parseInt(Math.max(0, postIndex - 1), 10))
   let description = ''
@@ -267,7 +267,7 @@ async function addTags (topicData, req, res) {
   }
 }
 
-async function addOGImageTags (res, topicData, postAtIndex) {
+async function addOGImageTags(res, topicData, postAtIndex) {
   const uploads = postAtIndex ? await posts.uploads.listWithSizes(postAtIndex.pid) : []
   const images = uploads.map((upload) => {
     upload.name = `${url + upload_url}/${upload.name}`
@@ -289,7 +289,7 @@ async function addOGImageTags (res, topicData, postAtIndex) {
   images.forEach(path => addOGImageTag(res, path))
 }
 
-function addOGImageTag (res, image) {
+function addOGImageTag(res, image) {
   let imageUrl
   if (typeof image === 'string' && !image.startsWith('http')) {
     imageUrl = url + image.replace(new RegExp(`^${relative_path}`), '')

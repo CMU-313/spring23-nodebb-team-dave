@@ -53,7 +53,7 @@ module.exports = function (Topics) {
     return mergeIntoTid
   }
 
-  async function createNewTopic (title, oldestTid) {
+  async function createNewTopic(title, oldestTid) {
     const topicData = await Topics.getTopicFields(oldestTid, ['uid', 'cid'])
     const params = {
       uid: topicData.uid,
@@ -68,7 +68,7 @@ module.exports = function (Topics) {
     return tid
   }
 
-  async function updateViewCount (mergeIntoTid, tids) {
+  async function updateViewCount(mergeIntoTid, tids) {
     const topicData = await Topics.getTopicsFields(tids, ['viewcount'])
     const totalViewCount = topicData.reduce(
       (count, topic) => count + parseInt(topic.viewcount, 10), 0
@@ -76,7 +76,7 @@ module.exports = function (Topics) {
     await Topics.setTopicField(mergeIntoTid, 'viewcount', totalViewCount)
   }
 
-  function findOldestTopic (tids) {
+  function findOldestTopic(tids) {
     return Math.min.apply(null, tids)
   }
 }

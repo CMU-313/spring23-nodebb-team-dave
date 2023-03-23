@@ -25,7 +25,7 @@ module.exports = function (Posts: PostsModel) {
     return ((await db.getObjectField(`post:${pid}`, 'endorsed')) === 'true')
   }
 
-  async function toggleEndorsement (type: 'endorse' | 'unendorse', pid: number): Promise<ToggleEndorsementResult> {
+  async function toggleEndorsement(type: 'endorse' | 'unendorse', pid: number): Promise<ToggleEndorsementResult> {
     const isEndorsing = type === 'endorse'
 
     const [postData, hasEndorsed] = await Promise.all([

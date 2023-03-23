@@ -33,7 +33,7 @@ module.exports = {
   }
 }
 
-function getGroupPrivileges (cid, callback) {
+function getGroupPrivileges(cid, callback) {
   const tasks = {};
 
   ['groups:upload:post:image', 'groups:upload:post:file'].forEach((privilege) => {

@@ -19,7 +19,7 @@ define('forum/chats/recent', ['alerts'], function (alerts) {
     })
   }
 
-  function loadMoreRecentChats () {
+  function loadMoreRecentChats() {
     const recentChats = $('[component="chat/recent"]')
     if (recentChats.attr('loading')) {
       return
@@ -27,7 +27,7 @@ define('forum/chats/recent', ['alerts'], function (alerts) {
     recentChats.attr('loading', 1)
     socket.emit('modules.chats.getRecentChats', {
       uid: ajaxify.data.uid,
-      after: recentChats.attr('data-nextstart')
+      after: recentChats.attr('data-nextstart'),
     }, function (err, data) {
       if (err) {
         return alerts.error(err)
@@ -44,7 +44,7 @@ define('forum/chats/recent', ['alerts'], function (alerts) {
     })
   }
 
-  function onRecentChatsLoaded (data, callback) {
+  function onRecentChatsLoaded(data, callback) {
     if (!data.rooms.length) {
       return callback()
     }

@@ -7,7 +7,7 @@ define('admin/appearance/skins', ['translator', 'alerts'], function (translator,
     // Populate skins from Bootswatch API
     $.ajax({
       method: 'get',
-      url: 'https://bootswatch.com/api/3.json'
+      url: 'https://bootswatch.com/api/3.json',
     }).done(Skins.render)
 
     $('#skins').on('click', function (e) {
@@ -28,7 +28,7 @@ define('admin/appearance/skins', ['translator', 'alerts'], function (translator,
         socket.emit('admin.themes.set', {
           type: themeType,
           id: themeId,
-          src: cssSrc
+          src: cssSrc,
         }, function (err) {
           if (err) {
             return alerts.error(err)
@@ -40,7 +40,7 @@ define('admin/appearance/skins', ['translator', 'alerts'], function (translator,
             type: 'info',
             title: '[[admin/appearance/skins:skin-updated]]',
             message: themeId ? ('[[admin/appearance/skins:applied-success, ' + themeId + ']]') : '[[admin/appearance/skins:revert-success]]',
-            timeout: 5000
+            timeout: 5000,
           })
         })
       }
@@ -60,10 +60,10 @@ define('admin/appearance/skins', ['translator', 'alerts'], function (translator,
           screenshot_url: theme.thumbnail,
           url: theme.preview,
           css: theme.cssCdn,
-          skin: true
+          skin: true,
         }
       }),
-      showRevert: true
+      showRevert: true,
     }, function (html) {
       themeContainer.html(html)
 
@@ -77,7 +77,7 @@ define('admin/appearance/skins', ['translator', 'alerts'], function (translator,
     })
   }
 
-  function highlightSelectedTheme (themeId) {
+  function highlightSelectedTheme(themeId) {
     translator.translate('[[admin/appearance/skins:select-skin]]  ||  [[admin/appearance/skins:current-skin]]', function (text) {
       text = text.split('  ||  ')
       const select = text[0]

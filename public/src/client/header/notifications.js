@@ -28,15 +28,15 @@ define('forum/header/notifications', ['components'], function (components) {
     socket.on('event:notifications.updateCount', onUpdateCount)
   }
 
-  function onNewNotification (data) {
+  function onNewNotification(data) {
     requireAndCall('onNewNotification', data)
   }
 
-  function onUpdateCount (data) {
+  function onUpdateCount(data) {
     requireAndCall('updateNotifCount', data)
   }
 
-  function requireAndCall (method, param) {
+  function requireAndCall(method, param) {
     require(['notifications'], function (notifications) {
       notifications[method](param)
     })

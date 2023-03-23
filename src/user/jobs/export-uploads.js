@@ -39,13 +39,13 @@ process.on('message', async (msg) => {
 
     archive.on('warning', (err) => {
       switch (err.code) {
-        case 'ENOENT':
-          winston.warn(`[user/export/uploads] File not found: ${err.path}`)
-          break
+      case 'ENOENT':
+        winston.warn(`[user/export/uploads] File not found: ${err.path}`)
+        break
 
-        default:
-          winston.warn(`[user/export/uploads] Unexpected warning: ${err.message}`)
-          break
+      default:
+        winston.warn(`[user/export/uploads] Unexpected warning: ${err.message}`)
+        break
       }
     })
 
@@ -54,13 +54,13 @@ process.on('message', async (msg) => {
         return path.replace(rootDirectory, '')
       }
       switch (err.code) {
-        case 'EACCES':
-          winston.error(`[user/export/uploads] File inaccessible: ${trimPath(err.path)}`)
-          break
+      case 'EACCES':
+        winston.error(`[user/export/uploads] File inaccessible: ${trimPath(err.path)}`)
+        break
 
-        default:
-          winston.error(`[user/export/uploads] Unable to construct archive: ${err.message}`)
-          break
+      default:
+        winston.error(`[user/export/uploads] Unable to construct archive: ${err.message}`)
+        break
       }
     })
 

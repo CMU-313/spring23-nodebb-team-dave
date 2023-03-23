@@ -26,7 +26,7 @@ module.exports = function (module) {
     }
   }
 
-  async function sortedSetAddBulk (key, scores, values) {
+  async function sortedSetAddBulk(key, scores, values) {
     if (!scores.length || !values.length) {
       return
     }

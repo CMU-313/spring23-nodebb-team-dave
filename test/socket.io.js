@@ -228,7 +228,7 @@ describe('socket.io', () => {
   describe('validation emails', () => {
     const plugins = require('../src/plugins')
 
-    async function dummyEmailerHook (data) {
+    async function dummyEmailerHook(data) {
       // pretend to handle sending emails
     }
     before(() => {

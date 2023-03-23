@@ -15,7 +15,7 @@ interface Message {
   data: object
 }
 
-function get (): PubSub {
+function get(): PubSub {
   if (real) {
     return real
   }
@@ -66,20 +66,20 @@ function get (): PubSub {
   return pubsub
 }
 
-export function publish (event: string | symbol, data: object) {
+export function publish(event: string | symbol, data: object) {
   get().publish(event, data)
 }
 
 // The on() function in EventEmitter class defines the callback with type (...args: any[]) => void)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function on (event: string | symbol, callback: (...args: any[]) => void) {
+export function on(event: string | symbol, callback: (...args: any[]) => void) {
   get().on(event, callback)
 }
 
-export function removeAllListeners (event: string | symbol) {
+export function removeAllListeners(event: string | symbol) {
   get().removeAllListeners(event)
 }
 
-export function reset () {
+export function reset() {
   real = null
 }

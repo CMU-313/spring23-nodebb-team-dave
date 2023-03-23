@@ -29,7 +29,7 @@ define('settings/textarea', function () {
       if (empty || value) {
         return value
       }
-    }
+    },
   }
 
   return SettingsArea

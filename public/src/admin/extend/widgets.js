@@ -6,7 +6,7 @@ define('admin/extend/widgets', [
   'jquery-ui/widgets/sortable',
   'jquery-ui/widgets/draggable',
   'jquery-ui/widgets/droppable',
-  'jquery-ui/widgets/datepicker'
+  'jquery-ui/widgets/datepicker',
 ], function (bootbox, alerts) {
   const Widgets = {}
 
@@ -33,7 +33,7 @@ define('admin/extend/widgets', [
     setupCloneButton()
   }
 
-  function prepareWidgets () {
+  function prepareWidgets() {
     $('[data-location="drafts"]').insertAfter($('[data-location="drafts"]').closest('.tab-content'))
 
     $('#widgets .available-widgets .widget-panel').draggable({
@@ -41,7 +41,7 @@ define('admin/extend/widgets', [
         return $(e.target).parents('.widget-panel').clone()
       },
       distance: 10,
-      connectToSortable: '.widget-area'
+      connectToSortable: '.widget-area',
     })
 
     $('#widgets .available-containers .containers > [data-container-html]')
@@ -52,7 +52,7 @@ define('admin/extend/widgets', [
 
           return target.clone().addClass('block').width(target.width()).css('opacity', '0.5')
         },
-        distance: 10
+        distance: 10,
       })
       .each(function () {
         $(this).attr('data-container-html', $(this).attr('data-container-html').replace(/\\\{([\s\S]*?)\\\}/g, '{$1}'))
@@ -63,7 +63,7 @@ define('admin/extend/widgets', [
         createDatePicker(ui.item)
         appendToggle(ui.item)
       },
-      connectWith: 'div'
+      connectWith: 'div',
     }).on('click', '.delete-widget', function () {
       const panel = $(this).parents('.widget-panel')
 
@@ -80,7 +80,7 @@ define('admin/extend/widgets', [
 
     $('#save').on('click', saveWidgets)
 
-    function saveWidgets () {
+    function saveWidgets() {
       const saveData = []
       $('#widgets [data-template][data-location]').each(function (i, el) {
         el = $(el)
@@ -100,7 +100,7 @@ define('admin/extend/widgets', [
                 if (widgetData[data[d].name]) {
                   if (!Array.isArray(widgetData[data[d].name])) {
                     widgetData[data[d].name] = [
-                      widgetData[data[d].name]
+                      widgetData[data[d].name],
                     ]
                   }
                   widgetData[data[d].name].push(data[d].value)
@@ -113,14 +113,14 @@ define('admin/extend/widgets', [
 
           widgets.push({
             widget: $(this).attr('data-widget'),
-            data: widgetData
+            data: widgetData,
           })
         })
 
         saveData.push({
           template,
           location,
-          widgets
+          widgets,
         })
       })
 
@@ -134,7 +134,7 @@ define('admin/extend/widgets', [
           type: 'success',
           title: '[[admin/extend/widgets:alert.updated]]',
           message: '[[admin/extend/widgets:alert.update-success]]',
-          timeout: 2500
+          timeout: 2500,
         })
       })
     }
@@ -158,16 +158,16 @@ define('admin/extend/widgets', [
     })
   }
 
-  function createDatePicker (el) {
+  function createDatePicker(el) {
     const currentYear = new Date().getFullYear()
     el.find('.date-selector').datepicker({
       changeMonth: true,
       changeYear: true,
-      yearRange: currentYear + ':' + (currentYear + 100)
+      yearRange: currentYear + ':' + (currentYear + 100),
     })
   }
 
-  function appendToggle (el) {
+  function appendToggle(el) {
     if (!el.hasClass('block')) {
       el.addClass('block').css('width', '').css('height', '')
         .droppable({
@@ -178,7 +178,7 @@ define('admin/extend/widgets', [
             el.find('.panel-body .container-html').val(ui.draggable.attr('data-container-html'))
             el.find('.panel-body').removeClass('hidden')
           },
-          hoverClass: 'panel-info'
+          hoverClass: 'panel-info',
         })
         .children('.panel-heading')
         .append('<div class="pull-right pointer"><span class="delete-widget"><i class="fa fa-times-circle"></i></span></div><div class="pull-left pointer"><span class="toggle-widget"><i class="fa fa-chevron-circle-down"></i></span>&nbsp;</div>')
@@ -187,8 +187,8 @@ define('admin/extend/widgets', [
     }
   }
 
-  function loadWidgetData () {
-    function populateWidget (widget, data) {
+  function loadWidgetData() {
+    function populateWidget(widget, data) {
       if (data.title) {
         const title = widget.find('.panel-heading strong')
         title.text(title.text() + ' - ' + data.title)
@@ -231,7 +231,7 @@ define('admin/extend/widgets', [
     })
   }
 
-  function setupCloneButton () {
+  function setupCloneButton() {
     const clone = $('[component="clone"]')
     const cloneBtn = $('[component="clone/button"]')
 
@@ -259,7 +259,7 @@ define('admin/extend/widgets', [
         return currentAreas.indexOf(location) !== -1 ? location : undefined
       }).get().filter(function (i) { return i })
 
-      function clone (location) {
+      function clone(location) {
         $('#active-widgets .tab-pane[data-template="' + template + '"] [data-location="' + location + '"]').each(function () {
           $(this).find('[data-widget]').each(function () {
             const widget = $(this).clone(true)

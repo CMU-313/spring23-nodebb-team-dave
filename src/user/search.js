@@ -65,7 +65,7 @@ module.exports = function (User) {
     return searchResult
   }
 
-  async function findUids (query, searchBy, hardCap) {
+  async function findUids(query, searchBy, hardCap) {
     if (!query) {
       return []
     }
@@ -81,7 +81,7 @@ module.exports = function (User) {
     return uids
   }
 
-  async function filterAndSortUids (uids, data) {
+  async function filterAndSortUids(uids, data) {
     uids = uids.filter(uid => parseInt(uid, 10))
     let filters = data.filters || []
     filters = Array.isArray(filters) ? filters : [data.filters]
@@ -128,7 +128,7 @@ module.exports = function (User) {
     return userData.map(user => user.uid)
   }
 
-  function sortUsers (userData, sortBy, sortDirection) {
+  function sortUsers(userData, sortBy, sortDirection) {
     if (!userData || !userData.length) {
       return
     }
@@ -150,7 +150,7 @@ module.exports = function (User) {
     }
   }
 
-  async function searchByIP (ip) {
+  async function searchByIP(ip) {
     const ipKeys = await db.scan({ match: `ip:${ip}*` })
     const uids = await db.getSortedSetRevRange(ipKeys, 0, -1)
     return _.uniq(uids)

@@ -147,12 +147,12 @@ Hooks.hasListeners = function (hook) {
   return !!(plugins.loadedHooks[hook] && plugins.loadedHooks[hook].length > 0)
 }
 
-async function fireFilterHook (hook, hookList, params) {
+async function fireFilterHook(hook, hookList, params) {
   if (!Array.isArray(hookList) || !hookList.length) {
     return params
   }
 
-  async function fireMethod (hookObj, params) {
+  async function fireMethod(hookObj, params) {
     if (typeof hookObj.method !== 'function') {
       if (global.env === 'development') {
         winston.warn(`[plugins] Expected method for hook '${hook}' in plugin '${hookObj.id}' not found, skipping.`)
@@ -165,7 +165,7 @@ async function fireFilterHook (hook, hookList, params) {
     }
     return new Promise((resolve, reject) => {
       let resolved = false
-      function _resolve (result) {
+      function _resolve(result) {
         if (resolved) {
           winston.warn(`[plugins] ${hook} already resolved in plugin ${hookObj.id}`)
           return
@@ -197,7 +197,7 @@ async function fireFilterHook (hook, hookList, params) {
   return params
 }
 
-async function fireActionHook (hook, hookList, params) {
+async function fireActionHook(hook, hookList, params) {
   if (!Array.isArray(hookList) || !hookList.length) {
     return
   }
@@ -213,7 +213,7 @@ async function fireActionHook (hook, hookList, params) {
   }
 }
 
-async function fireStaticHook (hook, hookList, params) {
+async function fireStaticHook(hook, hookList, params) {
   if (!Array.isArray(hookList) || !hookList.length) {
     return
   }
@@ -259,7 +259,7 @@ const timeout = (prom, time, error) => {
   ]).finally(() => clearTimeout(timer))
 }
 
-async function fireResponseHook (hook, hookList, params) {
+async function fireResponseHook(hook, hookList, params) {
   if (!Array.isArray(hookList) || !hookList.length) {
     return
   }

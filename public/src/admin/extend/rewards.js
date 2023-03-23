@@ -51,25 +51,25 @@ define('admin/extend/rewards', ['alerts'], function (alerts) {
     populateInputs()
   }
 
-  function select (el) {
+  function select(el) {
     el.val(el.attr('data-selected'))
     switch (el.attr('name')) {
-      case 'rid':
-        selectReward(el)
-        break
+    case 'rid':
+      selectReward(el)
+      break
     }
   }
 
-  function update (el) {
+  function update(el) {
     el.attr('data-selected', el.val())
     switch (el.attr('name')) {
-      case 'rid':
-        selectReward(el)
-        break
+    case 'rid':
+      selectReward(el)
+      break
     }
   }
 
-  function selectReward (el) {
+  function selectReward(el) {
     const parent = el.parents('[data-rid]')
     const div = parent.find('.inputs')
     let inputs
@@ -92,15 +92,15 @@ define('admin/extend/rewards', ['alerts'], function (alerts) {
     inputs.forEach(function (input) {
       html += '<label for="' + input.name + '">' + input.label + '<br />'
       switch (input.type) {
-        case 'select':
-          html += '<select class="form-control" name="' + input.name + '">'
-          input.values.forEach(function (value) {
-            html += '<option value="' + value.value + '">' + value.name + '</option>'
-          })
-          break
-        case 'text':
-          html += '<input type="text" class="form-control" name="' + input.name + '" />'
-          break
+      case 'select':
+        html += '<select class="form-control" name="' + input.name + '">'
+        input.values.forEach(function (value) {
+          html += '<option value="' + value.value + '">' + value.name + '</option>'
+        })
+        break
+      case 'text':
+        html += '<input type="text" class="form-control" name="' + input.name + '" />'
+        break
       }
       html += '</label><br />'
     })
@@ -108,7 +108,7 @@ define('admin/extend/rewards', ['alerts'], function (alerts) {
     div.html(html)
   }
 
-  function populateInputs () {
+  function populateInputs() {
     $('[data-rid]').each(function (i) {
       const div = $(this).find('.inputs')
       const rewards = active[i].rewards
@@ -121,7 +121,7 @@ define('admin/extend/rewards', ['alerts'], function (alerts) {
     })
   }
 
-  function newReward () {
+  function newReward() {
     const ul = $('#active')
 
     const data = {
@@ -130,11 +130,11 @@ define('admin/extend/rewards', ['alerts'], function (alerts) {
         value: '',
         claimable: 1,
         rid: null,
-        id: null
+        id: null,
       }],
       conditions,
       conditionals,
-      rewards: available
+      rewards: available,
     }
 
     app.parseAndTranslate('admin/extend/rewards', 'active', data, function (li) {
@@ -143,7 +143,7 @@ define('admin/extend/rewards', ['alerts'], function (alerts) {
     })
   }
 
-  function saveRewards () {
+  function saveRewards() {
     const activeRewards = []
 
     $('#active li').each(function () {

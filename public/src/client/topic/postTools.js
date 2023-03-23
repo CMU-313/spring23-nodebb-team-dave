@@ -9,7 +9,7 @@ define('forum/topic/postTools', [
   'api',
   'bootbox',
   'alerts',
-  'hooks'
+  'hooks',
 ], function (share, navigator, components, translator, votes, api, bootbox, alerts, hooks) {
   const PostTools = {}
 
@@ -29,7 +29,7 @@ define('forum/topic/postTools', [
     PostTools.updatePostCount(ajaxify.data.postcount)
   }
 
-  function renderMenu () {
+  function renderMenu() {
     $('[component="topic"]').on('show.bs.dropdown', '.moderator-tools', function () {
       const $this = $(this)
       const dropdownMenu = $this.find('.dropdown-menu')
@@ -54,7 +54,7 @@ define('forum/topic/postTools', [
         new clipboard('[data-clipboard-text]')
 
         hooks.fire('action:post.tools.load', {
-          element: dropdownMenu
+          element: dropdownMenu,
         })
       })
     })
@@ -84,7 +84,7 @@ define('forum/topic/postTools', [
     navigator.setCount(postCount)
   }
 
-  function addPostHandlers (tid) {
+  function addPostHandlers(tid) {
     const postContainer = components.get('topic')
 
     handleSelectionTooltip()
@@ -110,7 +110,7 @@ define('forum/topic/postTools', [
       translator.translate('[[topic:link_back, ' + ajaxify.data.titleRaw + ', ' + config.relative_path + '/topic/' + ajaxify.data.slug + ']]', function (body) {
         hooks.fire('action:composer.topic.new', {
           cid: ajaxify.data.cid,
-          body
+          body,
         })
       })
     })
@@ -136,7 +136,7 @@ define('forum/topic/postTools', [
       require(['flags'], function (flags) {
         flags.showFlagModal({
           type: 'post',
-          id: pid
+          id: pid,
         })
       })
     })
@@ -146,7 +146,7 @@ define('forum/topic/postTools', [
       require(['flags'], function (flags) {
         flags.showFlagModal({
           type: 'user',
-          id: uid
+          id: uid,
         })
       })
     })
@@ -166,7 +166,7 @@ define('forum/topic/postTools', [
 
       if (checkDuration(postEditDuration, timestamp, 'post-edit-duration-expired')) {
         hooks.fire('action:composer.post.edit', {
-          pid: getData(btn, 'data-pid')
+          pid: getData(btn, 'data-pid'),
         })
       }
     })
@@ -189,7 +189,7 @@ define('forum/topic/postTools', [
       }
     })
 
-    function checkDuration (duration, postTimestamp, languageKey) {
+    function checkDuration(duration, postTimestamp, languageKey) {
       if (!ajaxify.data.privileges.isAdminOrMod && duration && Date.now() - postTimestamp > duration * 1000) {
         const numDays = Math.floor(duration / 86400)
         const numHours = Math.floor((duration % 86400) / 3600)
@@ -258,7 +258,7 @@ define('forum/topic/postTools', [
     })
   }
 
-  async function onReplyClicked (button, tid) {
+  async function onReplyClicked(button, tid) {
     const selectedNode = await getSelectedNode()
 
     showStaleWarning(async function () {
@@ -278,21 +278,21 @@ define('forum/topic/postTools', [
           topicName: ajaxify.data.titleRaw,
           username,
           text: selectedNode.text,
-          selectedPid: selectedNode.pid
+          selectedPid: selectedNode.pid,
         })
       } else {
         hooks.fire('action:composer.post.new', {
           tid,
           pid: toPid,
           topicName: ajaxify.data.titleRaw,
-          text: username ? username + ' ' : ($('[component="topic/quickreply/text"]').val() || '')
+          text: username ? username + ' ' : ($('[component="topic/quickreply/text"]').val() || ''),
         })
       }
     })
   }
 
   // Below is the function that leads to backend of endorse
-  function endorsePost (button, pid) {
+  function endorsePost(button, pid) {
     const method = button.attr('data-endorsed') === 'true' ? 'del' : 'put'
 
     api[method](`/posts/${pid}/endorse`, undefined, function (err) {
@@ -305,20 +305,20 @@ define('forum/topic/postTools', [
     return false
   }
 
-  async function onQuoteClicked (button, tid) {
+  async function onQuoteClicked(button, tid) {
     const selectedNode = await getSelectedNode()
 
     showStaleWarning(async function () {
       const username = await getUserSlug(button)
       const toPid = getData(button, 'data-pid')
 
-      function quote (text) {
+      function quote(text) {
         hooks.fire('action:composer.addQuote', {
           tid,
           pid: toPid,
           username,
           topicName: ajaxify.data.titleRaw,
-          text
+          text,
         })
       }
 
@@ -335,7 +335,7 @@ define('forum/topic/postTools', [
     })
   }
 
-  async function getSelectedNode () {
+  async function getSelectedNode() {
     let selectedText = ''
     let selectedPid
     let username = ''
@@ -368,7 +368,7 @@ define('forum/topic/postTools', [
     return { text: selectedText, pid: selectedPid, username }
   }
 
-  function bookmarkPost (button, pid) {
+  function bookmarkPost(button, pid) {
     const method = button.attr('data-bookmarked') === 'false' ? 'put' : 'del'
 
     api[method](`/posts/${pid}/bookmark`, undefined, function (err) {
@@ -381,11 +381,11 @@ define('forum/topic/postTools', [
     return false
   }
 
-  function getData (button, data) {
+  function getData(button, data) {
     return button.parents('[data-pid]').attr(data)
   }
 
-  function getUserSlug (button) {
+  function getUserSlug(button) {
     return new Promise((resolve) => {
       let slug = ''
       if (button.attr('component') === 'topic/reply') {
@@ -415,7 +415,7 @@ define('forum/topic/postTools', [
     })
   }
 
-  function togglePostDelete (button) {
+  function togglePostDelete(button) {
     const pid = getData(button, 'data-pid')
     const postEl = components.get('post', 'pid', pid)
     const action = !postEl.hasClass('deleted') ? 'delete' : 'restore'
@@ -423,11 +423,11 @@ define('forum/topic/postTools', [
     postAction(action, pid)
   }
 
-  function purgePost (button) {
+  function purgePost(button) {
     postAction('purge', getData(button, 'data-pid'))
   }
 
-  async function postAction (action, pid) {
+  async function postAction(action, pid) {
     ({ action } = await hooks.fire(`static:post.${action}`, { action, pid }))
     if (!action) {
       return
@@ -444,7 +444,7 @@ define('forum/topic/postTools', [
     })
   }
 
-  function openChat (button) {
+  function openChat(button) {
     const post = button.parents('[data-pid]')
     require(['chat'], function (chat) {
       chat.newChat(post.attr('data-uid'))
@@ -453,7 +453,7 @@ define('forum/topic/postTools', [
     return false
   }
 
-  function showStaleWarning (callback) {
+  function showStaleWarning(callback) {
     const staleThreshold =
             Math.min(Date.now() - (1000 * 60 * 60 * 24 * ajaxify.data.topicStaleDays), 8640000000000000)
     if (staleReplyAnyway || ajaxify.data.lastposttime >= staleThreshold) {
@@ -470,7 +470,7 @@ define('forum/topic/postTools', [
           callback: function () {
             staleReplyAnyway = true
             callback()
-          }
+          },
         },
         create: {
           label: '[[topic:stale.create]]',
@@ -480,12 +480,12 @@ define('forum/topic/postTools', [
               hooks.fire('action:composer.topic.new', {
                 cid: ajaxify.data.cid,
                 body,
-                fromStaleTopic: true
+                fromStaleTopic: true,
               })
             })
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     warning.modal()
@@ -493,7 +493,7 @@ define('forum/topic/postTools', [
 
   const selectionChangeFn = utils.debounce(selectionChange, 100)
 
-  function handleSelectionTooltip () {
+  function handleSelectionTooltip() {
     if (!ajaxify.data.privileges['topics:reply']) {
       return
     }
@@ -503,7 +503,7 @@ define('forum/topic/postTools', [
     $(document).off('selectionchange', selectionChangeFn).on('selectionchange', selectionChangeFn)
   }
 
-  function selectionChange () {
+  function selectionChange() {
     const selectionEmpty = window.getSelection().toString() === ''
     if (selectionEmpty) {
       $('[component="selection/tooltip"]').addClass('hidden')
@@ -512,7 +512,7 @@ define('forum/topic/postTools', [
     }
   }
 
-  async function delayedTooltip () {
+  async function delayedTooltip() {
     let selectionTooltip = $('[component="selection/tooltip"]')
     selectionTooltip.addClass('hidden')
     if (selectionTooltip.attr('data-ajaxify') === '1') {
@@ -553,7 +553,7 @@ define('forum/topic/postTools', [
       const tooltipWidth = selectionTooltip.outerWidth(true)
       selectionTooltip.css({
         top: lastRect.bottom + $(window).scrollTop(),
-        left: tooltipWidth > lastRect.width ? lastRect.left : lastRect.left + lastRect.width - tooltipWidth
+        left: tooltipWidth > lastRect.width ? lastRect.left : lastRect.left + lastRect.width - tooltipWidth,
       })
     }
   }

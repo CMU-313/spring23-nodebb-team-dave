@@ -188,7 +188,7 @@ module.exports = function (Categories) {
     await Categories.updateRecentTidForCid(cid)
   }
 
-  async function filterScheduledTids (tids) {
+  async function filterScheduledTids(tids) {
     const scores = await db.sortedSetScores('topics:scheduled', tids)
     const now = Date.now()
     return tids.filter((tid, index) => tid && (!scores[index] || scores[index] <= now))

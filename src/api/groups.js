@@ -211,7 +211,7 @@ groupsAPI.rescind = async (caller, data) => {
   })
 }
 
-async function isOwner (caller, groupName) {
+async function isOwner(caller, groupName) {
   if (typeof groupName !== 'string') {
     throw new Error('[[error:invalid-group-name]]')
   }
@@ -228,7 +228,7 @@ async function isOwner (caller, groupName) {
   }
 }
 
-function logGroupEvent (caller, event, additional) {
+function logGroupEvent(caller, event, additional) {
   events.log({
     type: event,
     uid: caller.uid,

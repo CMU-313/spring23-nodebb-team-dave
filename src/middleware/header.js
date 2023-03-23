@@ -53,7 +53,7 @@ middleware.buildHeader = helpers.try(async (req, res, next) => {
 
 middleware.buildHeaderAsync = util.promisify(middleware.buildHeader)
 
-middleware.renderHeader = async function renderHeader (req, res, data) {
+middleware.renderHeader = async function renderHeader(req, res, data) {
   const registrationType = meta.config.registrationType || 'normal'
   res.locals.config = res.locals.config || {}
   const templateValues = {
@@ -158,7 +158,7 @@ middleware.renderHeader = async function renderHeader (req, res, data) {
   return await req.app.renderAsync('header', hookReturn.templateValues)
 }
 
-async function appendUnreadCounts ({ uid, navigation, unreadData, query }) {
+async function appendUnreadCounts({ uid, navigation, unreadData, query }) {
   const originalRoutes = navigation.map(nav => nav.originalRoute)
   const calls = {
     unreadData: topics.getUnreadData({ uid, query }),
@@ -201,7 +201,7 @@ async function appendUnreadCounts ({ uid, navigation, unreadData, query }) {
 
   const { tidsByFilter } = results.unreadData
   navigation = navigation.map((item) => {
-    function modifyNavItem (item, route, filter, content) {
+    function modifyNavItem(item, route, filter, content) {
       if (item && item.originalRoute === route) {
         unreadData[filter] = _.zipObject(tidsByFilter[filter], tidsByFilter[filter].map(() => true))
         item.content = content
@@ -230,7 +230,7 @@ async function appendUnreadCounts ({ uid, navigation, unreadData, query }) {
   return { navigation, unreadCount }
 }
 
-middleware.renderFooter = async function renderFooter (req, res, templateValues) {
+middleware.renderFooter = async function renderFooter(req, res, templateValues) {
   const data = await plugins.hooks.fire('filter:middleware.renderFooter', {
     req,
     res,
@@ -248,7 +248,7 @@ middleware.renderFooter = async function renderFooter (req, res, templateValues)
   return await req.app.renderAsync('footer', data.templateValues)
 }
 
-function modifyTitle (obj) {
+function modifyTitle(obj) {
   const title = controllers.helpers.buildTitle(meta.config.homePageTitle || '[[pages:home]]')
   obj.browserTitle = title
 

@@ -35,7 +35,7 @@ module.exports = function (User) {
     return await Promise.all(settings.map(s => onSettingsLoaded(s.uid, s)))
   }
 
-  async function onSettingsLoaded (uid, settings) {
+  async function onSettingsLoaded(uid, settings) {
     const data = await plugins.hooks.fire('filter:user.getSettings', { uid, settings })
     settings = data.settings
 
@@ -80,7 +80,7 @@ module.exports = function (User) {
     return settings
   }
 
-  function getSetting (settings, key, defaultValue) {
+  function getSetting(settings, key, defaultValue) {
     if (settings[key] || settings[key] === 0) {
       return settings[key]
     } else if (meta.config[key] || meta.config[key] === 0) {

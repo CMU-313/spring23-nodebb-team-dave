@@ -58,7 +58,7 @@ uploadsController.uploadPost = async function (req, res) {
   })
 }
 
-async function uploadAsImage (req, uploadedFile) {
+async function uploadAsImage(req, uploadedFile) {
   const canUpload = await privileges.global.can('upload:post:image', req.uid)
   if (!canUpload) {
     throw new Error('[[error:no-privileges]]')
@@ -86,7 +86,7 @@ async function uploadAsImage (req, uploadedFile) {
   return { url: fileObj.url }
 }
 
-async function uploadAsFile (req, uploadedFile) {
+async function uploadAsFile(req, uploadedFile) {
   const canUpload = await privileges.global.can('upload:post:file', req.uid)
   if (!canUpload) {
     throw new Error('[[error:no-privileges]]')
@@ -99,7 +99,7 @@ async function uploadAsFile (req, uploadedFile) {
   }
 }
 
-async function resizeImage (fileObj) {
+async function resizeImage(fileObj) {
   const imageData = await image.size(fileObj.path)
   if (
     imageData.width < meta.config.resizeImageWidthThreshold ||
@@ -178,7 +178,7 @@ uploadsController.uploadFile = async function (uid, uploadedFile) {
   return await saveFileToLocal(uid, 'files', uploadedFile)
 }
 
-async function saveFileToLocal (uid, folder, uploadedFile) {
+async function saveFileToLocal(uid, folder, uploadedFile) {
   const name = uploadedFile.name || 'upload'
   const extension = path.extname(name) || ''
 
@@ -196,7 +196,7 @@ async function saveFileToLocal (uid, folder, uploadedFile) {
   return data.storedFile
 }
 
-function deleteTempFiles (files) {
+function deleteTempFiles(files) {
   files.forEach(fileObj => file.delete(fileObj.path))
 }
 

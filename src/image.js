@@ -12,7 +12,7 @@ const meta = require('./meta')
 
 const image = module.exports
 
-function requireSharp () {
+function requireSharp() {
   const sharp = require('sharp')
   if (os.platform() === 'win32') {
     // https://github.com/lovell/sharp/issues/1259
@@ -55,21 +55,21 @@ image.resizeImage = async function (data) {
 
     if (data.quality) {
       switch (metadata.format) {
-        case 'jpeg': {
-          sharpImage.jpeg({
-            quality: data.quality,
-            mozjpeg: true
-          })
-          break
-        }
+      case 'jpeg': {
+        sharpImage.jpeg({
+          quality: data.quality,
+          mozjpeg: true
+        })
+        break
+      }
 
-        case 'png': {
-          sharpImage.png({
-            quality: data.quality,
-            compressionLevel: 9
-          })
-          break
-        }
+      case 'png': {
+        sharpImage.png({
+          quality: data.quality,
+          compressionLevel: 9
+        })
+        break
+      }
       }
     }
 

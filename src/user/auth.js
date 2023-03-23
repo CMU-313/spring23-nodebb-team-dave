@@ -57,8 +57,8 @@ module.exports = function (User) {
 
   User.auth.resetLockout = async function (uid) {
     await db.deleteAll([
-            `loginAttempts:${uid}`,
-            `lockout:${uid}`
+      `loginAttempts:${uid}`,
+      `lockout:${uid}`
     ])
   }
 
@@ -84,7 +84,7 @@ module.exports = function (User) {
     return sessions
   }
 
-  async function cleanExpiredSessions (uid) {
+  async function cleanExpiredSessions(uid) {
     const uuidMapping = await db.getObject(`uid:${uid}:sessionUUID:sessionId`)
     if (!uuidMapping) {
       return
@@ -115,7 +115,7 @@ module.exports = function (User) {
     await revokeSessionsAboveThreshold(uid, meta.config.maxUserSessions)
   }
 
-  async function revokeSessionsAboveThreshold (uid, maxUserSessions) {
+  async function revokeSessionsAboveThreshold(uid, maxUserSessions) {
     const activeSessions = await db.getSortedSetRange(`uid:${uid}:sessions`, 0, -1)
     if (activeSessions.length > maxUserSessions) {
       const sessionsToRevoke = activeSessions.slice(0, activeSessions.length - maxUserSessions)

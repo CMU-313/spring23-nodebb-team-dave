@@ -182,10 +182,10 @@ helpers.redirect = function (res, url, permanent) {
   }
 }
 
-function prependRelativePath (url) {
-  return url.startsWith('http://') || url.startsWith('https://')
-    ? url
-    : relative_path + url
+function prependRelativePath(url) {
+  return url.startsWith('http://') || url.startsWith('https://') ?
+    url :
+    relative_path + url
 }
 
 helpers.buildCategoryBreadcrumbs = async function (cid) {
@@ -257,7 +257,7 @@ helpers.getCategoriesByStates = async function (uid, selectedCid, states, privil
   return await getCategoryData(cids, uid, selectedCid, states, privilege)
 }
 
-async function getCategoryData (cids, uid, selectedCid, states, privilege) {
+async function getCategoryData(cids, uid, selectedCid, states, privilege) {
   const [visibleCategories, selectData] = await Promise.all([
     helpers.getVisibleCategories({
       cids, uid, states, privilege, showLinks: false
@@ -382,7 +382,7 @@ helpers.setCategoryTeaser = function (category) {
   }
 }
 
-function checkVisibleChildren (c, cidToAllowed, cidToWatchState, states) {
+function checkVisibleChildren(c, cidToAllowed, cidToWatchState, states) {
   if (!c || !Array.isArray(c.children)) {
     return false
   }
@@ -439,15 +439,15 @@ helpers.formatApiResponse = async (statusCode, res, payload) => {
     let code = 'ok'
     let message = 'OK'
     switch (statusCode) {
-      case 202:
-        code = 'accepted'
-        message = 'Accepted'
-        break
+    case 202:
+      code = 'accepted'
+      message = 'Accepted'
+      break
 
-      case 204:
-        code = 'no-content'
-        message = 'No Content'
-        break
+    case 204:
+      code = 'no-content'
+      message = 'No Content'
+      break
     }
 
     res.status(statusCode).json({
@@ -460,17 +460,17 @@ helpers.formatApiResponse = async (statusCode, res, payload) => {
 
     // Update status code based on some common error codes
     switch (message) {
-      case '[[error:user-banned]]':
-        Object.assign(response, await generateBannedResponse(res))
-        // intentional fall through
+    case '[[error:user-banned]]':
+      Object.assign(response, await generateBannedResponse(res))
+      // intentional fall through
 
-      case '[[error:no-privileges]]':
-        statusCode = 403
-        break
+    case '[[error:no-privileges]]':
+      statusCode = 403
+      break
 
-      case '[[error:invalid-uid]]':
-        statusCode = 401
-        break
+    case '[[error:invalid-uid]]':
+      statusCode = 401
+      break
     }
 
     if (message.startsWith('[[error:required-parameters-missing, ')) {
@@ -494,7 +494,7 @@ helpers.formatApiResponse = async (statusCode, res, payload) => {
   }
 }
 
-async function generateBannedResponse (res) {
+async function generateBannedResponse(res) {
   const response = {}
   const [reason, expiry] = await Promise.all([
     user.bans.getReason(res.req.uid),
@@ -514,7 +514,7 @@ async function generateBannedResponse (res) {
 }
 
 helpers.generateError = async (statusCode, message, res) => {
-  async function translateMessage (message) {
+  async function translateMessage(message) {
     const { req } = res
     const settings = req.query.lang ? null : await user.getSettings(req.uid)
     const language = String(req.query.lang || settings.userLang || meta.config.defaultLang)
@@ -533,41 +533,41 @@ helpers.generateError = async (statusCode, message, res) => {
   }
 
   switch (statusCode) {
-    case 400:
-      payload.status.code = 'bad-request'
-      break
+  case 400:
+    payload.status.code = 'bad-request'
+    break
 
-    case 401:
-      payload.status.code = 'not-authorised'
-      break
+  case 401:
+    payload.status.code = 'not-authorised'
+    break
 
-    case 403:
-      payload.status.code = 'forbidden'
-      break
+  case 403:
+    payload.status.code = 'forbidden'
+    break
 
-    case 404:
-      payload.status.code = 'not-found'
-      break
+  case 404:
+    payload.status.code = 'not-found'
+    break
 
-    case 426:
-      payload.status.code = 'upgrade-required'
-      break
+  case 426:
+    payload.status.code = 'upgrade-required'
+    break
 
-    case 429:
-      payload.status.code = 'too-many-requests'
-      break
+  case 429:
+    payload.status.code = 'too-many-requests'
+    break
 
-    case 500:
-      payload.status.code = 'internal-server-error'
-      break
+  case 500:
+    payload.status.code = 'internal-server-error'
+    break
 
-    case 501:
-      payload.status.code = 'not-implemented'
-      break
+  case 501:
+    payload.status.code = 'not-implemented'
+    break
 
-    case 503:
-      payload.status.code = 'service-unavailable'
-      break
+  case 503:
+    payload.status.code = 'service-unavailable'
+    break
   }
 
   return payload

@@ -186,7 +186,7 @@ Tags.parse = async (req, data, meta, link) => {
   return { meta, link }
 }
 
-function addIfNotExists (meta, keyName, tagName, value) {
+function addIfNotExists(meta, keyName, tagName, value) {
   let exists = false
   meta.forEach((tag) => {
     if (tag[keyName] === tagName) {
@@ -203,7 +203,7 @@ function addIfNotExists (meta, keyName, tagName, value) {
   }
 }
 
-function stripRelativePath (url) {
+function stripRelativePath(url) {
   if (url.startsWith(relative_path)) {
     return url.slice(relative_path.length)
   }
@@ -211,7 +211,7 @@ function stripRelativePath (url) {
   return url
 }
 
-async function addSiteOGImage (meta) {
+async function addSiteOGImage(meta) {
   const key = Meta.config['og:image'] ? 'og:image' : 'brand:logo'
   let ogImage = stripRelativePath(Meta.config[key] || '')
   if (ogImage && !ogImage.startsWith('http')) {
@@ -231,37 +231,37 @@ async function addSiteOGImage (meta) {
     for (const property of properties) {
       if (image.hasOwnProperty(property)) {
         switch (property) {
-          case 'url': {
-            meta.push({
-              property: 'og:image',
-              content: image.url,
-              noEscape: true
-            }, {
-              property: 'og:image:url',
-              content: image.url,
-              noEscape: true
-            })
-            break
-          }
+        case 'url': {
+          meta.push({
+            property: 'og:image',
+            content: image.url,
+            noEscape: true
+          }, {
+            property: 'og:image:url',
+            content: image.url,
+            noEscape: true
+          })
+          break
+        }
 
-          case 'secure_url': {
-            meta.push({
-              property: `og:${property}`,
-              content: image[property],
-              noEscape: true
-            })
-            break
-          }
+        case 'secure_url': {
+          meta.push({
+            property: `og:${property}`,
+            content: image[property],
+            noEscape: true
+          })
+          break
+        }
 
-          case 'type':
-          case 'alt':
-          case 'width':
-          case 'height': {
-            meta.push({
-              property: `og:image:${property}`,
-              content: String(image[property])
-            })
-          }
+        case 'type':
+        case 'alt':
+        case 'width':
+        case 'height': {
+          meta.push({
+            property: `og:image:${property}`,
+            content: String(image[property])
+          })
+        }
         }
       }
     }

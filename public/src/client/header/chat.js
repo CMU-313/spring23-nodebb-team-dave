@@ -34,19 +34,19 @@ define('forum/header/chat', ['components'], function (components) {
     })
   }
 
-  function onChatMessageReceived (data) {
+  function onChatMessageReceived(data) {
     requireAndCall('onChatMessageReceived', data)
   }
 
-  function onUserStatusChange (data) {
+  function onUserStatusChange(data) {
     requireAndCall('onUserStatusChange', data)
   }
 
-  function onRoomRename (data) {
+  function onRoomRename(data) {
     requireAndCall('onRoomRename', data)
   }
 
-  function requireAndCall (method, param) {
+  function requireAndCall(method, param) {
     require(['chat'], function (chat) {
       chat[method](param)
     })

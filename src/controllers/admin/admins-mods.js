@@ -44,7 +44,7 @@ AdminsMods.get = async function (req, res) {
   })
 }
 
-async function getModeratorsOfCategories (categoryData) {
+async function getModeratorsOfCategories(categoryData) {
   const [moderatorUids, childrenCounts] = await Promise.all([
     categories.getModeratorUids(categoryData.map(c => c.cid)),
     db.sortedSetsCard(categoryData.map(c => `cid:${c.cid}:children`))

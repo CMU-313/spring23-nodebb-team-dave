@@ -47,7 +47,7 @@ const fieldsToEscape = ['iconClass', 'class', 'route', 'id', 'text', 'textClass'
 admin.escapeFields = navItems => toggleEscape(navItems, true)
 admin.unescapeFields = navItems => toggleEscape(navItems, false)
 
-function toggleEscape (navItems, flag) {
+function toggleEscape(navItems, flag) {
   navItems.forEach((item) => {
     if (item) {
       fieldsToEscape.forEach((field) => {
@@ -85,7 +85,7 @@ admin.get = async function () {
   return cache.map(item => ({ ...item }))
 }
 
-async function getAvailable () {
+async function getAvailable() {
   const core = require('../../install/data/navigation.json').map((item) => {
     item.core = true
     item.id = item.id || ''

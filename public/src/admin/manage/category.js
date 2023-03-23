@@ -7,7 +7,7 @@ define('admin/manage/category', [
   'benchpress',
   'api',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (uploader, iconSelect, categorySelector, Benchpress, api, bootbox, alerts) {
   const Category = {}
   let updateHash = {}
@@ -22,7 +22,7 @@ define('admin/manage/category', [
       onSelect: function (selectedCategory) {
         ajaxify.go('admin/manage/categories/' + selectedCategory.cid)
       },
-      showLinks: true
+      showLinks: true,
     })
 
     handleTags()
@@ -60,7 +60,7 @@ define('admin/manage/category', [
           title: 'Updated Categories',
           message: 'Category "' + res.name + '" was successfully updated.',
           type: 'success',
-          timeout: 5000
+          timeout: 5000,
         })
         updateHash = {}
       }).catch(alerts.error)
@@ -73,7 +73,7 @@ define('admin/manage/category', [
 
       Benchpress.render('admin/partials/categories/purge', {
         name: ajaxify.data.category.name,
-        topic_count: ajaxify.data.category.topic_count
+        topic_count: ajaxify.data.category.topic_count,
       }).then(function (html) {
         const modal = bootbox.dialog({
           title: '[[admin/manage/categories:purge]]',
@@ -112,9 +112,9 @@ define('admin/manage/category', [
                 }).catch(alerts.error)
 
                 return false
-              }
-            }
-          }
+              },
+            },
+          },
         })
       })
     })
@@ -138,7 +138,7 @@ define('admin/manage/category', [
                 socket.emit('admin.categories.copySettingsFrom', {
                   fromCid: selectedCid,
                   toCid: ajaxify.data.category.cid,
-                  copyParent: modal.find('#copyParent').prop('checked')
+                  copyParent: modal.find('#copyParent').prop('checked'),
                 }, function (err) {
                   if (err) {
                     return alerts.error(err)
@@ -149,9 +149,9 @@ define('admin/manage/category', [
                   ajaxify.refresh()
                 })
                 return false
-              }
-            }
-          }
+              },
+            },
+          },
         })
         modal.find('.modal-footer button').prop('disabled', true)
         categorySelector.init(modal.find('[component="category-selector"]'), {
@@ -161,7 +161,7 @@ define('admin/manage/category', [
               modal.find('.modal-footer button').prop('disabled', false)
             }
           },
-          showLinks: true
+          showLinks: true,
         })
       })
       return false
@@ -174,7 +174,7 @@ define('admin/manage/category', [
       uploader.show({
         title: '[[admin/manage/categories:alert.upload-image]]',
         route: config.relative_path + '/api/admin/category/uploadpicture',
-        params: { cid }
+        params: { cid },
       }, function (imageUrlOnServer) {
         $('#category-image').val(imageUrlOnServer)
         const previewBox = inputEl.parent().parent().siblings('.category-preview')
@@ -212,7 +212,7 @@ define('admin/manage/category', [
     $('button[data-action="setParent"], button[data-action="changeParent"]').on('click', Category.launchParentSelector)
     $('button[data-action="removeParent"]').on('click', function () {
       api.put('/categories/' + ajaxify.data.category.cid, {
-        parentCid: 0
+        parentCid: 0,
       }).then(() => {
         $('button[data-action="removeParent"]').parent().addClass('hide')
         $('button[data-action="changeParent"]').parent().addClass('hide')
@@ -223,7 +223,7 @@ define('admin/manage/category', [
       const $this = $(this)
       const disabled = $this.attr('data-disabled') === '1'
       api.put('/categories/' + ajaxify.data.category.cid, {
-        disabled: disabled ? 0 : 1
+        disabled: disabled ? 0 : 1,
       }).then(() => {
         $this.translateText(!disabled ? '[[admin/manage/categories:enable]]' : '[[admin/manage/categories:disable]]')
         $this.toggleClass('btn-primary', !disabled).toggleClass('btn-danger', disabled)
@@ -232,7 +232,7 @@ define('admin/manage/category', [
     })
   }
 
-  function modified (el) {
+  function modified(el) {
     let value
     if ($(el).is(':checkbox')) {
       value = $(el).is(':checked') ? 1 : 0
@@ -242,7 +242,7 @@ define('admin/manage/category', [
     const dataName = $(el).attr('data-name')
     const fields = dataName.match(/[^\][.]+/g)
 
-    function setNestedFields (obj, index) {
+    function setNestedFields(obj, index) {
       if (index === fields.length) {
         return
       }
@@ -265,11 +265,11 @@ define('admin/manage/category', [
     app.flags._unsaved = true
   }
 
-  function handleTags () {
+  function handleTags() {
     const tagEl = $('#tag-whitelist')
     tagEl.tagsinput({
       confirmKeys: [13, 44],
-      trimValue: true
+      trimValue: true,
     })
 
     ajaxify.data.category.tagWhitelist.forEach(function (tag) {
@@ -289,7 +289,7 @@ define('admin/manage/category', [
           return
         }
         api.put('/categories/' + ajaxify.data.category.cid, {
-          parentCid
+          parentCid,
         }).then(() => {
           api.get(`/categories/${parentCid}`, {}).then(function (parent) {
             if (parent && parent.icon && parent.name) {
@@ -302,7 +302,7 @@ define('admin/manage/category', [
           $('button[data-action="setParent"]').addClass('hide')
         }).catch(alerts.error)
       },
-      showLinks: true
+      showLinks: true,
     })
   }
 

@@ -38,7 +38,7 @@ define('iconSelect', ['benchpress', 'bootbox'], function (Benchpress, bootbox) {
               el.attr('value', '')
 
               onModified(el)
-            }
+            },
           },
           success: {
             label: 'Select',
@@ -60,9 +60,9 @@ define('iconSelect', ['benchpress', 'bootbox'], function (Benchpress, bootbox) {
               }
 
               onModified(el)
-            }
-          }
-        }
+            },
+          },
+        },
       })
 
       picker.on('show.bs.modal', function () {
@@ -81,7 +81,7 @@ define('iconSelect', ['benchpress', 'bootbox'], function (Benchpress, bootbox) {
         const icons = modalEl.find('.fa-icons i')
         const submitEl = modalEl.find('button.btn-primary')
 
-        function changeSelection (newSelection) {
+        function changeSelection(newSelection) {
           modalEl.find('i.selected').removeClass('selected')
           if (newSelection) {
             newSelection.addClass('selected')

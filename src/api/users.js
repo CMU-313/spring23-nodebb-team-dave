@@ -286,7 +286,7 @@ usersAPI.unmute = async function (caller, data) {
   })
 }
 
-async function isPrivilegedOrSelfAndPasswordMatch (caller, data) {
+async function isPrivilegedOrSelfAndPasswordMatch(caller, data) {
   const { uid } = caller
   const isSelf = parseInt(uid, 10) === parseInt(data.uid, 10)
   const canEdit = await privileges.users.canEdit(uid, data.uid)
@@ -304,7 +304,7 @@ async function isPrivilegedOrSelfAndPasswordMatch (caller, data) {
   }
 }
 
-async function processDeletion ({ uid, method, password, caller }) {
+async function processDeletion({ uid, method, password, caller }) {
   const isTargetAdmin = await user.isAdministrator(uid)
   const isSelf = parseInt(uid, 10) === parseInt(caller.uid, 10)
   const isAdmin = await user.isAdministrator(caller.uid)
@@ -361,7 +361,7 @@ async function processDeletion ({ uid, method, password, caller }) {
   })
 }
 
-async function canDeleteUids (uids) {
+async function canDeleteUids(uids) {
   if (!Array.isArray(uids)) {
     throw new Error('[[error:invalid-data]]')
   }

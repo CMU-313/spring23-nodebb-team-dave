@@ -90,7 +90,7 @@ recentController.getData = async function (req, url, sort) {
   return data
 }
 
-async function canPostTopic (uid) {
+async function canPostTopic(uid) {
   let cids = await categories.getAllCidsFromSet('categories:cid')
   cids = await privileges.categories.filterCids('topics:create', cids, uid)
   return cids.length > 0

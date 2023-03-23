@@ -6,7 +6,7 @@ define('notifications', [
   'navigator',
   'tinycon',
   'hooks',
-  'alerts'
+  'alerts',
 ], function (translator, components, navigator, Tinycon, hooks, alerts) {
   const Notifications = {}
 
@@ -66,7 +66,7 @@ define('notifications', [
 
           hooks.fire('action:notifications.loaded', {
             notifications: notifs,
-            list: notifList
+            list: notifList,
           })
           callback()
         })
@@ -92,7 +92,7 @@ define('notifications', [
     }
   }
 
-  function markNotification (nid, read, callback) {
+  function markNotification(nid, read, callback) {
     socket.emit('notifications.mark' + (read ? 'Read' : 'Unread'), nid, function (err) {
       if (err) {
         return alerts.error(err)
@@ -107,7 +107,7 @@ define('notifications', [
     })
   }
 
-  function scrollToPostIndexIfOnPage (notifEl) {
+  function scrollToPostIndexIfOnPage(notifEl) {
     // Scroll to index if already in topic (gh#5873)
     const pid = notifEl.attr('data-pid')
     const path = notifEl.attr('data-path')
@@ -133,7 +133,7 @@ define('notifications', [
 
     const payload = {
       count,
-      updateFavicon: true
+      updateFavicon: true,
     }
     hooks.fire('action:notification.updateCount', payload)
 

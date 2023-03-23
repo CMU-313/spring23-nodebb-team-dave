@@ -39,7 +39,7 @@ UserReset.generate = async function (uid) {
   return code
 }
 
-async function canGenerate (uid) {
+async function canGenerate(uid) {
   const score = await db.sortedSetScore('reset:issueDate:uid', uid)
   if (score > Date.now() - (1000 * 60)) {
     throw new Error('[[error:reset-rate-limited]]')
@@ -75,8 +75,8 @@ UserReset.commit = async function (code, password) {
     throw new Error('[[error:reset-code-not-valid]]')
   }
   const userData = await db.getObjectFields(
-        `user:${uid}`,
-        ['password', 'passwordExpiry', 'password:shaWrapped']
+    `user:${uid}`,
+    ['password', 'passwordExpiry', 'password:shaWrapped']
   )
   const ok = await Password.compare(password, userData.password, !!parseInt(userData['password:shaWrapped'], 10))
   if (ok) {
@@ -156,7 +156,7 @@ UserReset.cleanByUid = async function (uid) {
   await cleanTokensAndUids(tokensToClean, uid)
 }
 
-async function cleanTokensAndUids (tokens, uids) {
+async function cleanTokensAndUids(tokens, uids) {
   await Promise.all([
     db.deleteObjectFields('reset:uid', tokens),
     db.sortedSetRemove('reset:issueDate', tokens),

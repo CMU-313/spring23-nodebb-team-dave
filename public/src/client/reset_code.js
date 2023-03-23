@@ -21,7 +21,7 @@ define('forum/reset_code', ['alerts', 'zxcvbn'], function (alerts, zxcvbn) {
         resetEl.prop('disabled', true).translateHtml('<i class="fa fa-spin fa-refresh"></i> [[reset_password:changing_password]]')
         socket.emit('user.reset.commit', {
           code: reset_code,
-          password: password.val()
+          password: password.val(),
         }, function (err) {
           if (err) {
             ajaxify.refresh()

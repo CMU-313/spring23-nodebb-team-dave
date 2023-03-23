@@ -36,7 +36,7 @@ define('admin/manage/digest', ['bootbox', 'alerts'], function (bootbox, alerts) 
   Digest.send = function (action, uid, callback) {
     socket.emit('admin.digest.resend', {
       action,
-      uid
+      uid,
     }, callback)
   }
 

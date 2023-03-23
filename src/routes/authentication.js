@@ -41,7 +41,7 @@ Auth.initialize = function (app, middleware) {
   }
 }
 
-Auth.setAuthVars = function setAuthVars (req) {
+Auth.setAuthVars = function setAuthVars(req) {
   const isSpider = req.isSpider()
   req.loggedIn = !isSpider && !!req.user
   if (req.user) {

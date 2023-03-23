@@ -784,7 +784,7 @@ describe('Admin Controllers', () => {
 
   it('should escape special characters in config', (done) => {
     const plugins = require('../src/plugins')
-    function onConfigGet (config, callback) {
+    function onConfigGet(config, callback) {
       config.someValue = '"foo"'
       config.otherValue = "'123'"
       config.script = '</script>'
@@ -823,7 +823,7 @@ describe('Admin Controllers', () => {
     describe('routeMap parsing', () => {
       it('should allow normal user access to admin pages', async function () {
         this.timeout(50000)
-        function makeRequest (url) {
+        function makeRequest(url) {
           return new Promise((resolve, reject) => {
             request(url, { jar: userJar, json: true }, (err, res, body) => {
               if (err) reject(err)
@@ -873,7 +873,7 @@ describe('Admin Controllers', () => {
     describe('routePrefixMap parsing', () => {
       it('should allow normal user access to admin pages', async () => {
         // this.timeout(50000);
-        function makeRequest (url) {
+        function makeRequest(url) {
           return new Promise((resolve, reject) => {
             request(url, { jar: userJar, json: true }, (err, res, body) => {
               if (err) reject(err)

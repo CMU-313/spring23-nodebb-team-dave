@@ -25,7 +25,7 @@ define('forum/infinitescroll', ['hooks', 'alerts'], function (hooks, alerts) {
     }
   }
 
-  function startScrollTimeout () {
+  function startScrollTimeout() {
     if (scrollTimeout) {
       clearTimeout(scrollTimeout)
     }
@@ -35,7 +35,7 @@ define('forum/infinitescroll', ['hooks', 'alerts'], function (hooks, alerts) {
     }, 60)
   }
 
-  function onScroll () {
+  function onScroll() {
     const bsEnv = utils.findBootstrapEnvironment()
     const mobileComposerOpen = (bsEnv === 'xs' || bsEnv === 'sm') && $('html').hasClass('composing')
     if (loadingMore || mobileComposerOpen) {

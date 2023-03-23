@@ -40,7 +40,7 @@ helpers.isAllowedTo = async function (privilege, uidOrGroupName, cid) {
   throw new Error('[[error:invalid-data]]')
 }
 
-async function isAllowedToCids (privilege, uidOrGroupName, cids) {
+async function isAllowedToCids(privilege, uidOrGroupName, cids) {
   if (!privilege) {
     return cids.map(() => false)
   }
@@ -61,7 +61,7 @@ async function isAllowedToCids (privilege, uidOrGroupName, cids) {
   return await checkIfAllowedUser(uidOrGroupName, userKeys, groupKeys)
 }
 
-async function isAllowedToPrivileges (privileges, uidOrGroupName, cid) {
+async function isAllowedToPrivileges(privileges, uidOrGroupName, cid) {
   const groupKeys = privileges.map(privilege => `cid:${cid}:privileges:groups:${privilege}`)
   // Group handling
   if (isNaN(parseInt(uidOrGroupName, 10)) && (uidOrGroupName || '').length) {
@@ -77,7 +77,7 @@ async function isAllowedToPrivileges (privileges, uidOrGroupName, cid) {
   return await checkIfAllowedUser(uidOrGroupName, userKeys, groupKeys)
 }
 
-async function checkIfAllowedUser (uid, userKeys, groupKeys) {
+async function checkIfAllowedUser(uid, userKeys, groupKeys) {
   const [hasUserPrivilege, hasGroupPrivilege] = await Promise.all([
     groups.isMemberOfGroups(uid, userKeys),
     groups.isMemberOfGroupsList(uid, groupKeys)
@@ -85,7 +85,7 @@ async function checkIfAllowedUser (uid, userKeys, groupKeys) {
   return userKeys.map((key, index) => hasUserPrivilege[index] || hasGroupPrivilege[index])
 }
 
-async function checkIfAllowedGroup (groupName, groupKeys) {
+async function checkIfAllowedGroup(groupName, groupKeys) {
   const sets = await Promise.all([
     groups.isMemberOfGroups(groupName, groupKeys),
     groups.isMemberOfGroups('registered-users', groupKeys)
@@ -93,12 +93,12 @@ async function checkIfAllowedGroup (groupName, groupKeys) {
   return groupKeys.map((key, index) => sets[0][index] || sets[1][index])
 }
 
-async function isSystemGroupAllowedToCids (privilege, uid, cids) {
+async function isSystemGroupAllowedToCids(privilege, uid, cids) {
   const groupKeys = cids.map(cid => `cid:${cid}:privileges:groups:${privilege}`)
   return await groups.isMemberOfGroups(uidToSystemGroup[uid], groupKeys)
 }
 
-async function isSystemGroupAllowedToPrivileges (privileges, uid, cid) {
+async function isSystemGroupAllowedToPrivileges(privileges, uid, cid) {
   const groupKeys = privileges.map(privilege => `cid:${cid}:privileges:groups:${privilege}`)
   return await groups.isMemberOfGroups(uidToSystemGroup[uid], groupKeys)
 }
@@ -159,7 +159,7 @@ helpers.getGroupPrivileges = async function (cid, groupPrivileges) {
   return memberData
 }
 
-function moveToFront (groupNames, groupToMove) {
+function moveToFront(groupNames, groupToMove) {
   const index = groupNames.indexOf(groupToMove)
   if (index !== -1) {
     groupNames.splice(0, 0, groupNames.splice(index, 1)[0])

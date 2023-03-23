@@ -18,7 +18,7 @@ module.exports = function (Topics) {
     })
   }
 
-  async function removeTopicPidsFromCid (tid) {
+  async function removeTopicPidsFromCid(tid) {
     const [cid, pids] = await Promise.all([
       Topics.getTopicField(tid, 'cid'),
       Topics.getPids(tid)
@@ -27,7 +27,7 @@ module.exports = function (Topics) {
     await categories.updateRecentTidForCid(cid)
   }
 
-  async function addTopicPidsToCid (tid) {
+  async function addTopicPidsToCid(tid) {
     const [cid, pids] = await Promise.all([
       Topics.getTopicField(tid, 'cid'),
       Topics.getPids(tid)
@@ -72,12 +72,12 @@ module.exports = function (Topics) {
 
     await Promise.all([
       db.deleteAll([
-                `tid:${tid}:followers`,
-                `tid:${tid}:ignorers`,
-                `tid:${tid}:posts`,
-                `tid:${tid}:posts:votes`,
-                `tid:${tid}:bookmarks`,
-                `tid:${tid}:posters`
+        `tid:${tid}:followers`,
+        `tid:${tid}:ignorers`,
+        `tid:${tid}:posts`,
+        `tid:${tid}:posts:votes`,
+        `tid:${tid}:bookmarks`,
+        `tid:${tid}:posters`
       ]),
       db.sortedSetsRemove([
         'topics:tid',
@@ -97,7 +97,7 @@ module.exports = function (Topics) {
     await db.delete(`topic:${tid}`)
   }
 
-  async function deleteFromFollowersIgnorers (tid) {
+  async function deleteFromFollowersIgnorers(tid) {
     const [followers, ignorers] = await Promise.all([
       db.getSetMembers(`tid:${tid}:followers`),
       db.getSetMembers(`tid:${tid}:ignorers`)
@@ -107,26 +107,26 @@ module.exports = function (Topics) {
     await db.sortedSetsRemove(followerKeys.concat(ignorerKeys), tid)
   }
 
-  async function deleteTopicFromCategoryAndUser (tid) {
+  async function deleteTopicFromCategoryAndUser(tid) {
     const topicData = await Topics.getTopicFields(tid, ['cid', 'uid'])
     await Promise.all([
       db.sortedSetsRemove([
-                `cid:${topicData.cid}:tids`,
-                `cid:${topicData.cid}:tids:pinned`,
-                `cid:${topicData.cid}:tids:posts`,
-                `cid:${topicData.cid}:tids:lastposttime`,
-                `cid:${topicData.cid}:tids:votes`,
-                `cid:${topicData.cid}:tids:views`,
-                `cid:${topicData.cid}:recent_tids`,
-                `cid:${topicData.cid}:uid:${topicData.uid}:tids`,
-                `uid:${topicData.uid}:topics`
+        `cid:${topicData.cid}:tids`,
+        `cid:${topicData.cid}:tids:pinned`,
+        `cid:${topicData.cid}:tids:posts`,
+        `cid:${topicData.cid}:tids:lastposttime`,
+        `cid:${topicData.cid}:tids:votes`,
+        `cid:${topicData.cid}:tids:views`,
+        `cid:${topicData.cid}:recent_tids`,
+        `cid:${topicData.cid}:uid:${topicData.uid}:tids`,
+        `uid:${topicData.uid}:topics`
       ], tid),
       user.decrementUserFieldBy(topicData.uid, 'topiccount', 1)
     ])
     await categories.updateRecentTidForCid(topicData.cid)
   }
 
-  async function reduceCounters (tid) {
+  async function reduceCounters(tid) {
     const incr = -1
     await db.incrObjectFieldBy('global', 'topicCount', incr)
     const topicData = await Topics.getTopicFields(tid, ['cid', 'postcount'])

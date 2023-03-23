@@ -2,11 +2,11 @@
 
 define('coverPhoto', [
   'alerts',
-  'vendor/jquery/draggable-background/backgroundDraggable'
+  'vendor/jquery/draggable-background/backgroundDraggable',
 ], function (alerts) {
   const coverPhoto = {
     coverEl: null,
-    saveFn: null
+    saveFn: null,
   }
 
   coverPhoto.init = function (coverEl, saveFn, uploadFn, removeFn) {
@@ -51,18 +51,18 @@ define('coverPhoto', [
     }
   }
 
-  function enableDragging (coverEl) {
+  function enableDragging(coverEl) {
     coverEl.toggleClass('active', 1)
       .backgroundDraggable({
         axis: 'y',
-        units: 'percent'
+        units: 'percent',
       })
 
     alerts.alert({
       alert_id: 'drag_start',
       title: '[[modules:cover.dragging_title]]',
       message: '[[modules:cover.dragging_message]]',
-      timeout: 5000
+      timeout: 5000,
     })
   }
 

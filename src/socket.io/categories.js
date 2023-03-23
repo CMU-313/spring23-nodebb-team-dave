@@ -14,7 +14,7 @@ SocketCategories.getRecentReplies = async function (socket, cid) {
 }
 
 SocketCategories.get = async function (socket) {
-  async function getCategories () {
+  async function getCategories() {
     const cids = await categories.getCidsByPrivilege('categories:cid', socket.uid, 'find')
     return await categories.getCategoriesData(cids)
   }
@@ -119,7 +119,7 @@ SocketCategories.ignore = async function (socket, data) {
   return await ignoreOrWatch(user.ignoreCategory, socket, data)
 }
 
-async function ignoreOrWatch (fn, socket, data) {
+async function ignoreOrWatch(fn, socket, data) {
   let targetUid = socket.uid
   const cids = Array.isArray(data.cid) ? data.cid.map(cid => parseInt(cid, 10)) : [parseInt(data.cid, 10)]
   if (data.hasOwnProperty('uid')) {

@@ -2,7 +2,7 @@
 
 define('forum/login', ['hooks', 'translator', 'jquery-form'], function (hooks, translator) {
   const Login = {
-    _capsState: false
+    _capsState: false,
   }
 
   Login.init = function () {
@@ -28,7 +28,7 @@ define('forum/login', ['hooks', 'translator', 'jquery-form'], function (hooks, t
         hooks.fire('action:app.login')
         formEl.ajaxSubmit({
           headers: {
-            'x-csrf-token': config.csrf_token
+            'x-csrf-token': config.csrf_token,
           },
           beforeSend: function () {
             app.flags._login = true
@@ -49,9 +49,9 @@ define('forum/login', ['hooks', 'translator', 'jquery-form'], function (hooks, t
             if (data.status === 403 && data.responseText === 'Forbidden') {
               window.location.href = config.relative_path + '/login?error=csrf-invalid'
             } else if (errInfo && errInfo.hasOwnProperty('banned_until')) {
-              message = errInfo.banned_until
-                ? translator.compile('error:user-banned-reason-until', (new Date(errInfo.banned_until).toLocaleString()), errInfo.reason)
-                : '[[error:user-banned-reason, ' + errInfo.reason + ']]'
+              message = errInfo.banned_until ?
+                translator.compile('error:user-banned-reason-until', (new Date(errInfo.banned_until).toLocaleString()), errInfo.reason) :
+                '[[error:user-banned-reason, ' + errInfo.reason + ']]'
             }
             errorEl.find('p').translateText(message)
             errorEl.show()
@@ -61,7 +61,7 @@ define('forum/login', ['hooks', 'translator', 'jquery-form'], function (hooks, t
             if ($('#password:focus').length) {
               $('#password').select()
             }
-          }
+          },
         })
       }
     })

@@ -26,7 +26,7 @@ module.exports = function (module) {
     }
   }
 
-  async function countSets (sets, limit) {
+  async function countSets(sets, limit) {
     const objects = module.client.collection('objects')
     const counts = await Promise.all(
       sets.map(s => objects.countDocuments({ _key: s }, {
@@ -52,7 +52,7 @@ module.exports = function (module) {
     return await getSortedSetRevIntersect(params)
   }
 
-  async function getSortedSetRevIntersect (params) {
+  async function getSortedSetRevIntersect(params) {
     params.start = params.hasOwnProperty('start') ? params.start : 0
     params.stop = params.hasOwnProperty('stop') ? params.stop : -1
     params.weights = params.weights || []
@@ -75,7 +75,7 @@ module.exports = function (module) {
     return await intersectAggregate(params)
   }
 
-  async function intersectSingle (params) {
+  async function intersectSingle(params) {
     const objects = module.client.collection('objects')
     const sortSet = params.sets[params.weights.indexOf(1)]
     if (sortSet === params.counts.smallestSet) {
@@ -114,7 +114,7 @@ module.exports = function (module) {
     return items
   }
 
-  async function intersectBatch (params) {
+  async function intersectBatch(params) {
     const project = { _id: 0, value: 1 }
     if (params.withScores) {
       project.score = 1
@@ -161,7 +161,7 @@ module.exports = function (module) {
     return inters
   }
 
-  async function intersectAggregate (params) {
+  async function intersectAggregate(params) {
     const aggregate = {}
 
     if (params.aggregate) {

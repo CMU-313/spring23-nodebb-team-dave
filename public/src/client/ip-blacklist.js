@@ -18,14 +18,14 @@ define('forum/ip-blacklist', ['Chart', 'benchpress', 'bootbox', 'alerts'], funct
         alerts.alert({
           type: 'success',
           alert_id: 'blacklist-saved',
-          title: '[[ip-blacklist:alerts.applied-success]]'
+          title: '[[ip-blacklist:alerts.applied-success]]',
         })
       })
     })
 
     $('[data-action="test"]').on('click', function () {
       socket.emit('blacklist.validate', {
-        rules: blacklist.val()
+        rules: blacklist.val(),
       }, function (err, data) {
         if (err) {
           return alerts.error(err)
@@ -66,9 +66,9 @@ define('forum/ip-blacklist', ['Chart', 'benchpress', 'bootbox', 'alerts'], funct
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(186,139,175,1)',
-            data: ajaxify.data.analytics.hourly
-          }
-        ]
+            data: ajaxify.data.analytics.hourly,
+          },
+        ],
       },
       'blacklist:daily': {
         labels: dailyLabels,
@@ -81,10 +81,10 @@ define('forum/ip-blacklist', ['Chart', 'benchpress', 'bootbox', 'alerts'], funct
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(151,187,205,1)',
-            data: ajaxify.data.analytics.daily
-          }
-        ]
-      }
+            data: ajaxify.data.analytics.daily,
+          },
+        ],
+      },
     }
 
     hourlyCanvas.width = $(hourlyCanvas).parent().width()
@@ -97,16 +97,16 @@ define('forum/ip-blacklist', ['Chart', 'benchpress', 'bootbox', 'alerts'], funct
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
     })
 
     new Chart(dailyCanvas.getContext('2d'), {
@@ -116,16 +116,16 @@ define('forum/ip-blacklist', ['Chart', 'benchpress', 'bootbox', 'alerts'], funct
         responsive: true,
         animation: false,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
     })
   }
 

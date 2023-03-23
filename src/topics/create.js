@@ -45,8 +45,8 @@ module.exports = function (Topics) {
 
     const timestampedSortedSetKeys = [
       'topics:tid',
-            `cid:${topicData.cid}:tids`,
-            `cid:${topicData.cid}:uid:${topicData.uid}:tids`
+      `cid:${topicData.cid}:tids`,
+      `cid:${topicData.cid}:uid:${topicData.uid}:tids`
     ]
 
     const scheduled = timestamp > Date.now()
@@ -58,9 +58,9 @@ module.exports = function (Topics) {
       db.sortedSetsAdd(timestampedSortedSetKeys, timestamp, topicData.tid),
       db.sortedSetsAdd([
         'topics:views', 'topics:posts', 'topics:votes',
-                `cid:${topicData.cid}:tids:votes`,
-                `cid:${topicData.cid}:tids:posts`,
-                `cid:${topicData.cid}:tids:views`
+        `cid:${topicData.cid}:tids:votes`,
+        `cid:${topicData.cid}:tids:posts`,
+        `cid:${topicData.cid}:tids:views`
       ], 0, topicData.tid),
       user.addTopicIdToUser(topicData.uid, topicData.tid, timestamp),
       db.incrObjectField(`category:${topicData.cid}`, 'topic_count'),
@@ -210,7 +210,7 @@ module.exports = function (Topics) {
     return postData
   }
 
-  async function onNewPost (postData, data) {
+  async function onNewPost(postData, data) {
     const { tid } = postData
     const { uid } = postData
     await Topics.markAsUnreadForAll(tid)
@@ -253,7 +253,7 @@ module.exports = function (Topics) {
     check(content, meta.config.minimumPostLength, meta.config.maximumPostLength, 'content-too-short', 'content-too-long')
   }
 
-  function check (item, min, max, minError, maxError) {
+  function check(item, min, max, minError, maxError) {
     // Trim and remove HTML (latter for composers that send in HTML, like redactor)
     if (typeof item === 'string') {
       item = utils.stripHTMLTags(item).trim()
@@ -266,7 +266,7 @@ module.exports = function (Topics) {
     }
   }
 
-  async function guestHandleValid (data) {
+  async function guestHandleValid(data) {
     if (meta.config.allowGuestHandles && parseInt(data.uid, 10) === 0 && data.handle) {
       if (data.handle.length > meta.config.maximumUsernameLength) {
         throw new Error('[[error:guest-handle-invalid]]')
@@ -278,7 +278,7 @@ module.exports = function (Topics) {
     }
   }
 
-  async function canReply (data, topicData) {
+  async function canReply(data, topicData) {
     if (!topicData) {
       throw new Error('[[error:no-topic]]')
     }

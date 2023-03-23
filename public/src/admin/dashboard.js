@@ -1,27 +1,27 @@
 'use strict'
 
 define('admin/dashboard', [
-  'Chart', 'translator', 'benchpress', 'bootbox', 'alerts'
+  'Chart', 'translator', 'benchpress', 'bootbox', 'alerts',
 ], function (Chart, translator, Benchpress, bootbox, alerts) {
   const Admin = {}
   const intervals = {
     rooms: false,
-    graphs: false
+    graphs: false,
   }
   let isMobile = false
   const graphData = {
     rooms: {},
-    traffic: {}
+    traffic: {},
   }
   const currentGraph = {
     units: 'hours',
-    until: undefined
+    until: undefined,
   }
 
   const DEFAULTS = {
     roomInterval: 10000,
     graphInterval: 15000,
-    realtimeInterval: 1500
+    realtimeInterval: 1500,
   }
 
   const usedTopicColors = []
@@ -91,7 +91,7 @@ define('admin/dashboard', [
     traffic: null,
     registered: null,
     presence: null,
-    topics: null
+    topics: null,
   }
 
   const topicColors = ['#bf616a', '#5B90BF', '#d08770', '#ebcb8b', '#a3be8c', '#96b5b4', '#8fa1b3', '#b48ead', '#ab7967', '#46BFBD']
@@ -127,7 +127,7 @@ define('admin/dashboard', [
     }
     /* eslint-enable */
 
-  function setupGraphs (callback) {
+  function setupGraphs(callback) {
     callback = callback || function () {}
     const trafficCanvas = document.getElementById('analytics-traffic')
     const registeredCanvas = document.getElementById('analytics-registered')
@@ -156,7 +156,7 @@ define('admin/dashboard', [
       t.translateKey('admin/dashboard:reading-posts', []),
       t.translateKey('admin/dashboard:browsing-topics', []),
       t.translateKey('admin/dashboard:recent', []),
-      t.translateKey('admin/dashboard:unread', [])
+      t.translateKey('admin/dashboard:unread', []),
     ]).then(function (translations) {
       const data = {
         labels: trafficLabels,
@@ -169,7 +169,7 @@ define('admin/dashboard', [
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(220,220,220,1)',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             label: translations[1],
@@ -179,7 +179,7 @@ define('admin/dashboard', [
             pointHoverBackgroundColor: '#ab4642',
             pointBorderColor: '#fff',
             pointHoverBorderColor: '#ab4642',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             label: translations[2],
@@ -189,7 +189,7 @@ define('admin/dashboard', [
             pointHoverBackgroundColor: '#ba8baf',
             pointBorderColor: '#fff',
             pointHoverBorderColor: '#ba8baf',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             label: translations[3],
@@ -199,7 +199,7 @@ define('admin/dashboard', [
             pointHoverBackgroundColor: '#f7ca88',
             pointBorderColor: '#fff',
             pointHoverBorderColor: '#f7ca88',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           },
           {
             label: translations[4],
@@ -209,9 +209,9 @@ define('admin/dashboard', [
             pointHoverBackgroundColor: 'rgba(151,187,205,1)',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(151,187,205,1)',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-          }
-        ]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          },
+        ],
       }
 
       trafficCanvas.width = $(trafficCanvas).parent().width()
@@ -228,40 +228,40 @@ define('admin/dashboard', [
         options: {
           responsive: true,
           legend: {
-            display: true
+            display: true,
           },
           scales: {
             yAxes: [{
               id: 'left-y-axis',
               ticks: {
                 beginAtZero: true,
-                precision: 0
+                precision: 0,
               },
               type: 'linear',
               position: 'left',
               scaleLabel: {
                 display: true,
-                labelString: translations[0]
-              }
+                labelString: translations[0],
+              },
             }, {
               id: 'right-y-axis',
               ticks: {
                 beginAtZero: true,
                 suggestedMax: 10,
-                precision: 0
+                precision: 0,
               },
               type: 'linear',
               position: 'right',
               scaleLabel: {
                 display: true,
-                labelString: translations[4]
-              }
-            }]
+                labelString: translations[4],
+              },
+            }],
           },
           tooltips: {
-            mode: 'x'
-          }
-        }
+            mode: 'x',
+          },
+        },
       })
 
       graphs.registered = new Chart(registeredCtx, {
@@ -271,15 +271,15 @@ define('admin/dashboard', [
           datasets: [{
             data: [1, 1],
             backgroundColor: ['#F7464A', '#46BFBD'],
-            hoverBackgroundColor: ['#FF5A5E', '#5AD3D1']
-          }]
+            hoverBackgroundColor: ['#FF5A5E', '#5AD3D1'],
+          }],
         },
         options: {
           responsive: true,
           legend: {
-            display: false
-          }
-        }
+            display: false,
+          },
+        },
       })
 
       graphs.presence = new Chart(presenceCtx, {
@@ -289,15 +289,15 @@ define('admin/dashboard', [
           datasets: [{
             data: [1, 1, 1, 1, 1],
             backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#9FB194'],
-            hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#A8B3C5']
-          }]
+            hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#A8B3C5'],
+          }],
         },
         options: {
           responsive: true,
           legend: {
-            display: false
-          }
-        }
+            display: false,
+          },
+        },
       })
 
       graphs.topics = new Chart(topicsCtx, {
@@ -307,15 +307,15 @@ define('admin/dashboard', [
           datasets: [{
             data: [],
             backgroundColor: [],
-            hoverBackgroundColor: []
-          }]
+            hoverBackgroundColor: [],
+          }],
         },
         options: {
           responsive: true,
           legend: {
-            display: false
-          }
-        }
+            display: false,
+          },
+        },
       })
 
       updateTrafficGraph()
@@ -350,9 +350,9 @@ define('admin/dashboard', [
               submit: {
                 label: '[[global:search]]',
                 className: 'btn-primary',
-                callback: submit
-              }
-            }
+                callback: submit,
+              },
+            },
           }).on('shown.bs.modal', function () {
             const date = new Date()
             const today = date.toISOString().slice(0, 10)
@@ -363,7 +363,7 @@ define('admin/dashboard', [
             modal.find('#endRange').val(targetEl.attr('data-endRange') || today)
           })
 
-          function submit () {
+          function submit() {
             // NEED TO ADD VALIDATION HERE FOR YYYY-MM-DD
             const formData = modal.find('form').serializeObject()
             const validRegexp = /\d{4}-\d{2}-\d{2}/
@@ -400,7 +400,7 @@ define('admin/dashboard', [
     })
   }
 
-  function adjustPieCharts () {
+  function adjustPieCharts() {
     $('.pie-chart.legend-up').each(function () {
       const $this = $(this)
 
@@ -412,7 +412,7 @@ define('admin/dashboard', [
     })
   }
 
-  function updateTrafficGraph (units, until, amount) {
+  function updateTrafficGraph(units, until, amount) {
     // until and amount are optional
 
     if (!app.isFocused) {
@@ -423,7 +423,7 @@ define('admin/dashboard', [
       graph: 'traffic',
       units: units || 'hours',
       until,
-      amount
+      amount,
     }, function (err, data) {
       if (err) {
         return alerts.error(err)
@@ -464,13 +464,13 @@ define('admin/dashboard', [
       const newHref = $.param({
         units: units || 'hours',
         until,
-        count: amount
+        count: amount,
       })
       apiEl.attr('href', config.relative_path + '/api/admin/analytics?' + newHref)
     })
   }
 
-  function updateRegisteredGraph (registered, guest) {
+  function updateRegisteredGraph(registered, guest) {
     $('#analytics-legend .registered').parent().find('.count').text(registered)
     $('#analytics-legend .guest').parent().find('.count').text(guest)
     graphs.registered.data.datasets[0].data[0] = registered
@@ -478,7 +478,7 @@ define('admin/dashboard', [
     graphs.registered.update()
   }
 
-  function updatePresenceGraph (users) {
+  function updatePresenceGraph(users) {
     $('#analytics-presence-legend .on-categories').parent().find('.count').text(users.categories)
     $('#analytics-presence-legend .reading-posts').parent().find('.count').text(users.topics)
     $('#analytics-presence-legend .browsing-topics').parent().find('.count').text(users.category)
@@ -493,12 +493,12 @@ define('admin/dashboard', [
     graphs.presence.update()
   }
 
-  function updateTopicsGraph (topics) {
+  function updateTopicsGraph(topics) {
     if (!topics.length) {
       translator.translate('[[admin/dashboard:no-users-browsing]]', function (translated) {
         topics = [{
           title: translated,
-          count: 1
+          count: 1,
         }]
         updateTopicsGraph(topics)
       })
@@ -517,7 +517,7 @@ define('admin/dashboard', [
       graphs.topics.data.datasets[0].hoverBackgroundColor.push(lighten(topicColors[i], 10))
     })
 
-    function buildTopicsLegend () {
+    function buildTopicsLegend() {
       let html = ''
       topics.forEach(function (t, i) {
         const link = t.tid ? '<a title="' + t.title + '"href="' + config.relative_path + '/topic/' + t.tid + '" target="_blank"> ' + t.title + '</a>' : t.title
@@ -535,7 +535,7 @@ define('admin/dashboard', [
     graphs.topics.update()
   }
 
-  function setupRealtimeButton () {
+  function setupRealtimeButton() {
     $('#toggle-realtime .fa').on('click', function () {
       const $this = $(this)
       if ($this.hasClass('fa-toggle-on')) {
@@ -550,7 +550,7 @@ define('admin/dashboard', [
     })
   }
 
-  function initiateDashboard (realtime) {
+  function initiateDashboard(realtime) {
     clearInterval(intervals.rooms)
     clearInterval(intervals.graphs)
 
@@ -565,7 +565,7 @@ define('admin/dashboard', [
     }, realtime ? DEFAULTS.realtimeInterval : DEFAULTS.graphInterval)
   }
 
-  function setupFullscreen () {
+  function setupFullscreen() {
     const container = document.getElementById('analytics-panel')
     const $container = $(container)
     const btn = $container.find('.fa-expand')

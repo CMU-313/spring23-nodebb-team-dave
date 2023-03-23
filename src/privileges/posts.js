@@ -225,7 +225,7 @@ privsPosts.canPurge = async function (pid, uid) {
   return (results.purge && (results.owner || results.isModerator)) || results.isAdmin
 }
 
-async function isAdminOrMod (pid, uid) {
+async function isAdminOrMod(pid, uid) {
   if (parseInt(uid, 10) <= 0) {
     return false
   }

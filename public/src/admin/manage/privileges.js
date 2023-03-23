@@ -8,7 +8,7 @@ define('admin/manage/privileges', [
   'translator',
   'categorySelector',
   'mousetrap',
-  'admin/modules/checkboxRowSelector'
+  'admin/modules/checkboxRowSelector',
 ], function (api, autocomplete, bootbox, alerts, translator, categorySelector, mousetrap, checkboxRowSelector) {
   const Privileges = {}
 
@@ -30,7 +30,7 @@ define('admin/manage/privileges', [
       },
       localCategories: ajaxify.data.categories,
       privilege: 'find',
-      showLinks: true
+      showLinks: true,
     })
 
     Privileges.setupPrivilegeTable()
@@ -140,7 +140,7 @@ define('admin/manage/privileges', [
       ev.preventDefault()
     })
 
-    function throwConfirmModal (method, onConfirm) {
+    function throwConfirmModal(method, onConfirm) {
       const privilegeSubset = getPrivilegeSubset()
       bootbox.confirm(`[[admin/manage/privileges:alert.confirm-${method}, ${privilegeSubset}]]<br /><br />[[admin/manage/privileges:alert.no-undo]]`, function (ok) {
         if (ok) {
@@ -223,11 +223,11 @@ define('admin/manage/privileges', [
   Privileges.exposeSingleAssumedPriv = function (columnNo, sourceGroupName) {
     let inputSelectorFn
     switch (sourceGroupName) {
-      case 'banned-users':
-        inputSelectorFn = () => `.privilege-table tr[data-banned] td[data-privilege]:nth-child(${columnNo}) input`
-        break
-      default:
-        inputSelectorFn = () => `.privilege-table tr[data-group-name]:not([data-group-name="registered-users"],[data-group-name="banned-users"],[data-group-name="guests"],[data-group-name="spiders"]) td[data-privilege]:nth-child(${columnNo}) input, .privilege-table tr[data-uid]:not([data-banned]) td[data-privilege]:nth-child(${columnNo}) input`
+    case 'banned-users':
+      inputSelectorFn = () => `.privilege-table tr[data-banned] td[data-privilege]:nth-child(${columnNo}) input`
+      break
+    default:
+      inputSelectorFn = () => `.privilege-table tr[data-group-name]:not([data-group-name="registered-users"],[data-group-name="banned-users"],[data-group-name="guests"],[data-group-name="spiders"]) td[data-privilege]:nth-child(${columnNo}) input, .privilege-table tr[data-uid]:not([data-banned]) td[data-privilege]:nth-child(${columnNo}) input`
     }
 
     const sourceChecked = getPrivilegeFromColumn(sourceGroupName, columnNo)
@@ -240,7 +240,7 @@ define('admin/manage/privileges', [
     const modal = bootbox.dialog({
       title: '[[admin/manage/categories:alert.find-user]]',
       message: '<input class="form-control input-lg" placeholder="[[admin/manage/categories:alert.user-search]]" />',
-      show: true
+      show: true,
     })
 
     modal.on('shown.bs.modal', function () {
@@ -259,7 +259,7 @@ define('admin/manage/privileges', [
     const modal = bootbox.dialog({
       title: '[[admin/manage/categories:alert.find-group]]',
       message: '<input class="form-control input-lg" placeholder="[[admin/manage/categories:alert.group-search]]" />',
-      show: true
+      show: true,
     })
 
     modal.on('shown.bs.modal', function () {
@@ -270,7 +270,7 @@ define('admin/manage/privileges', [
         if (ui.item.group.name === 'administrators') {
           return alerts.alert({
             type: 'warning',
-            message: '[[admin/manage/privileges:alert.admin-warning]]'
+            message: '[[admin/manage/privileges:alert.admin-warning]]',
           })
         }
         addGroupToCategory(ui.item.group.name, function () {
@@ -293,9 +293,9 @@ define('admin/manage/privileges', [
   Privileges.copyPrivilegesFromCategory = function (cid, group) {
     const privilegeSubset = getPrivilegeSubset()
     const message = '<br>' +
-            (group
-              ? `[[admin/manage/privileges:alert.copyPrivilegesFromGroup-warning, ${privilegeSubset}]]`
-              : `[[admin/manage/privileges:alert.copyPrivilegesFrom-warning, ${privilegeSubset}]]`) +
+            (group ?
+              `[[admin/manage/privileges:alert.copyPrivilegesFromGroup-warning, ${privilegeSubset}]]` :
+              `[[admin/manage/privileges:alert.copyPrivilegesFrom-warning, ${privilegeSubset}]]`) +
             '<br><br>[[admin/manage/privileges:alert.no-undo]]'
     categorySelector.modal({
       title: '[[admin/manage/privileges:alert.copyPrivilegesFrom-title]]',
@@ -307,14 +307,14 @@ define('admin/manage/privileges', [
           toCid: cid,
           filter: getPrivilegeFilter(),
           fromCid: selectedCategory.cid,
-          group
+          group,
         }, function (err) {
           if (err) {
             return alerts.error(err)
           }
           ajaxify.refresh()
         })
-      }
+      },
     })
   }
 
@@ -328,7 +328,7 @@ define('admin/manage/privileges', [
     })
   }
 
-  function getPrivilegesFromRow (sourceGroupName) {
+  function getPrivilegesFromRow(sourceGroupName) {
     const privs = []
     $(`.privilege-table tr[data-group-name="${sourceGroupName}"] td input[type="checkbox"]:not(.checkbox-helper)`)
       .parent()
@@ -348,11 +348,11 @@ define('admin/manage/privileges', [
     })).filter(Boolean)
   }
 
-  function getPrivilegeFromColumn (sourceGroupName, columnNo) {
+  function getPrivilegeFromColumn(sourceGroupName, columnNo) {
     return $(`.privilege-table tr[data-group-name="${sourceGroupName}"] td:nth-child(${columnNo}) input[type="checkbox"]`)[0].checked
   }
 
-  function applyPrivileges (privs, inputSelectorFn) {
+  function applyPrivileges(privs, inputSelectorFn) {
     for (let x = 0, numPrivs = privs.length; x < numPrivs; x += 1) {
       const inputs = $(inputSelectorFn(privs, x))
       inputs.each(function (idx, el) {
@@ -363,14 +363,14 @@ define('admin/manage/privileges', [
     }
   }
 
-  function applyPrivilegesToColumn (inputSelectorFn, sourceChecked) {
+  function applyPrivilegesToColumn(inputSelectorFn, sourceChecked) {
     const $inputs = $(inputSelectorFn())
     $inputs.each((idx, el) => {
       el.indeterminate = el.checked ? false : sourceChecked
     })
   }
 
-  function hightlightRowByDataAttr (attrName, attrValue) {
+  function hightlightRowByDataAttr(attrName, attrValue) {
     if (attrValue) {
       const $el = $('[' + attrName + ']').filter(function () {
         return $(this).attr(attrName) === String(attrValue)
@@ -384,7 +384,7 @@ define('admin/manage/privileges', [
     return false
   }
 
-  function highlightRow () {
+  function highlightRow() {
     if (ajaxify.data.group) {
       if (hightlightRowByDataAttr('data-group-name', ajaxify.data.group)) {
         return
@@ -393,7 +393,7 @@ define('admin/manage/privileges', [
     }
   }
 
-  function addGroupToCategory (group, cb) {
+  function addGroupToCategory(group, cb) {
     cb = cb || function () {}
     const groupRow = document.querySelector('.privilege-table [data-group-name="' + group + '"]')
     if (groupRow) {
@@ -412,10 +412,10 @@ define('admin/manage/privileges', [
           {
             name: group,
             nameEscaped: translator.escape(group),
-            privileges: privilegeSet
-          }
-        ]
-      }
+            privileges: privilegeSet,
+          },
+        ],
+      },
     }, function (html) {
       const tbodyEl = document.querySelector('.privilege-table tbody')
       const btnIdx = $('.privilege-filters').first().find('button.btn-warning').index()
@@ -427,7 +427,7 @@ define('admin/manage/privileges', [
     })
   }
 
-  async function addUserToCategory (user, cb) {
+  async function addUserToCategory(user, cb) {
     cb = cb || function () {}
     const userRow = document.querySelector('.privilege-table [data-uid="' + user.uid + '"]')
     if (userRow) {
@@ -450,10 +450,10 @@ define('admin/manage/privileges', [
             uid: user.uid,
             'icon:text': user['icon:text'],
             'icon:bgColor': user['icon:bgColor'],
-            privileges: privilegeSet
-          }
-        ]
-      }
+            privileges: privilegeSet,
+          },
+        ],
+      },
     })
 
     const tbodyEl = document.querySelectorAll('.privilege-table tbody')
@@ -465,7 +465,7 @@ define('admin/manage/privileges', [
     cb()
   }
 
-  function filterPrivileges (ev) {
+  function filterPrivileges(ev) {
     const [startIdx, endIdx] = ev.target.getAttribute('data-filter').split(',').map(i => parseInt(i, 10))
     const rows = $(ev.target).closest('table')[0].querySelectorAll('thead tr:last-child, tbody tr ')
     rows.forEach((tr) => {
@@ -482,7 +482,7 @@ define('admin/manage/privileges', [
     ev.target.classList.add('btn-warning')
   }
 
-  function getPrivilegeFilter () {
+  function getPrivilegeFilter() {
     const indices = document.querySelector('.privilege-filters .btn-warning')
       .getAttribute('data-filter')
       .split(',')
@@ -492,7 +492,7 @@ define('admin/manage/privileges', [
     return indices
   }
 
-  function getPrivilegeSubset () {
+  function getPrivilegeSubset() {
     const currentPrivFilter = document.querySelector('.privilege-filters .btn-warning')
     const filterText = currentPrivFilter ? currentPrivFilter.textContent.toLocaleLowerCase() : ''
     return filterText.indexOf('privileges') > -1 ? filterText : `${filterText} privileges`.trim()

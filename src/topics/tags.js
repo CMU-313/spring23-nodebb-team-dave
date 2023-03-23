@@ -94,7 +94,7 @@ module.exports = function (Topics) {
     }
   }
 
-  async function filterCategoryTags (tags, cid) {
+  async function filterCategoryTags(tags, cid) {
     const tagWhitelist = await categories.getTagWhitelist([cid])
     if (!Array.isArray(tagWhitelist[0]) || !tagWhitelist[0].length) {
       return tags
@@ -131,7 +131,7 @@ module.exports = function (Topics) {
     }
   }
 
-  async function renameTag (tag, newTagName) {
+  async function renameTag(tag, newTagName) {
     if (!newTagName || tag === newTagName) {
       return
     }
@@ -172,7 +172,7 @@ module.exports = function (Topics) {
     await Topics.updateCategoryTagsCount(Object.keys(allCids), [newTagName])
   }
 
-  async function updateTagCount (tag) {
+  async function updateTagCount(tag) {
     const count = await Topics.getTagTopicCount(tag)
     await db.sortedSetAdd('tags:topic:count', count || 0, tag)
     cache.del('tags:topic:count')
@@ -228,7 +228,7 @@ module.exports = function (Topics) {
     await db.deleteAll(deleteKeys)
   }
 
-  async function removeTagsFromTopics (tags) {
+  async function removeTagsFromTopics(tags) {
     await async.eachLimit(tags, 50, async (tag) => {
       const tids = await db.getSortedSetRange(`tag:${tag}:topics`, 0, -1)
       if (!tids.length) {
@@ -269,7 +269,7 @@ module.exports = function (Topics) {
     )
   }
 
-  async function getFromSet (set, start, stop) {
+  async function getFromSet(set, start, stop) {
     let tags
     if (Array.isArray(set)) {
       tags = await db.getSortedSetRevUnion({
@@ -430,7 +430,7 @@ module.exports = function (Topics) {
     return result.matches
   }
 
-  async function getAllTags () {
+  async function getAllTags() {
     const cached = cache.get('tags:topic:count')
     if (cached !== undefined) {
       return cached
@@ -440,7 +440,7 @@ module.exports = function (Topics) {
     return tags
   }
 
-  async function findMatches (data) {
+  async function findMatches(data) {
     let { query } = data
     let tagWhitelist = []
     if (parseInt(data.cid, 10)) {

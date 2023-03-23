@@ -103,7 +103,7 @@ module.exports = function (Posts) {
     }
   }
 
-  async function editMainPost (data, postData, topicData) {
+  async function editMainPost(data, postData, topicData) {
     const { tid } = postData
     const title = data.title ? data.title.trim() : ''
 
@@ -177,7 +177,7 @@ module.exports = function (Posts) {
     }
   }
 
-  async function scheduledTopicCheck (data, topicData) {
+  async function scheduledTopicCheck(data, topicData) {
     if (!topicData.scheduled) {
       return
     }
@@ -191,7 +191,7 @@ module.exports = function (Posts) {
     }
   }
 
-  function getEditPostData (data, topicData, postData) {
+  function getEditPostData(data, topicData, postData) {
     const editPostData = {
       content: data.content,
       editor: data.uid
@@ -210,7 +210,7 @@ module.exports = function (Posts) {
     return editPostData
   }
 
-  function rescheduling (data, topicData) {
+  function rescheduling(data, topicData) {
     const isMain = parseInt(data.pid, 10) === parseInt(topicData.mainPid, 10)
     return isMain && topicData.scheduled && topicData.timestamp !== data.timestamp
   }

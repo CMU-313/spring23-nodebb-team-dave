@@ -9,7 +9,7 @@ const plugins = require('../plugins')
 const middleware = require('../middleware')
 const helpers = require('../middleware/helpers')
 
-exports.handle404 = function handle404 (req, res) {
+exports.handle404 = function handle404(req, res) {
   const relativePath = nconf.get('relative_path')
   const isClientScript = new RegExp(`^${relativePath}\\/assets\\/src\\/.+\\.js(\\?v=\\w+)?$`)
 

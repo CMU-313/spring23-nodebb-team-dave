@@ -9,7 +9,7 @@ define('forum/topic/events', [
   'components',
   'translator',
   'benchpress',
-  'hooks'
+  'hooks',
 ], function (postTools, threadTools, posts, images, components, translator, Benchpress, hooks) {
   const Events = {}
 
@@ -47,7 +47,7 @@ define('forum/topic/events', [
     'posts.unvote': togglePostVote,
 
     'event:new_notification': onNewNotification,
-    'event:new_post': posts.onNewPost
+    'event:new_post': posts.onNewPost,
   }
 
   Events.init = function () {
@@ -67,11 +67,11 @@ define('forum/topic/events', [
     }
   }
 
-  function onUserStatusChange (data) {
+  function onUserStatusChange(data) {
     app.updateUserStatus($('[data-uid="' + data.uid + '"] [component="user/status"]'), data.status)
   }
 
-  function updatePostVotesAndUserReputation (data) {
+  function updatePostVotesAndUserReputation(data) {
     const votes = $('[data-pid="' + data.post.pid + '"] [component="post/vote-count"]').filter(function (index, el) {
       return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10)
     })
@@ -80,13 +80,13 @@ define('forum/topic/events', [
     reputationElements.html(data.user.reputation).attr('data-reputation', data.user.reputation)
   }
 
-  function updateBookmarkCount (data) {
+  function updateBookmarkCount(data) {
     $('[data-pid="' + data.post.pid + '"] .bookmarkCount').filter(function (index, el) {
       return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10)
     }).html(data.post.bookmarks).attr('data-bookmarks', data.post.bookmarks)
   }
 
-  function onTopicPurged (data) {
+  function onTopicPurged(data) {
     if (
       ajaxify.data.category &&
             ajaxify.data.category.slug &&
@@ -96,13 +96,13 @@ define('forum/topic/events', [
     }
   }
 
-  function onTopicMoved (data) {
+  function onTopicMoved(data) {
     if (data && data.slug && parseInt(data.tid, 10) === parseInt(ajaxify.data.tid, 10)) {
       ajaxify.go('topic/' + data.slug, null, true)
     }
   }
 
-  function onPostEdited (data) {
+  function onPostEdited(data) {
     if (!data || !data.post || parseInt(data.post.tid, 10) !== parseInt(ajaxify.data.tid, 10)) {
       return
     }
@@ -147,7 +147,7 @@ define('forum/topic/events', [
 
         const editData = {
           editor: data.editor,
-          editedISO: utils.toISOString(data.post.edited)
+          editedISO: utils.toISOString(data.post.edited),
         }
 
         app.parseAndTranslate('partials/topic/post-editor', editData, function (html) {
@@ -173,7 +173,7 @@ define('forum/topic/events', [
     postTools.removeMenu(components.get('post', 'pid', data.post.pid))
   }
 
-  function onPostPurged (postData) {
+  function onPostPurged(postData) {
     if (!postData || parseInt(postData.tid, 10) !== parseInt(ajaxify.data.tid, 10)) {
       return
     }
@@ -188,7 +188,7 @@ define('forum/topic/events', [
     })
   }
 
-  function togglePostDeleteState (data) {
+  function togglePostDeleteState(data) {
     const postEl = components.get('post', 'pid', data.pid)
 
     if (!postEl.length) {
@@ -209,7 +209,7 @@ define('forum/topic/events', [
     }
   }
 
-  function togglePostBookmark (data) {
+  function togglePostBookmark(data) {
     const el = $('[data-pid="' + data.post.pid + '"] [component="post/bookmark"]').filter(function (index, el) {
       return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10)
     })
@@ -223,7 +223,7 @@ define('forum/topic/events', [
     el.find('[component="post/bookmark/off"]').toggleClass('hidden', data.isBookmarked)
   }
 
-  function toggleEndorsement (data) {
+  function toggleEndorsement(data) {
     const el = $('[data-pid="' + data.post.pid + '"] [component="post/endorse"]').filter(function (index, el) {
       return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10)
     })
@@ -237,7 +237,7 @@ define('forum/topic/events', [
     el.find('[component="post/endorse/off"]').toggleClass('hidden', data.isEndorsed)
   }
 
-  function togglePostVote (data) {
+  function togglePostVote(data) {
     const post = $('[data-pid="' + data.post.pid + '"]')
     post.find('[component="post/upvote"]').filter(function (index, el) {
       return parseInt($(el).closest('[data-pid]').attr('data-pid'), 10) === parseInt(data.post.pid, 10)
@@ -247,7 +247,7 @@ define('forum/topic/events', [
     }).toggleClass('downvoted', data.downvote)
   }
 
-  function onNewNotification (data) {
+  function onNewNotification(data) {
     const tid = ajaxify.data.tid
     if (data && data.tid && parseInt(data.tid, 10) === parseInt(tid, 10)) {
       socket.emit('topics.markTopicNotificationsRead', [tid])

@@ -22,7 +22,7 @@ module.exports = function (Topics) {
     return await toggleDelete(tid, uid, false)
   }
 
-  async function toggleDelete (tid, uid, isDelete) {
+  async function toggleDelete(tid, uid, isDelete) {
     const topicData = await Topics.getTopicData(tid)
     if (!topicData) {
       throw new Error('[[error:no-topic]]')
@@ -91,7 +91,7 @@ module.exports = function (Topics) {
     return await toggleLock(tid, uid, false)
   }
 
-  async function toggleLock (tid, uid, lock) {
+  async function toggleLock(tid, uid, lock) {
     const topicData = await Topics.getTopicFields(tid, ['tid', 'uid', 'cid'])
     if (!topicData || !topicData.cid) {
       throw new Error('[[error:no-topic]]')
@@ -148,7 +148,7 @@ module.exports = function (Topics) {
     return tids.filter(Boolean)
   }
 
-  async function togglePin (tid, uid, pin) {
+  async function togglePin(tid, uid, pin) {
     const topicData = await Topics.getTopicData(tid)
     if (!topicData) {
       throw new Error('[[error:no-topic]]')
@@ -169,10 +169,10 @@ module.exports = function (Topics) {
     if (pin) {
       promises.push(db.sortedSetAdd(`cid:${topicData.cid}:tids:pinned`, Date.now(), tid))
       promises.push(db.sortedSetsRemove([
-                `cid:${topicData.cid}:tids`,
-                `cid:${topicData.cid}:tids:posts`,
-                `cid:${topicData.cid}:tids:votes`,
-                `cid:${topicData.cid}:tids:views`
+        `cid:${topicData.cid}:tids`,
+        `cid:${topicData.cid}:tids:posts`,
+        `cid:${topicData.cid}:tids:votes`,
+        `cid:${topicData.cid}:tids:views`
       ], tid))
     } else {
       promises.push(db.sortedSetRemove(`cid:${topicData.cid}:tids:pinned`, tid))
@@ -223,9 +223,9 @@ module.exports = function (Topics) {
     }
 
     await db.sortedSetAdd(
-            `cid:${cid}:tids:pinned`,
-            pinnedTids.map((tid, index) => index),
-            pinnedTids
+      `cid:${cid}:tids:pinned`,
+      pinnedTids.map((tid, index) => index),
+      pinnedTids
     )
   }
 
@@ -240,15 +240,15 @@ module.exports = function (Topics) {
     }
     const tags = await Topics.getTopicTags(tid)
     await db.sortedSetsRemove([
-            `cid:${topicData.cid}:tids`,
-            `cid:${topicData.cid}:tids:pinned`,
-            `cid:${topicData.cid}:tids:posts`,
-            `cid:${topicData.cid}:tids:votes`,
-            `cid:${topicData.cid}:tids:views`,
-            `cid:${topicData.cid}:tids:lastposttime`,
-            `cid:${topicData.cid}:recent_tids`,
-            `cid:${topicData.cid}:uid:${topicData.uid}:tids`,
-            ...tags.map(tag => `cid:${topicData.cid}:tag:${tag}:topics`)
+      `cid:${topicData.cid}:tids`,
+      `cid:${topicData.cid}:tids:pinned`,
+      `cid:${topicData.cid}:tids:posts`,
+      `cid:${topicData.cid}:tids:votes`,
+      `cid:${topicData.cid}:tids:views`,
+      `cid:${topicData.cid}:tids:lastposttime`,
+      `cid:${topicData.cid}:recent_tids`,
+      `cid:${topicData.cid}:uid:${topicData.uid}:tids`,
+      ...tags.map(tag => `cid:${topicData.cid}:tag:${tag}:topics`)
     ], tid)
 
     topicData.postcount = topicData.postcount || 0

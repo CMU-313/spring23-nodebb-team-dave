@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/unread', [
-  'forum/header/unread', 'topicSelect', 'components', 'topicList', 'categorySelector', 'alerts'
+  'forum/header/unread', 'topicSelect', 'components', 'topicList', 'categorySelector', 'alerts',
 ], function (headerUnread, topicSelect, components, topicList, categorySelector, alerts) {
   const Unread = {}
 
@@ -15,8 +15,8 @@ define('forum/unread', [
     headerUnread.updateUnreadTopicCount('/' + ajaxify.data.selectedFilter.url, ajaxify.data.topicCount)
   }
 
-  function handleMarkRead () {
-    function markAllRead () {
+  function handleMarkRead() {
+    function markAllRead() {
       socket.emit('topics.markAllRead', function (err) {
         if (err) {
           return alerts.error(err)
@@ -31,7 +31,7 @@ define('forum/unread', [
       })
     }
 
-    function markSelectedRead () {
+    function markSelectedRead() {
       const tids = topicSelect.getSelectedTids()
       if (!tids.length) {
         return
@@ -45,8 +45,8 @@ define('forum/unread', [
       })
     }
 
-    function markCategoryRead (cid) {
-      function getCategoryTids (cid) {
+    function markCategoryRead(cid) {
+      function getCategoryTids(cid) {
         const tids = []
         components.get('category/topic', 'cid', cid).each(function () {
           tids.push($(this).attr('data-tid'))
@@ -79,18 +79,18 @@ define('forum/unread', [
         {
           cid: 'selected',
           name: '[[unread:selected]]',
-          icon: ''
+          icon: '',
         },
         {
           cid: 'all',
           name: '[[unread:all]]',
-          icon: ''
-        }
-      ]
+          icon: '',
+        },
+      ],
     })
   }
 
-  function doneRemovingTids (tids) {
+  function doneRemovingTids(tids) {
     removeTids(tids)
 
     alerts.success('[[unread:topics_marked_as_read.success]]')
@@ -101,7 +101,7 @@ define('forum/unread', [
     }
   }
 
-  function removeTids (tids) {
+  function removeTids(tids) {
     for (let i = 0; i < tids.length; i += 1) {
       components.get('category/topic', 'tid', tids[i]).remove()
     }

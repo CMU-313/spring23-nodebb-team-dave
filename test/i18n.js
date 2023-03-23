@@ -113,7 +113,7 @@ describe('i18n', () => {
             assert.strictEqual(
               sourceKeys.length,
               translationKeys.length,
-                            `Extra keys found in namespace ${namespace.slice(1, -5)} for language "${language}"`
+              `Extra keys found in namespace ${namespace.slice(1, -5)} for language "${language}"`
             )
           })
         })

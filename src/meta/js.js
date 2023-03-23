@@ -33,7 +33,7 @@ JS.scripts = {
 
 const basePath = path.resolve(__dirname, '../..')
 
-async function linkModules () {
+async function linkModules() {
   const { modules } = JS.scripts
 
   await Promise.all([
@@ -58,7 +58,7 @@ async function linkModules () {
 
 const moduleDirs = ['modules', 'admin', 'client']
 
-async function clearModules () {
+async function clearModules() {
   const builtPaths = moduleDirs.map(
     p => path.join(__dirname, '../../build/public/src', p)
   )
@@ -91,7 +91,7 @@ JS.linkStatics = async function () {
   }))
 }
 
-async function getBundleScriptList (target) {
+async function getBundleScriptList(target) {
   const pluginDirectories = []
 
   if (target === 'admin') {

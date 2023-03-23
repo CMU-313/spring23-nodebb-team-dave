@@ -55,7 +55,7 @@ module.exports = function (Posts) {
   }
 }
 
-function modifyPost (post, fields) {
+function modifyPost(post, fields) {
   if (post) {
     db.parseIntFields(post, intFields, fields)
     if (post.hasOwnProperty('upvotes') && post.hasOwnProperty('downvotes')) {

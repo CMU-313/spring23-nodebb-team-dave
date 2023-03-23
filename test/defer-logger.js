@@ -6,12 +6,12 @@ const Transport = require('winston-transport')
 const winstonLogged = []
 
 class DeferLogger extends Transport {
-  constructor (opts) {
+  constructor(opts) {
     super(opts)
     this.logged = opts.logged
   }
 
-  log (info, callback) {
+  log(info, callback) {
     setImmediate(() => {
       this.emit('logged', info)
     })

@@ -13,7 +13,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
      @param type The type of the element to get the matching hook for, or the element itself.
      @param name The name of the hook.
      */
-  function getHook (type, name) {
+  function getHook(type, name) {
     if (typeof type !== 'string') {
       type = $(type)
       type = type.data('type') || type.attr('type') || type.prop('tagName')
@@ -294,7 +294,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
       }
       socket.emit('admin.settings.set', {
         hash,
-        values: settings
+        values: settings,
       }, function (err) {
         if (notify) {
           if (err) {
@@ -302,14 +302,14 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
               title: '[[admin/admin:changes-not-saved]]',
               type: 'danger',
               message: `[[admin/admin/changes-not-saved-message, ${err.message}]]`,
-              timeout: 5000
+              timeout: 5000,
             })
           } else {
             alerts.alert({
               title: '[[admin/admin:changes-saved]]',
               type: 'success',
               message: '[[admin/admin:changes-saved-message]]',
-              timeout: 2500
+              timeout: 2500,
             })
           }
         }
@@ -327,7 +327,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
         settings._ = JSON.parse(settings._)
       } catch (_error) {}
       Settings.cfg = settings
-    }
+    },
   }
 
   // eslint-disable-next-line prefer-const
@@ -393,7 +393,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
          */
     sync: function (hash, wrapper, callback) {
       socket.emit('admin.settings.get', {
-        hash
+        hash,
       }, function (err, values) {
         if (err) {
           if (typeof callback === 'function') {
@@ -452,7 +452,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
           title: 'Attributes Not Saved',
           message: "'" + (notSaved.join(', ')) + "' could not be saved. Please contact the plugin-author!",
           type: 'danger',
-          timeout: 5000
+          timeout: 5000,
         })
       }
       helper.persistSettings(hash, Settings.cfg, notify, callback)
@@ -462,7 +462,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
       const call = formEl.attr('data-socket-get')
 
       socket.emit(call || 'admin.settings.get', {
-        hash
+        hash,
       }, function (err, values) {
         if (err) {
           return callback(err)
@@ -537,7 +537,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
         const call = formEl.attr('data-socket-set')
         socket.emit(call || 'admin.settings.set', {
           hash,
-          values
+          values,
         }, function (err) {
           // Remove unsaved flag to re-enable ajaxify
           app.flags._unsaved = false
@@ -552,13 +552,13 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
               title: '[[admin/admin:changes-not-saved]]',
               message: `[[admin/admin:changes-not-saved-message, ${err.message}]]`,
               type: 'error',
-              timeout: 2500
+              timeout: 2500,
             })
           } else {
             alerts.alert({
               title: '[[admin/admin:changes-saved]]',
               type: 'success',
-              timeout: 2500
+              timeout: 2500,
             })
           }
         })
@@ -583,7 +583,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
         controlEl.addEventListener('invalid', onTrigger)
         return controlEl.reportValidity()
       }).every(Boolean)
-    }
+    },
   }
 
   helper.registerReadyJobs(1)
@@ -595,7 +595,7 @@ define('settings', ['hooks', 'alerts'], function (hooks, alerts) {
     'settings/array',
     'settings/key',
     'settings/object',
-    'settings/sorted-list'
+    'settings/sorted-list',
   ], function () {
     for (let i = 0; i < arguments.length; i += 1) {
       Settings.registerPlugin(arguments[i])

@@ -18,7 +18,7 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
       const scrollTo = $('a[name="' + window.location.hash.replace('#', '') + '"]')
       if (scrollTo.length) {
         $('html, body').animate({
-          scrollTop: (scrollTo.offset().top) + 'px'
+          scrollTop: (scrollTo.offset().top) + 'px',
         }, 400)
       }
     } else {
@@ -70,14 +70,14 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
         return
       }
 
-      saveFields(fields, function onFieldsSaved (err) {
+      saveFields(fields, function onFieldsSaved(err) {
         if (err) {
           return alerts.alert({
             alert_id: 'config_status',
             timeout: 2500,
             title: '[[admin/admin:changes-not-saved]]',
             message: `[[admin/admin:changes-not-saved-message, ${err.message}]]`,
-            type: 'danger'
+            type: 'danger',
           })
         }
 
@@ -88,7 +88,7 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
           timeout: 2500,
           title: '[[admin/admin:changes-saved]]',
           message: '[[admin/admin:changes-saved-message]]',
-          type: 'success'
+          type: 'success',
         })
 
         hooks.fire('action:admin.settingsSaved')
@@ -119,7 +119,7 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
     }, 0)
   }
 
-  function handleUploads () {
+  function handleUploads() {
     $('#content input[data-action="upload"]').each(function () {
       const uploadBtn = $(this)
       uploadBtn.on('click', function () {
@@ -129,7 +129,7 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
           route: uploadBtn.attr('data-route'),
           params: {},
           showHelp: uploadBtn.attr('data-help') ? uploadBtn.attr('data-help') === 1 : undefined,
-          accept: uploadBtn.attr('data-accept')
+          accept: uploadBtn.attr('data-accept'),
         }, function (image) {
           $('#' + uploadBtn.attr('data-target')).val(image)
         })
@@ -137,10 +137,10 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
     })
   }
 
-  function setupTagsInput () {
+  function setupTagsInput() {
     $('[data-field-type="tagsinput"]').tagsinput({
       confirmKeys: [13, 44],
-      trimValue: true
+      trimValue: true,
     })
     app.flags._unsaved = false
   }
@@ -149,7 +149,7 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
     socket.emit('admin.config.remove', key)
   }
 
-  function saveFields (fields, callback) {
+  function saveFields(fields, callback) {
     const data = {}
 
     fields.each(function () {
@@ -161,17 +161,17 @@ define('admin/settings', ['uploader', 'mousetrap', 'hooks', 'alerts', 'settings'
       if (field.is('input')) {
         inputType = field.attr('type')
         switch (inputType) {
-          case 'text':
-          case 'password':
-          case 'hidden':
-          case 'textarea':
-          case 'number':
-            value = field.val()
-            break
+        case 'text':
+        case 'password':
+        case 'hidden':
+        case 'textarea':
+        case 'number':
+          value = field.val()
+          break
 
-          case 'checkbox':
-            value = field.prop('checked') ? '1' : '0'
-            break
+        case 'checkbox':
+          value = field.prop('checked') ? '1' : '0'
+          break
         }
       } else if (field.is('textarea') || field.is('select')) {
         value = field.val()

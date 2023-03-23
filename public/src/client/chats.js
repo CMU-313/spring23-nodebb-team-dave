@@ -13,7 +13,7 @@ define('forum/chats', [
   'alerts',
   'chat',
   'api',
-  'uploadHelpers'
+  'uploadHelpers',
 ], function (
   components, translator, mousetrap,
   recentChats, search, messages,
@@ -21,7 +21,7 @@ define('forum/chats', [
   api, uploadHelpers
 ) {
   const Chats = {
-    initialised: false
+    initialised: false,
   }
 
   let newMessage = false
@@ -73,7 +73,7 @@ define('forum/chats', [
       dragDropAreaEl: $('.chats-full'),
       pasteEl: $('[component="chat/input"]'),
       uploadFormEl: $('[component="chat/upload"]'),
-      inputEl: $('[component="chat/input"]')
+      inputEl: $('[component="chat/input"]'),
     })
 
     $('[data-action="close"]').on('click', function () {
@@ -94,7 +94,7 @@ define('forum/chats', [
           text = text + (text ? '\n' : '') + (upload.isImage ? '!' : '') + `[${upload.filename}](${upload.url})`
         })
         inputEl.val(text)
-      }
+      },
     })
   }
 
@@ -194,18 +194,18 @@ define('forum/chats', [
       const action = this.getAttribute('data-action')
 
       switch (action) {
-        case 'edit': {
-          const inputEl = $('[data-roomid="' + roomId + '"] [component="chat/input"]')
-          messages.prepEdit(inputEl, messageId, roomId)
-          break
-        }
-        case 'delete':
-          messages.delete(messageId, roomId)
-          break
+      case 'edit': {
+        const inputEl = $('[data-roomid="' + roomId + '"] [component="chat/input"]')
+        messages.prepEdit(inputEl, messageId, roomId)
+        break
+      }
+      case 'delete':
+        messages.delete(messageId, roomId)
+        break
 
-        case 'restore':
-          messages.restore(messageId, roomId)
-          break
+      case 'restore':
+        messages.restore(messageId, roomId)
+        break
       }
     })
   }
@@ -249,7 +249,7 @@ define('forum/chats', [
       app.parseAndTranslate('partials/modals/manage_room', {}, function (html) {
         modal = bootbox.dialog({
           title: '[[modules:chat.manage-room]]',
-          message: html
+          message: html,
         })
 
         modal.attr('component', 'chat/manage-modal')
@@ -263,7 +263,7 @@ define('forum/chats', [
           autocomplete.user(searchInput, function (event, selected) {
             errorEl.text('')
             api.post(`/chats/${roomId}/users`, {
-              uids: [selected.item.user.uid]
+              uids: [selected.item.user.uid],
             }).then((body) => {
               Chats.refreshParticipantsList(roomId, modal, body)
               searchInput.val('')
@@ -306,7 +306,7 @@ define('forum/chats', [
               }
             }).catch(alerts.error)
           }
-        }
+        },
       })
     })
   }
@@ -334,7 +334,7 @@ define('forum/chats', [
 
     buttonEl.on('click', function () {
       app.parseAndTranslate('partials/modals/rename_room', {
-        name: roomName || ajaxify.data.roomName
+        name: roomName || ajaxify.data.roomName,
       }, function (html) {
         modal = bootbox.dialog({
           title: '[[modules:chat.rename-room]]',
@@ -343,16 +343,16 @@ define('forum/chats', [
             save: {
               label: '[[global:save]]',
               className: 'btn-primary',
-              callback: submit
-            }
-          }
+              callback: submit,
+            },
+          },
         })
       })
     })
 
-    function submit () {
+    function submit() {
       api.put(`/chats/${roomId}`, {
-        name: modal.find('#roomName').val()
+        name: modal.find('#roomName').val(),
       }).catch(alerts.error)
     }
   }
@@ -384,10 +384,10 @@ define('forum/chats', [
         style: {
           'z-index': 20000,
           flex: 0,
-          top: 'inherit'
+          top: 'inherit',
         },
-        placement: 'top'
-      }
+        placement: 'top',
+      },
     }
 
     $(window).trigger('chat:autocomplete:init', data)
@@ -434,7 +434,7 @@ define('forum/chats', [
                 messages.scrollToBottom($('.expanded-chat ul.chat-content'))
                 if (history.pushState) {
                   history.pushState({
-                    url
+                    url,
                   }, null, window.location.protocol + '//' + window.location.host + config.relative_path + '/' + url)
                 }
               })
@@ -479,8 +479,8 @@ define('forum/chats', [
               roomId: data.roomId,
               lastUser: data.message.fromUser,
               usernames: data.message.fromUser.username,
-              unread: true
-            }
+              unread: true,
+            },
           }, function (html) {
             recentEl.prepend(html)
           })

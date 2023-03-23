@@ -2,7 +2,7 @@
 
 define('forum/chats/messages', [
   'components', 'translator', 'benchpress', 'hooks',
-  'bootbox', 'alerts', 'messages', 'api'
+  'bootbox', 'alerts', 'messages', 'api',
 ], function (components, translator, Benchpress, hooks, bootbox, alerts, messagesModule, api) {
   const messages = {}
 
@@ -35,7 +35,7 @@ define('forum/chats/messages', [
           title: '[[global:alert.error]]',
           message: err.message,
           type: 'danger',
-          timeout: 10000
+          timeout: 10000,
         })
       })
     } else {
@@ -53,7 +53,7 @@ define('forum/chats/messages', [
     parent.find('[component="chat/message/length"]').text(element.val().length)
     parent.find('[component="chat/message/remaining"]').text(config.maximumChatMessageLength - element.val().length)
     hooks.fire('action:chat.updateRemainingLength', {
-      parent
+      parent,
     })
   }
 
@@ -70,7 +70,7 @@ define('forum/chats/messages', [
     })
   }
 
-  function onMessagesParsed (chatContentEl, html) {
+  function onMessagesParsed(chatContentEl, html) {
     const newMessage = $(html)
     const isAtBottom = messages.isAtBottom(chatContentEl)
     newMessage.appendTo(chatContentEl)
@@ -81,22 +81,22 @@ define('forum/chats/messages', [
     }
 
     hooks.fire('action:chat.received', {
-      messageEl: newMessage
+      messageEl: newMessage,
     })
   }
 
   messages.parseMessage = function (data, callback) {
-    function done (html) {
+    function done(html) {
       translator.translate(html, callback)
     }
 
     if (Array.isArray(data)) {
       Benchpress.render('partials/chats/message' + (Array.isArray(data) ? 's' : ''), {
-        messages: data
+        messages: data,
       }).then(done)
     } else {
       Benchpress.render('partials/chats/' + (data.system ? 'system-message' : 'message'), {
-        messages: data
+        messages: data,
       }).then(done)
     }
   }
@@ -141,7 +141,7 @@ define('forum/chats/messages', [
         hooks.fire('action:chat.prepEdit', {
           inputEl,
           messageId,
-          roomId
+          roomId,
         })
       }
     })
@@ -158,7 +158,7 @@ define('forum/chats/messages', [
     socket.on('event:chats.restore', onChatMessageRestored)
   }
 
-  function onChatMessageEdited (data) {
+  function onChatMessageEdited(data) {
     data.messages.forEach(function (message) {
       const self = parseInt(message.fromuid, 10) === parseInt(app.user.uid, 10)
       message.self = self ? 1 : 0
@@ -172,13 +172,13 @@ define('forum/chats/messages', [
     })
   }
 
-  function onChatMessageDeleted (messageId) {
+  function onChatMessageDeleted(messageId) {
     components.get('chat/message', messageId)
       .toggleClass('deleted', true)
       .find('[component="chat/message/body"]').translateHtml('[[modules:chat.message-deleted]]')
   }
 
-  function onChatMessageRestored (message) {
+  function onChatMessageRestored(message) {
     components.get('chat/message', message.messageId)
       .toggleClass('deleted', false)
       .find('[component="chat/message/body"]').html(message.content)

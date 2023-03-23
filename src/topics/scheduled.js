@@ -51,10 +51,10 @@ Scheduled.pin = async function (tid, topicData) {
     topics.setTopicField(tid, 'pinned', 1),
     db.sortedSetAdd(`cid:${topicData.cid}:tids:pinned`, Date.now(), tid),
     db.sortedSetsRemove([
-            `cid:${topicData.cid}:tids`,
-            `cid:${topicData.cid}:tids:posts`,
-            `cid:${topicData.cid}:tids:votes`,
-            `cid:${topicData.cid}:tids:views`
+      `cid:${topicData.cid}:tids`,
+      `cid:${topicData.cid}:tids:posts`,
+      `cid:${topicData.cid}:tids:votes`,
+      `cid:${topicData.cid}:tids:views`
     ], tid)
   ])
 }
@@ -63,16 +63,16 @@ Scheduled.reschedule = async function ({ cid, tid, timestamp, uid }) {
   await Promise.all([
     db.sortedSetsAdd([
       'topics:scheduled',
-            `uid:${uid}:topics`,
-            'topics:tid',
-            `cid:${cid}:uid:${uid}:tids`
+      `uid:${uid}:topics`,
+      'topics:tid',
+      `cid:${cid}:uid:${uid}:tids`
     ], timestamp, tid),
     shiftPostTimes(tid, timestamp)
   ])
   return topics.updateLastPostTimeFromLastPid(tid)
 }
 
-function unpin (tid, topicData) {
+function unpin(tid, topicData) {
   return [
     topics.setTopicField(tid, 'pinned', 0),
     topics.deleteTopicField(tid, 'pinExpiry'),
@@ -86,7 +86,7 @@ function unpin (tid, topicData) {
   ]
 }
 
-async function sendNotifications (uids, topicsData) {
+async function sendNotifications(uids, topicsData) {
   const usernames = await Promise.all(uids.map(uid => user.getUserField(uid, 'username')))
   const uidToUsername = Object.fromEntries(uids.map((uid, idx) => [uid, usernames[idx]]))
 
@@ -106,7 +106,7 @@ async function sendNotifications (uids, topicsData) {
   ))
 }
 
-async function updateUserLastposttimes (uids, topicsData) {
+async function updateUserLastposttimes(uids, topicsData) {
   const lastposttimes = (await user.getUsersFields(uids, ['lastposttime'])).map(u => u.lastposttime)
 
   let tstampByUid = {}
@@ -121,7 +121,7 @@ async function updateUserLastposttimes (uids, topicsData) {
   return Promise.all(uidsToUpdate.map(uid => user.setUserField(uid, 'lastposttime', tstampByUid[uid])))
 }
 
-async function shiftPostTimes (tid, timestamp) {
+async function shiftPostTimes(tid, timestamp) {
   const pids = (await posts.getPidsFromSet(`tid:${tid}:posts`, 0, -1, false))
   // Leaving other related score values intact, since they reflect post order correctly,
   // and it seems that's good enough

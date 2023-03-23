@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/users', [
-  'translator', 'benchpress', 'api', 'alerts', 'accounts/invite'
+  'translator', 'benchpress', 'api', 'alerts', 'accounts/invite',
 ], function (translator, Benchpress, api, alerts, AccountInvite) {
   const Users = {}
 
@@ -28,7 +28,7 @@ define('forum/users', [
     $('.search select, .search input[type="checkbox"]').on('change', doSearch)
   }
 
-  function doSearch () {
+  function doSearch() {
     if (!ajaxify.data.template.users) {
       return
     }
@@ -38,7 +38,7 @@ define('forum/users', [
 
     const query = {
       section: activeSection,
-      page: 1
+      page: 1,
     }
 
     if (!username) {
@@ -64,7 +64,7 @@ define('forum/users', [
     loadPage(query)
   }
 
-  function getSortBy () {
+  function getSortBy() {
     let sortBy
     const activeSection = getActiveSection()
     if (activeSection === 'sort-posts') {
@@ -77,13 +77,13 @@ define('forum/users', [
     return sortBy
   }
 
-  function loadPage (query) {
+  function loadPage(query) {
     api.get('/api/users', query)
       .then(renderSearchResults)
       .catch(alerts.error)
   }
 
-  function renderSearchResults (data) {
+  function renderSearchResults(data) {
     Benchpress.render('partials/paginator', { pagination: data.pagination }).then(function (html) {
       $('.pagination-container').replaceWith(html)
     })
@@ -100,7 +100,7 @@ define('forum/users', [
     })
   }
 
-  function onUserStatusChange (data) {
+  function onUserStatusChange(data) {
     const section = getActiveSection()
 
     if ((section.startsWith('online') || section.startsWith('users'))) {
@@ -108,11 +108,11 @@ define('forum/users', [
     }
   }
 
-  function updateUser (data) {
+  function updateUser(data) {
     app.updateUserStatus($('#users-container [data-uid="' + data.uid + '"] [component="user/status"]'), data.status)
   }
 
-  function getActiveSection () {
+  function getActiveSection() {
     return utils.param('section') || ''
   }
 

@@ -169,7 +169,7 @@ Groups.getOwnersAndMembers = async function (groupName, uid, start, stop) {
   let memberStop = memberStart + countToReturn - 1
   memberStart = Math.max(0, memberStart)
   memberStop = Math.max(0, memberStop)
-  async function addMembers (start, stop) {
+  async function addMembers(start, stop) {
     let batch = await user.getUsersFromSet(`group:${groupName}:members`, uid, start, stop)
     if (!batch.length) {
       done = true
@@ -219,7 +219,7 @@ Groups.isHidden = async function (groupName) {
   return await isFieldOn(groupName, 'hidden')
 }
 
-async function isFieldOn (groupName, field) {
+async function isFieldOn(groupName, field) {
   const value = await db.getObjectField(`group:${groupName}`, field)
   return parseInt(value, 10) === 1
 }

@@ -6,7 +6,7 @@ define('admin/dashboard/logins', ['admin/modules/dashboard-line-graph'], (graph)
   ACP.init = () => {
     graph.init({
       set: 'logins',
-      dataset: ajaxify.data.dataset
+      dataset: ajaxify.data.dataset,
     })
   }
 

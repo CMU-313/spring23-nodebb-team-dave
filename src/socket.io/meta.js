@@ -52,7 +52,7 @@ SocketMeta.rooms.leaveCurrent = function (socket, data, callback) {
   callback()
 }
 
-function leaveCurrentRoom (socket) {
+function leaveCurrentRoom(socket) {
   if (socket.currentRoom) {
     socket.leave(socket.currentRoom)
     socket.currentRoom = ''

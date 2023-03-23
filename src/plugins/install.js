@@ -103,7 +103,7 @@ module.exports = function (Plugins) {
 
   const runPackageManagerCommandAsync = util.promisify(runPackageManagerCommand)
 
-  async function toggleInstall (id, version) {
+  async function toggleInstall(id, version) {
     const [installed, active] = await Promise.all([
       Plugins.isInstalled(id),
       Plugins.isActive(id)
@@ -118,7 +118,7 @@ module.exports = function (Plugins) {
     return pluginData
   }
 
-  function runPackageManagerCommand (command, pkgName, version, callback) {
+  function runPackageManagerCommand(command, pkgName, version, callback) {
     cproc.execFile(packageManagerExecutable, [
       packageManagerCommands[packageManager][command],
       pkgName + (command === 'install' ? `@${version}` : ''),
@@ -138,7 +138,7 @@ module.exports = function (Plugins) {
     return await upgrade(id, version)
   }
 
-  async function upgrade (id, version) {
+  async function upgrade(id, version) {
     await runPackageManagerCommandAsync('install', id, version || 'latest')
     const isActive = await Plugins.isActive(id)
     meta.reloadRequired = isActive

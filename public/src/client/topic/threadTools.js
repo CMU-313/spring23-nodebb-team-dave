@@ -8,7 +8,7 @@ define('forum/topic/threadTools', [
   'api',
   'hooks',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (components, translator, handleBack, posts, api, hooks, bootbox, alerts) {
   const ThreadTools = {}
 
@@ -132,7 +132,7 @@ define('forum/topic/threadTools', [
       changeWatching('ignore')
     })
 
-    function changeWatching (type, state = 1) {
+    function changeWatching(type, state = 1) {
       const method = state ? 'put' : 'del'
       api[method](`/topics/${tid}/${type}`, {}, () => {
         let message = ''
@@ -153,7 +153,7 @@ define('forum/topic/threadTools', [
           alert_id: 'follow_thread',
           message,
           type: 'success',
-          timeout: 5000
+          timeout: 5000,
         })
 
         hooks.fire('action:topics.changeWatching', { tid, type })
@@ -163,7 +163,7 @@ define('forum/topic/threadTools', [
           alert_id: 'topic_follow',
           title: '[[global:please_log_in]]',
           message: '[[topic:login_to_subscribe]]',
-          timeout: 5000
+          timeout: 5000,
         })
       })
 
@@ -171,7 +171,7 @@ define('forum/topic/threadTools', [
     }
   }
 
-  function renderMenu (container) {
+  function renderMenu(container) {
     container.on('show.bs.dropdown', '.thread-tools', function () {
       const $this = $(this)
       const dropdownMenu = $this.find('.dropdown-menu')
@@ -189,14 +189,14 @@ define('forum/topic/threadTools', [
           dropdownMenu.toggleClass('hidden', false)
 
           hooks.fire('action:topic.tools.load', {
-            element: dropdownMenu
+            element: dropdownMenu,
           })
         })
       })
     })
   }
 
-  function topicCommand (method, path, command, onComplete) {
+  function topicCommand(method, path, command, onComplete) {
     if (!onComplete) {
       onComplete = function () {}
     }
@@ -211,19 +211,19 @@ define('forum/topic/threadTools', [
     }
 
     switch (command) {
-      case 'delete':
-      case 'restore':
-      case 'purge':
-        bootbox.confirm(`[[topic:thread_tools.${command}_confirm]]`, execute)
-        break
+    case 'delete':
+    case 'restore':
+    case 'purge':
+      bootbox.confirm(`[[topic:thread_tools.${command}_confirm]]`, execute)
+      break
 
-      case 'pin':
-        ThreadTools.requestPinExpiry(body, execute.bind(null, true))
-        break
+    case 'pin':
+      ThreadTools.requestPinExpiry(body, execute.bind(null, true))
+      break
 
-      default:
-        execute(true)
-        break
+    default:
+      execute(true)
+      break
     }
   }
 
@@ -237,7 +237,7 @@ define('forum/topic/threadTools', [
         buttons: {
           cancel: {
             label: '[[modules:bootbox.cancel]]',
-            className: 'btn-link'
+            className: 'btn-link',
           },
           save: {
             label: '[[global:save]]',
@@ -260,9 +260,9 @@ define('forum/topic/threadTools', [
               } else {
                 alerts.error('[[error:invalid-date]]')
               }
-            }
-          }
-        }
+            },
+          },
+        },
       })
     })
   }
@@ -310,7 +310,7 @@ define('forum/topic/threadTools', [
       app.parseAndTranslate('partials/topic/deleted-message', {
         deleter: data.user,
         deleted: true,
-        deletedTimestampISO: utils.toISOString(Date.now())
+        deletedTimestampISO: utils.toISOString(Date.now()),
       }, function (html) {
         components.get('topic/deleted/message').replaceWith(html)
         html.find('.timeago').timeago()
@@ -340,9 +340,9 @@ define('forum/topic/threadTools', [
     icon.toggleClass('hidden', !data.pinned)
     if (data.pinned) {
       icon.translateAttr('title', (
-        data.pinExpiry && data.pinExpiryISO
-          ? '[[topic:pinned-with-expiry, ' + data.pinExpiryISO + ']]'
-          : '[[topic:pinned]]'
+        data.pinExpiry && data.pinExpiryISO ?
+          '[[topic:pinned-with-expiry, ' + data.pinExpiryISO + ']]' :
+          '[[topic:pinned]]'
       ))
     }
     ajaxify.data.pinned = data.pinned
@@ -350,11 +350,11 @@ define('forum/topic/threadTools', [
     posts.addTopicEvents(data.events)
   }
 
-  function setFollowState (state) {
+  function setFollowState(state) {
     const titles = {
       follow: '[[topic:watching]]',
       unfollow: '[[topic:not-watching]]',
-      ignore: '[[topic:ignoring]]'
+      ignore: '[[topic:ignoring]]',
     }
     translator.translate(titles[state], function (translatedTitle) {
       $('[component="topic/watch"] button')

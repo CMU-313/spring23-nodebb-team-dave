@@ -37,7 +37,7 @@ sitemap.render = async function () {
   return returnData
 }
 
-async function getSitemapPages () {
+async function getSitemapPages() {
   const urls = [{
     url: '',
     changefreq: 'weekly',
@@ -77,7 +77,7 @@ sitemap.getPages = async function () {
   return sitemap.maps.pages
 }
 
-async function getSitemapCategories () {
+async function getSitemapCategories() {
   const cids = await categories.getCidsByPrivilege('categories:cid', 0, 'find')
   return await categories.getCategoriesFields(cids, ['slug'])
 }
@@ -155,7 +155,7 @@ sitemap.getTopicPage = async function (page) {
   return sitemap.maps.topics[page - 1].sm
 }
 
-async function urlsToSitemap (urls) {
+async function urlsToSitemap(urls) {
   if (!urls.length) {
     return ''
   }

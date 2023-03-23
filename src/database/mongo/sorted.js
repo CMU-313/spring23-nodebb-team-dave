@@ -31,7 +31,7 @@ module.exports = function (module) {
     return await getSortedSetRange(key, start, stop, '-inf', '+inf', -1, true)
   }
 
-  async function getSortedSetRange (key, start, stop, min, max, sort, withScores) {
+  async function getSortedSetRange(key, start, stop, min, max, sort, withScores) {
     if (!key) {
       return
     }
@@ -83,7 +83,7 @@ module.exports = function (module) {
     }
 
     let result = []
-    async function doQuery (_key, fields, skip, limit) {
+    async function doQuery(_key, fields, skip, limit) {
       return await module.client.collection('objects').find({ ...query, ...{ _key } }, { projection: fields })
         .sort({ score: sort })
         .skip(skip)
@@ -133,7 +133,7 @@ module.exports = function (module) {
     return await getSortedSetRangeByScore(key, start, count, min, max, -1, true)
   }
 
-  async function getSortedSetRangeByScore (key, start, count, min, max, sort, withScores) {
+  async function getSortedSetRangeByScore(key, start, count, min, max, sort, withScores) {
     if (parseInt(count, 10) === 0) {
       return []
     }
@@ -192,7 +192,7 @@ module.exports = function (module) {
     return await getSortedSetRank(true, key, value)
   }
 
-  async function getSortedSetRank (reverse, key, value) {
+  async function getSortedSetRank(reverse, key, value) {
     if (!key) {
       return
     }
@@ -225,7 +225,7 @@ module.exports = function (module) {
     return await sortedSetsRanks(module.sortedSetRevRank, keys, values)
   }
 
-  async function sortedSetsRanks (method, keys, values) {
+  async function sortedSetsRanks(method, keys, values) {
     if (!Array.isArray(keys) || !keys.length) {
       return []
     }
@@ -245,7 +245,7 @@ module.exports = function (module) {
     return await sortedSetRanks(true, key, values)
   }
 
-  async function sortedSetRanks (reverse, key, values) {
+  async function sortedSetRanks(reverse, key, values) {
     if (values.length === 1) {
       return [await getSortedSetRank(reverse, key, values[0])]
     }
@@ -458,7 +458,7 @@ module.exports = function (module) {
     return data ? data.length : null
   }
 
-  async function sortedSetLex (key, min, max, sort, start, count) {
+  async function sortedSetLex(key, min, max, sort, start, count) {
     const query = { _key: key }
     start = start !== undefined ? start : 0
     count = count !== undefined ? count : 0
@@ -480,7 +480,7 @@ module.exports = function (module) {
     await module.client.collection('objects').deleteMany(query)
   }
 
-  function buildLexQuery (query, min, max) {
+  function buildLexQuery(query, min, max) {
     if (min !== '-') {
       if (min.match(/^\(/)) {
         query.value = { $gt: min.slice(1) }

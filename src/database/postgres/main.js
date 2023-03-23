@@ -193,7 +193,7 @@ SELECT "type"::TEXT t
     return res.rows.length ? res.rows[0].t : null
   }
 
-  async function doExpire (key, date) {
+  async function doExpire(key, date) {
     await module.pool.query({
       name: 'expire',
       text: `
@@ -220,7 +220,7 @@ UPDATE "legacy_object"
     await doExpire(key, new Date(timestamp))
   }
 
-  async function getExpire (key) {
+  async function getExpire(key) {
     const res = await module.pool.query({
       name: 'ttl',
       text: `

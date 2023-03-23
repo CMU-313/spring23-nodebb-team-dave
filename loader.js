@@ -83,22 +83,22 @@ Loader.addWorkerEvents = function (worker) {
   worker.on('message', (message) => {
     if (message && typeof message === 'object' && message.action) {
       switch (message.action) {
-        case 'restart':
-          console.log('[cluster] Restarting...')
-          Loader.restart()
-          break
-        case 'pubsub':
-          workers.forEach((w) => {
+      case 'restart':
+        console.log('[cluster] Restarting...')
+        Loader.restart()
+        break
+      case 'pubsub':
+        workers.forEach((w) => {
+          w.send(message)
+        })
+        break
+      case 'socket.io':
+        workers.forEach((w) => {
+          if (w !== worker) {
             w.send(message)
-          })
-          break
-        case 'socket.io':
-          workers.forEach((w) => {
-            if (w !== worker) {
-              w.send(message)
-            }
-          })
-          break
+          }
+        })
+        break
       }
     }
   })
@@ -113,7 +113,7 @@ Loader.start = function () {
   }
 }
 
-function forkWorker (index, isPrimary) {
+function forkWorker(index, isPrimary) {
   const ports = getPorts()
   const args = []
 
@@ -144,7 +144,7 @@ function forkWorker (index, isPrimary) {
   }
 }
 
-function getPorts () {
+function getPorts() {
   const _url = nconf.get('url')
   if (!_url) {
     console.log('[cluster] url is undefined, please check your config.json')
@@ -192,7 +192,7 @@ Loader.stop = function () {
   }
 }
 
-function killWorkers () {
+function killWorkers() {
   workers.forEach((worker) => {
     worker.suicide = true
     worker.kill()

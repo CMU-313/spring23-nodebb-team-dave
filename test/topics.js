@@ -719,7 +719,7 @@ describe('Topic\'s', () => {
       let tid2
       const cid1 = topic.categoryId
       let cid2
-      function checkCidSets (post1, post2, callback) {
+      function checkCidSets(post1, post2, callback) {
         async.waterfall([
           function (next) {
             async.parallel({
@@ -728,16 +728,16 @@ describe('Topic\'s', () => {
               },
               scores1: function (next) {
                 db.sortedSetsScore([
-                                    `cid:${cid1}:tids`,
-                                    `cid:${cid1}:tids:lastposttime`,
-                                    `cid:${cid1}:tids:posts`
+                  `cid:${cid1}:tids`,
+                  `cid:${cid1}:tids:lastposttime`,
+                  `cid:${cid1}:tids:posts`
                 ], tid1, next)
               },
               scores2: function (next) {
                 db.sortedSetsScore([
-                                    `cid:${cid2}:tids`,
-                                    `cid:${cid2}:tids:lastposttime`,
-                                    `cid:${cid2}:tids:posts`
+                  `cid:${cid2}:tids`,
+                  `cid:${cid2}:tids:lastposttime`,
+                  `cid:${cid2}:tids:posts`
                 ], tid2, next)
               },
               posts1: function (next) {
@@ -874,7 +874,7 @@ describe('Topic\'s', () => {
     let tid2
     let tid3
     before((done) => {
-      function createTopic (callback) {
+      function createTopic(callback) {
         topics.post({
           uid: topic.userId,
           title: 'topic for test',
@@ -1078,7 +1078,7 @@ describe('Topic\'s', () => {
     const replies = []
     let topicPids
     const originalBookmark = 6
-    function postReply (next) {
+    function postReply(next) {
       topics.reply({ uid: topic.userId, content: `test post ${replies.length}`, tid: newTopic.tid }, (err, result) => {
         assert.equal(err, null, 'was created with error')
         assert.ok(result)
@@ -2433,7 +2433,7 @@ describe('Topic\'s', () => {
     let topic1Data
     let topic2Data
 
-    async function getTopic (tid) {
+    async function getTopic(tid) {
       const topicData = await topics.getTopicData(tid)
       return await topics.getTopicWithPosts(topicData, `tid:${topicData.tid}:posts`, adminUid, 0, 19, false)
     }
@@ -2667,9 +2667,9 @@ describe('Topic\'s', () => {
       assert(score)
       // should not be in regular category zsets
       const isMember = await db.isMemberOfSortedSets([
-                `cid:${categoryObj.cid}:tids`,
-                `cid:${categoryObj.cid}:tids:votes`,
-                `cid:${categoryObj.cid}:tids:posts`
+        `cid:${categoryObj.cid}:tids`,
+        `cid:${categoryObj.cid}:tids:votes`,
+        `cid:${categoryObj.cid}:tids:posts`
       ], topicData.tid)
       assert.deepStrictEqual(isMember, [false, false, false])
     })
@@ -2777,9 +2777,9 @@ describe('Topic\'s', () => {
 
       const scores = await db.sortedSetsScore([
         'topics:scheduled',
-                `uid:${adminUid}:topics`,
-                'topics:tid',
-                `cid:${topicData.cid}:uid:${adminUid}:tids`
+        `uid:${adminUid}:topics`,
+        'topics:tid',
+        `cid:${topicData.cid}:uid:${adminUid}:tids`
       ], topicData.tid)
       assert(scores.every(publishTime => publishTime === editedTopic.timestamp))
     })

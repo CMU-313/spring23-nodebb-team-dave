@@ -25,7 +25,7 @@ interface Locals {
   metaTags: { [key: string]: string }
 }
 
-export async function get (req: Request, res: Response<object, Locals>, callback: NextFunction): Promise<void> {
+export async function get(req: Request, res: Response<object, Locals>, callback: NextFunction): Promise<void> {
   res.locals.metaTags = {
     ...res.locals.metaTags,
     name: 'robots',
@@ -79,7 +79,7 @@ interface QueueResult {
 
 type PostFnType = (data: ComposerData) => Promise<QueueResult>
 
-export async function post (req: Request<object, object, ComposerData> & { uid: number }, res: Response): Promise<void> {
+export async function post(req: Request<object, object, ComposerData> & { uid: number }, res: Response): Promise<void> {
   const { body } = req
   const data: ComposerData = {
     uid: req.uid,
@@ -94,7 +94,7 @@ export async function post (req: Request<object, object, ComposerData> & { uid: 
     return await (await helpers.noScriptErrors(req, res, '[[error:invalid-data]]', 400) as Promise<void>)
   }
 
-  async function queueOrPost (postFn: PostFnType, data: ComposerData): Promise<QueueResult> {
+  async function queueOrPost(postFn: PostFnType, data: ComposerData): Promise<QueueResult> {
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     const shouldQueue: boolean = await posts.shouldQueue(req.uid, data) as boolean

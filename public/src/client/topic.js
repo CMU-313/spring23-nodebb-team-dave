@@ -12,7 +12,7 @@ define('forum/topic', [
   'storage',
   'hooks',
   'api',
-  'alerts'
+  'alerts',
 ], function (
   infinitescroll, threadTools, postTools,
   events, posts, navigator, sort,
@@ -71,7 +71,7 @@ define('forum/topic', [
     hooks.fire('action:topic.loaded', ajaxify.data)
   }
 
-  function handleTopicSearch () {
+  function handleTopicSearch() {
     require(['mousetrap'], (mousetrap) => {
       if (config.topicSearchEnabled) {
         require(['search'], function (search) {
@@ -121,7 +121,7 @@ define('forum/topic', [
     })
   }
 
-  function handleBookmark (tid) {
+  function handleBookmark(tid) {
     if (window.location.hash) {
       const el = $(utils.escapeHTML(window.location.hash))
       if (el.length) {
@@ -149,7 +149,7 @@ define('forum/topic', [
         },
         closefn: function () {
           storage.removeItem('topic:' + tid + ':bookmark')
-        }
+        },
       })
       setTimeout(function () {
         alerts.remove('bookmark')
@@ -157,7 +157,7 @@ define('forum/topic', [
     }
   }
 
-  function addBlockQuoteHandler () {
+  function addBlockQuoteHandler() {
     components.get('topic').on('click', 'blockquote .toggle', function () {
       const blockQuote = $(this).parent('blockquote')
       const toggle = $(this)
@@ -167,7 +167,7 @@ define('forum/topic', [
     })
   }
 
-  function addParentHandler () {
+  function addParentHandler() {
     components.get('topic').on('click', '[component="post/parent"]', function (e) {
       const toPid = $(this).attr('data-topid')
 
@@ -193,7 +193,7 @@ define('forum/topic', [
     this.classList.toggle('dropup', dropUp)
   }
 
-  function addDropupHandler () {
+  function addDropupHandler() {
     // Locate all dropdowns
     const target = $('#content .dropdown-menu').parent()
     $(target).on('shown.bs.dropdown', function () {
@@ -210,7 +210,7 @@ define('forum/topic', [
     })
   }
 
-  function addRepliesHandler () {
+  function addRepliesHandler() {
     $('[component="topic"]').on('click', '[component="post/reply-count"]', function () {
       const btn = $(this)
       require(['forum/topic/replies'], function (replies) {
@@ -219,7 +219,7 @@ define('forum/topic', [
     })
   }
 
-  function addPostsPreviewHandler () {
+  function addPostsPreviewHandler() {
     if (!ajaxify.data.showPostPreviewsOnHover || utils.isMobile()) {
       return
     }
@@ -232,7 +232,7 @@ define('forum/topic', [
     $('[component="topic"]').on('mouseenter', '[component="post"] a, [component="topic/event"] a', async function () {
       const link = $(this)
 
-      async function renderPost (pid) {
+      async function renderPost(pid) {
         const postData = postCache[pid] || await socket.emit('posts.getPostSummaryByPid', { pid })
         $('#post-tooltip').remove()
         if (postData && ajaxify.data.template.topic) {
@@ -247,7 +247,7 @@ define('forum/topic', [
           tooltip.css({
             top: linkRect.top + 30,
             left: postRect.left,
-            width: postWidth
+            width: postWidth,
           })
         }
       }
@@ -281,7 +281,7 @@ define('forum/topic', [
     })
   }
 
-  function updateTopicTitle () {
+  function updateTopicTitle() {
     const span = components.get('navbar/title').find('span')
     if ($(window).scrollTop() > 50 && span.hasClass('hidden')) {
       span.html(ajaxify.data.title).removeClass('hidden')
@@ -316,13 +316,13 @@ define('forum/topic', [
         }
 
         history.replaceState({
-          url: newUrl + search
+          url: newUrl + search,
         }, null, window.location.protocol + '//' + window.location.host + config.relative_path + '/' + newUrl + search)
       }
     }
   }
 
-  function updateUserBookmark (index) {
+  function updateUserBookmark(index) {
     const bookmarkKey = 'topic:' + ajaxify.data.tid + ':bookmark'
     const currentBookmark = ajaxify.data.bookmark || storage.getItem(bookmarkKey)
     if (config.topicPostSort === 'newest_to_oldest') {
@@ -340,7 +340,7 @@ define('forum/topic', [
       if (app.user.uid) {
         socket.emit('topics.bookmark', {
           tid: ajaxify.data.tid,
-          index
+          index,
         }, function (err) {
           if (err) {
             return alerts.error(err)

@@ -46,7 +46,7 @@ SocketUser.reset.send = async function (socket, email) {
   if (meta.config['password:disableEdit']) {
     throw new Error('[[error:no-privileges]]')
   }
-  async function logEvent (text) {
+  async function logEvent(text) {
     await events.log({
       type: 'password-reset',
       text,

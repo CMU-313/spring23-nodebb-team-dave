@@ -2,7 +2,7 @@
 
 const winston = require('winston')
 
-function warn (msg) {
+function warn(msg) {
   winston.warn(msg)
 }
 

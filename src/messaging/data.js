@@ -135,7 +135,7 @@ module.exports = function (Messaging) {
   }
 }
 
-async function modifyMessage (message, fields, mid) {
+async function modifyMessage(message, fields, mid) {
   if (message) {
     db.parseIntFields(message, intFields, fields)
     if (message.hasOwnProperty('timestamp')) {

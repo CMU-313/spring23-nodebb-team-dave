@@ -32,7 +32,7 @@ module.exports = function (User) {
     winston.verbose('[user/jobs] jobs started')
   }
 
-  function startDigestJob (name, cronString, term) {
+  function startDigestJob(name, cronString, term) {
     jobs[name] = new cronJob(cronString, async () => {
       winston.verbose(`[user/jobs] Digest job (${name}) started.`)
       try {

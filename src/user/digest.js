@@ -170,7 +170,7 @@ Digest.getDeliveryTimes = async (start, stop) => {
   }
 }
 
-async function getTermTopics (term, uid) {
+async function getTermTopics(term, uid) {
   const data = await topics.getSortedTopics({
     uid,
     start: 0,
@@ -201,9 +201,9 @@ async function getTermTopics (term, uid) {
         topicObj.teaser.content = `${topicObj.teaser.content.slice(0, 255)}...`
       }
       // Fix relative paths in topic data
-      const user = topicObj.hasOwnProperty('teaser') && topicObj.teaser && topicObj.teaser.user
-        ? topicObj.teaser.user
-        : topicObj.user
+      const user = topicObj.hasOwnProperty('teaser') && topicObj.teaser && topicObj.teaser.user ?
+        topicObj.teaser.user :
+        topicObj.user
       if (user && user.picture && utils.isRelativeUrl(user.picture)) {
         user.picture = baseUrl + user.picture
       }

@@ -103,7 +103,7 @@ searchController.search = async function (req, res, next) {
 
 const searches = {}
 
-async function recordSearch (data) {
+async function recordSearch(data) {
   const { query, searchIn } = data
   if (query) {
     const cleanedQuery = String(query).trim().toLowerCase().slice(0, 255)
@@ -127,7 +127,7 @@ async function recordSearch (data) {
   }
 }
 
-async function buildCategories (uid, searchOnly) {
+async function buildCategories(uid, searchOnly) {
   if (searchOnly) {
     return []
   }

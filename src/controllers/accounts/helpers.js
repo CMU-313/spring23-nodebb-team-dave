@@ -123,11 +123,11 @@ helpers.getUserDataByUserSlug = async function (userslug, callerUID, query = {})
   return hookData.userData
 }
 
-function escape (value) {
+function escape(value) {
   return translator.escape(validator.escape(String(value || '')))
 }
 
-async function getAllData (uid, callerUID) {
+async function getAllData(uid, callerUID) {
   return await utils.promiseParallel({
     userData: user.getUserData(uid),
     isTargetAdmin: user.isAdministrator(uid),
@@ -149,7 +149,7 @@ async function getAllData (uid, callerUID) {
   })
 }
 
-async function getCounts (userData, callerUID) {
+async function getCounts(userData, callerUID) {
   const { uid } = userData
   const cids = await categories.getCidsByPrivilege('categories:cid', callerUID, 'topics:read')
   const promises = {
@@ -179,7 +179,7 @@ async function getCounts (userData, callerUID) {
   userData.counts = counts
 }
 
-async function getProfileMenu (uid, callerUID) {
+async function getProfileMenu(uid, callerUID) {
   const links = [{
     id: 'info',
     route: 'info',
@@ -232,7 +232,7 @@ async function getProfileMenu (uid, callerUID) {
   })
 }
 
-async function parseAboutMe (userData) {
+async function parseAboutMe(userData) {
   if (!userData.aboutme) {
     userData.aboutme = ''
     userData.aboutmeParsed = ''
@@ -244,7 +244,7 @@ async function parseAboutMe (userData) {
   userData.aboutmeParsed = translator.escape(parsed)
 }
 
-function filterLinks (links, states) {
+function filterLinks(links, states) {
   return links.filter((link, index) => {
     // Default visibility
     link.visibility = {

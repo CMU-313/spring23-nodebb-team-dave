@@ -18,7 +18,7 @@ define('admin/modules/colorpicker', function () {
         },
         onShow: function (colpkr) {
           $(colpkr).css('z-index', 1051)
-        }
+        },
       })
 
       $(window).one('action:ajaxify.start', function () {

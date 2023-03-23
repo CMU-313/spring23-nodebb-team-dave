@@ -99,7 +99,7 @@ editController.email = async function (req, res, next) {
   helpers.redirect(res, '/register/complete')
 }
 
-async function renderRoute (name, req, res, next) {
+async function renderRoute(name, req, res, next) {
   const userData = await getUserData(req, next)
   if (!userData) {
     return next()
@@ -131,7 +131,7 @@ async function renderRoute (name, req, res, next) {
   res.render(`account/edit/${name}`, userData)
 }
 
-async function getUserData (req) {
+async function getUserData(req) {
   const userData = await accountHelpers.getUserDataByUserSlug(req.params.userslug, req.uid, req.query)
   if (!userData) {
     return null

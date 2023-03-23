@@ -8,7 +8,7 @@ define('forum/compose', ['hooks'], function (hooks) {
 
     if (container.length) {
       hooks.fire('action:composer.enhance', {
-        container
+        container,
       })
     }
   }

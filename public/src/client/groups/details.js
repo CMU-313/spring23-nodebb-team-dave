@@ -11,7 +11,7 @@ define('forum/groups/details', [
   'slugify',
   'categorySelector',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (
   memberList,
   iconSelect,
@@ -42,7 +42,7 @@ define('forum/groups/details', [
           socket.emit('groups.cover.update', {
             groupName,
             imageData,
-            position
+            position,
           }, callback)
         },
         function () {
@@ -53,7 +53,7 @@ define('forum/groups/details', [
             allowSkippingCrop: true,
             restrictImageDimension: false,
             paramName: 'groupName',
-            paramValue: groupName
+            paramValue: groupName,
           }, function (imageUrlOnServer) {
             imageUrlOnServer = (!imageUrlOnServer.startsWith('http') ? config.relative_path : '') + imageUrlOnServer + '?' + Date.now()
             components.get('groups/cover').css('background-image', 'url(' + imageUrlOnServer + ')')
@@ -78,60 +78,60 @@ define('forum/groups/details', [
       const action = btnEl.attr('data-action')
 
       switch (action) {
-        case 'toggleOwnership':
-          api[isOwner ? 'del' : 'put'](`/groups/${ajaxify.data.group.slug}/ownership/${uid}`, {}).then(() => {
-            ownerFlagEl.toggleClass('invisible')
-          }).catch(alerts.error)
-          break
+      case 'toggleOwnership':
+        api[isOwner ? 'del' : 'put'](`/groups/${ajaxify.data.group.slug}/ownership/${uid}`, {}).then(() => {
+          ownerFlagEl.toggleClass('invisible')
+        }).catch(alerts.error)
+        break
 
-        case 'kick':
-          translator.translate('[[groups:details.kick_confirm]]', function (translated) {
-            bootbox.confirm(translated, function (confirm) {
-              if (!confirm) {
-                return
-              }
-
-              api.del(`/groups/${ajaxify.data.group.slug}/membership/${uid}`, undefined).then(() => userRow.slideUp().remove()).catch(alerts.error)
-            })
-          })
-          break
-
-        case 'update':
-          Details.update()
-          break
-
-        case 'delete':
-          Details.deleteGroup()
-          break
-
-        case 'join':
-          api.put('/groups/' + ajaxify.data.group.slug + '/membership/' + (uid || app.user.uid), undefined).then(() => ajaxify.refresh()).catch(alerts.error)
-          break
-
-        case 'leave':
-          api.del('/groups/' + ajaxify.data.group.slug + '/membership/' + (uid || app.user.uid), undefined).then(() => ajaxify.refresh()).catch(alerts.error)
-          break
-
-          // TODO (14/10/2020): rewrite these to use api module and merge with above 2 case blocks
-        case 'accept': // intentional fall-throughs!
-        case 'reject':
-        case 'issueInvite':
-        case 'rescindInvite':
-        case 'acceptInvite':
-        case 'rejectInvite':
-        case 'acceptAll':
-        case 'rejectAll':
-          socket.emit('groups.' + action, {
-            toUid: uid,
-            groupName
-          }, function (err) {
-            if (!err) {
-              ajaxify.refresh()
-            } else {
-              alerts.error(err)
+      case 'kick':
+        translator.translate('[[groups:details.kick_confirm]]', function (translated) {
+          bootbox.confirm(translated, function (confirm) {
+            if (!confirm) {
+              return
             }
+
+            api.del(`/groups/${ajaxify.data.group.slug}/membership/${uid}`, undefined).then(() => userRow.slideUp().remove()).catch(alerts.error)
           })
-          break
+        })
+        break
+
+      case 'update':
+        Details.update()
+        break
+
+      case 'delete':
+        Details.deleteGroup()
+        break
+
+      case 'join':
+        api.put('/groups/' + ajaxify.data.group.slug + '/membership/' + (uid || app.user.uid), undefined).then(() => ajaxify.refresh()).catch(alerts.error)
+        break
+
+      case 'leave':
+        api.del('/groups/' + ajaxify.data.group.slug + '/membership/' + (uid || app.user.uid), undefined).then(() => ajaxify.refresh()).catch(alerts.error)
+        break
+
+        // TODO (14/10/2020): rewrite these to use api module and merge with above 2 case blocks
+      case 'accept': // intentional fall-throughs!
+      case 'reject':
+      case 'issueInvite':
+      case 'rescindInvite':
+      case 'acceptInvite':
+      case 'rejectInvite':
+      case 'acceptAll':
+      case 'rejectAll':
+        socket.emit('groups.' + action, {
+          toUid: uid,
+          groupName,
+        }, function (err) {
+          if (!err) {
+            ajaxify.refresh()
+          } else {
+            alerts.error(err)
+          }
+        })
+        break
       }
     })
   }
@@ -188,7 +188,7 @@ define('forum/groups/details', [
         cids = cids.filter((cid, index, array) => array.indexOf(cid) === index)
         $('#memberPostCids').val(cids.join(','))
         cidSelector.selectCategory(0)
-      }
+      },
     })
   }
 
@@ -241,7 +241,7 @@ define('forum/groups/details', [
     })
   }
 
-  function handleMemberInvitations () {
+  function handleMemberInvitations() {
     if (!ajaxify.data.group.isOwner) {
       return
     }
@@ -251,7 +251,7 @@ define('forum/groups/details', [
       autocomplete.user(searchInput, function (event, selected) {
         socket.emit('groups.issueInvite', {
           toUid: selected.item.user.uid,
-          groupName: ajaxify.data.group.name
+          groupName: ajaxify.data.group.name,
         }, function (err) {
           if (err) {
             return alerts.error(err)
@@ -268,7 +268,7 @@ define('forum/groups/details', [
       }
       socket.emit('groups.issueMassInvite', {
         usernames,
-        groupName: ajaxify.data.group.name
+        groupName: ajaxify.data.group.name,
       }, function (err) {
         if (err) {
           return alerts.error(err)
@@ -279,7 +279,7 @@ define('forum/groups/details', [
     })
   }
 
-  function removeCover () {
+  function removeCover() {
     translator.translate('[[groups:remove_group_cover_confirm]]', function (translated) {
       bootbox.confirm(translated, function (confirm) {
         if (!confirm) {
@@ -287,7 +287,7 @@ define('forum/groups/details', [
         }
 
         socket.emit('groups.cover.remove', {
-          groupName: ajaxify.data.group.name
+          groupName: ajaxify.data.group.name,
         }, function (err) {
           if (!err) {
             ajaxify.refresh()

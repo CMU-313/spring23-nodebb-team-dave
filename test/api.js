@@ -91,10 +91,10 @@ describe('API', async () => {
     }
   }
 
-  async function dummySearchHook (data) {
+  async function dummySearchHook(data) {
     return [1]
   }
-  async function dummyEmailerHook (data) {
+  async function dummyEmailerHook(data) {
     // pretend to handle sending emails
   }
 
@@ -103,7 +103,7 @@ describe('API', async () => {
     plugins.hooks.unregister('emailer-test', 'filter:email.send')
   })
 
-  async function setupData () {
+  async function setupData() {
     if (setup) {
       return
     }
@@ -305,7 +305,7 @@ describe('API', async () => {
   // generateTests(readApi, Object.keys(readApi.paths));
   generateTests(writeApi, Object.keys(writeApi.paths), writeApi.servers[0].url)
 
-  function generateTests (api, paths, prefix) {
+  function generateTests(api, paths, prefix) {
     // Iterate through all documented paths, make a call to it,
     // and compare the result body with what is defined in the spec
     const pathLib = path // for calling path module from inside this forEach
@@ -347,15 +347,15 @@ describe('API', async () => {
               assert(param.example !== null && param.example !== undefined, `${method.toUpperCase()} ${path} has parameters without examples`)
 
               switch (param.in) {
-                case 'path':
-                  testPath = testPath.replace(`{${param.name}}`, param.example)
-                  break
-                case 'header':
-                  headers[param.name] = param.example
-                  break
-                case 'query':
-                  qs[param.name] = param.example
-                  break
+              case 'path':
+                testPath = testPath.replace(`{${param.name}}`, param.example)
+                break
+              case 'header':
+                headers[param.name] = param.example
+                break
+              case 'query':
+                qs[param.name] = param.example
+                break
               }
             })
           }
@@ -495,18 +495,18 @@ describe('API', async () => {
     })
   }
 
-  function buildBody (schema) {
+  function buildBody(schema) {
     return Object.keys(schema).reduce((memo, cur) => {
       memo[cur] = schema[cur].example
       return memo
     }, {})
   }
 
-  function compare (schema, response, method, path, context) {
+  function compare(schema, response, method, path, context) {
     let required = []
     const additionalProperties = schema.hasOwnProperty('additionalProperties')
 
-    function flattenAllOf (obj) {
+    function flattenAllOf(obj) {
       return obj.reduce((memo, obj) => {
         if (obj.allOf) {
           obj = { properties: flattenAllOf(obj.allOf) }
@@ -546,35 +546,35 @@ describe('API', async () => {
         assert(response[prop] !== null, `"${prop}" was null, but schema does not specify it to be a nullable property (path: ${method} ${path}, context: ${context})`)
 
         switch (schema[prop].type) {
-          case 'string':
-            assert.strictEqual(typeof response[prop], 'string', `"${prop}" was expected to be a string, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
-            break
-          case 'boolean':
-            assert.strictEqual(typeof response[prop], 'boolean', `"${prop}" was expected to be a boolean, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
-            break
-          case 'object':
-            assert.strictEqual(typeof response[prop], 'object', `"${prop}" was expected to be an object, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
-            compare(schema[prop], response[prop], method, path, context ? [context, prop].join('.') : prop)
-            break
-          case 'array':
-            assert.strictEqual(Array.isArray(response[prop]), true, `"${prop}" was expected to be an array, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
+        case 'string':
+          assert.strictEqual(typeof response[prop], 'string', `"${prop}" was expected to be a string, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
+          break
+        case 'boolean':
+          assert.strictEqual(typeof response[prop], 'boolean', `"${prop}" was expected to be a boolean, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
+          break
+        case 'object':
+          assert.strictEqual(typeof response[prop], 'object', `"${prop}" was expected to be an object, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
+          compare(schema[prop], response[prop], method, path, context ? [context, prop].join('.') : prop)
+          break
+        case 'array':
+          assert.strictEqual(Array.isArray(response[prop]), true, `"${prop}" was expected to be an array, but was ${typeof response[prop]} instead (path: ${method} ${path}, context: ${context})`)
 
-            if (schema[prop].items) {
-              // Ensure the array items have a schema defined
-              assert(schema[prop].items.type || schema[prop].items.allOf, `"${prop}" is defined to be an array, but its items have no schema defined (path: ${method} ${path}, context: ${context})`)
+          if (schema[prop].items) {
+            // Ensure the array items have a schema defined
+            assert(schema[prop].items.type || schema[prop].items.allOf, `"${prop}" is defined to be an array, but its items have no schema defined (path: ${method} ${path}, context: ${context})`)
 
-              // Compare types
-              if (schema[prop].items.type === 'object' || Array.isArray(schema[prop].items.allOf)) {
-                response[prop].forEach((res) => {
-                  compare(schema[prop].items, res, method, path, context ? [context, prop].join('.') : prop)
-                })
-              } else if (response[prop].length) { // for now
-                response[prop].forEach((item) => {
-                  assert.strictEqual(typeof item, schema[prop].items.type, `"${prop}" should have ${schema[prop].items.type} items, but found ${typeof items} instead (path: ${method} ${path}, context: ${context})`)
-                })
-              }
+            // Compare types
+            if (schema[prop].items.type === 'object' || Array.isArray(schema[prop].items.allOf)) {
+              response[prop].forEach((res) => {
+                compare(schema[prop].items, res, method, path, context ? [context, prop].join('.') : prop)
+              })
+            } else if (response[prop].length) { // for now
+              response[prop].forEach((item) => {
+                assert.strictEqual(typeof item, schema[prop].items.type, `"${prop}" should have ${schema[prop].items.type} items, but found ${typeof items} instead (path: ${method} ${path}, context: ${context})`)
+              })
             }
-            break
+          }
+          break
         }
       }
     })

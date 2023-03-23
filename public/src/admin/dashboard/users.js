@@ -6,7 +6,7 @@ define('admin/dashboard/users', ['admin/modules/dashboard-line-graph', 'hooks'],
   ACP.init = () => {
     graph.init({
       set: 'registrations',
-      dataset: ajaxify.data.dataset
+      dataset: ajaxify.data.dataset,
     }).then(() => {
       hooks.onPage('action:admin.dashboard.updateGraph', ACP.updateTable)
     })

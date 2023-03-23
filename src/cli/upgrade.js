@@ -45,7 +45,7 @@ const steps = {
   }
 }
 
-async function runSteps (tasks) {
+async function runSteps(tasks) {
   try {
     for (let i = 0; i < tasks.length; i++) {
       const step = steps[tasks[i]]
@@ -70,7 +70,7 @@ async function runSteps (tasks) {
   }
 }
 
-async function runUpgrade (upgrades, options) {
+async function runUpgrade(upgrades, options) {
   console.log(chalk.cyan('\nUpdating NodeBB...'))
   options = options || {}
   // disable mongo timeouts during upgrade

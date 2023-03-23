@@ -54,7 +54,7 @@ Messaging.getMessages = async (params) => {
   return messageData
 }
 
-async function canGet (hook, callerUid, uid) {
+async function canGet(hook, callerUid, uid) {
   const data = await plugins.hooks.fire(hook, {
     callerUid,
     uid,
@@ -252,7 +252,7 @@ Messaging.canMessageRoom = async (uid, roomId) => {
   })
 }
 
-async function checkReputation (uid) {
+async function checkReputation(uid) {
   if (meta.config['min:rep:chat'] > 0) {
     const reputation = await user.getUserField(uid, 'reputation')
     if (meta.config['min:rep:chat'] > reputation) {

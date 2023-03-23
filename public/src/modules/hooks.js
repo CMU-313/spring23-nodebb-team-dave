@@ -9,8 +9,8 @@ define('hooks', [], () => {
 
     },
     logs: {
-      _collection: new Set()
-    }
+      _collection: new Set(),
+    },
   }
 
   Hooks.logs.collect = () => {
@@ -109,9 +109,9 @@ define('hooks', [], () => {
     return listeners.reduce((promise, listener) => promise.then((data) => {
       try {
         const result = listener(data)
-        return utils.isPromise(result)
-          ? result.then(data => Promise.resolve(data)).catch(e => _onHookError(e, listener, data))
-          : result
+        return utils.isPromise(result) ?
+          result.then(data => Promise.resolve(data)).catch(e => _onHookError(e, listener, data)) :
+          result
       } catch (e) {
         return _onHookError(e, listener, data)
       }
@@ -148,17 +148,17 @@ define('hooks', [], () => {
     const type = hookName.split(':').shift()
     let result
     switch (type) {
-      case 'filter':
-        result = _fireFilterHook(hookName, data)
-        break
+    case 'filter':
+      result = _fireFilterHook(hookName, data)
+      break
 
-      case 'action':
-        result = _fireActionHook(hookName, data)
-        break
+    case 'action':
+      result = _fireActionHook(hookName, data)
+      break
 
-      case 'static':
-        result = _fireStaticHook(hookName, data)
-        break
+    case 'static':
+      result = _fireStaticHook(hookName, data)
+      break
     }
     Hooks.runOnce.forEach((pair) => {
       if (pair.hookName === hookName) {

@@ -74,7 +74,7 @@ let privHelpers
 let utils
 let winston
 
-async function init () {
+async function init() {
   db = require('../database')
   await db.init()
 
@@ -86,7 +86,7 @@ async function init () {
   winston = require('winston')
 }
 
-async function execute (cmd, args) {
+async function execute(cmd, args) {
   await init()
   try {
     await cmd(...args)
@@ -99,8 +99,8 @@ async function execute (cmd, args) {
   process.exit()
 }
 
-function UserCmdHelpers () {
-  async function getAdminUidOrFail () {
+function UserCmdHelpers() {
+  async function getAdminUidOrFail() {
     const adminUid = await user.getFirstAdminUid()
     if (!adminUid) {
       const err = new Error('An admin account does not exists to execute the operation.')
@@ -110,7 +110,7 @@ function UserCmdHelpers () {
     return adminUid
   }
 
-  async function setupApp () {
+  async function setupApp() {
     const nconf = require('nconf')
     const Benchpress = require('benchpressjs')
 
@@ -152,10 +152,10 @@ function UserCmdHelpers () {
   }
 }
 
-function UserCommands () {
+function UserCommands() {
   const { argParsers, getAdminUidOrFail, setupApp } = UserCmdHelpers()
 
-  async function info ({ uid, username, userslug }) {
+  async function info({ uid, username, userslug }) {
     if (!uid && !username && !userslug) {
       return winston.error('[userCmd/info] At least one option has to be passed (--uid, --username or --userslug).')
     }
@@ -173,7 +173,7 @@ function UserCommands () {
     console.log(userData)
   }
 
-  async function create (username, { password, email }) {
+  async function create(username, { password, email }) {
     let pwGenerated = false
     if (password === undefined) {
       password = utils.generateUUID().slice(0, 8)
@@ -195,7 +195,7 @@ function UserCommands () {
 ${pwGenerated ? ` Generated password: ${password}` : ''}`)
   }
 
-  async function reset (uid, { password, sendResetEmail }) {
+  async function reset(uid, { password, sendResetEmail }) {
     uid = argParsers.intParse(uid, 'uid')
 
     if (password === false && sendResetEmail === false) {
@@ -235,7 +235,7 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`)
     }
   }
 
-  async function deleteUser (uids, { type }) {
+  async function deleteUser(uids, { type }) {
     uids = argParsers.intArrayParse(uids, 'uids')
 
     const userExists = await user.exists(uids)
@@ -247,36 +247,36 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`)
     const adminUid = await getAdminUidOrFail()
 
     switch (type) {
-      case 'purge':
-        await Promise.all(uids.map(uid => user.delete(adminUid, uid)))
-        winston.info('[userCmd/delete] User(s) with their content has been deleted.')
-        break
-      case 'account':
-        await Promise.all(uids.map(uid => user.deleteAccount(uid)))
-        winston.info('[userCmd/delete] User(s) has been deleted, their content left intact.')
-        break
-      case 'content':
-        await Promise.all(uids.map(uid => user.deleteContent(adminUid, uid)))
-        winston.info('[userCmd/delete] User(s)\' content has been deleted.')
-        break
+    case 'purge':
+      await Promise.all(uids.map(uid => user.delete(adminUid, uid)))
+      winston.info('[userCmd/delete] User(s) with their content has been deleted.')
+      break
+    case 'account':
+      await Promise.all(uids.map(uid => user.deleteAccount(uid)))
+      winston.info('[userCmd/delete] User(s) has been deleted, their content left intact.')
+      break
+    case 'content':
+      await Promise.all(uids.map(uid => user.deleteContent(adminUid, uid)))
+      winston.info('[userCmd/delete] User(s)\' content has been deleted.')
+      break
     }
   }
 
-  async function makeAdmin (uids) {
+  async function makeAdmin(uids) {
     uids = argParsers.intArrayParse(uids, 'uids')
     await Promise.all(uids.map(uid => groups.join('administrators', uid)))
 
     winston.info('[userCmd/make/admin] User(s) added as administrators.')
   }
 
-  async function makeGlobalMod (uids) {
+  async function makeGlobalMod(uids) {
     uids = argParsers.intArrayParse(uids, 'uids')
     await Promise.all(uids.map(uid => groups.join('Global Moderators', uid)))
 
     winston.info('[userCmd/make/globalMod] User(s) added as global moderators.')
   }
 
-  async function makeMod (uids, { cid: cids }) {
+  async function makeMod(uids, { cid: cids }) {
     uids = argParsers.intArrayParse(uids, 'uids')
     cids = argParsers.intArrayParse(cids, 'cids')
 
@@ -286,7 +286,7 @@ ${pwGenerated ? ` Generated password: ${password}` : ''}`)
     winston.info('[userCmd/make/mod] User(s) added as moderators to given categories.')
   }
 
-  async function makeRegular (uids) {
+  async function makeRegular(uids) {
     uids = argParsers.intArrayParse(uids, 'uids')
 
     await Promise.all(uids.map(uid => groups.leave(['administrators', 'Global Moderators'], uid)))

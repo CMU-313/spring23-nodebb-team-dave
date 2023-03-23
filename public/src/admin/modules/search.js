@@ -3,7 +3,7 @@
 define('admin/modules/search', ['mousetrap', 'alerts'], function (mousetrap, alerts) {
   const search = {}
 
-  function find (dict, term) {
+  function find(dict, term) {
     const html = dict.filter(function (elem) {
       return elem.translations.toLowerCase().includes(term)
     }).map(function (params) {
@@ -35,9 +35,9 @@ define('admin/modules/search', ['mousetrap', 'alerts'], function (mousetrap, ale
       return '<li role="presentation" class="result">' +
                 '<a role= "menuitem" href= "' + config.relative_path + '/' + namespace + '" >' +
                     title +
-                    '<br>' + (!results
-        ? ''
-        : ('<small><code>' +
+                    '<br>' + (!results ?
+        '' :
+        ('<small><code>' +
                         results +
                     '</small></code>')) +
                 '</a>' +
@@ -60,7 +60,7 @@ define('admin/modules/search', ['mousetrap', 'alerts'], function (mousetrap, ale
     })
   }
 
-  function setupACPSearch (dict) {
+  function setupACPSearch(dict) {
     const dropdown = $('#acp-search .dropdown')
     const menu = $('#acp-search .dropdown-menu')
     const input = $('#acp-search input')

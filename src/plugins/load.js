@@ -10,8 +10,8 @@ const meta = require('../meta')
 const { themeNamePattern } = require('../constants')
 
 module.exports = function (Plugins) {
-  async function registerPluginAssets (pluginData, fields) {
-    function add (dest, arr) {
+  async function registerPluginAssets(pluginData, fields) {
+    function add(dest, arr) {
       dest.push(...(arr || []))
     }
 
@@ -84,17 +84,17 @@ module.exports = function (Plugins) {
     // clear old data before build
     fields.forEach((field) => {
       switch (field) {
-        case 'clientScripts':
-        case 'acpScripts':
-        case 'cssFiles':
-        case 'lessFiles':
-        case 'acpLessFiles':
-          Plugins[field].length = 0
-          break
-        case 'languageData':
-          Plugins.languageData.languages = []
-          Plugins.languageData.namespaces = []
-          break
+      case 'clientScripts':
+      case 'acpScripts':
+      case 'cssFiles':
+      case 'lessFiles':
+      case 'acpLessFiles':
+        Plugins[field].length = 0
+        break
+      case 'languageData':
+        Plugins.languageData.languages = []
+        Plugins.languageData.namespaces = []
+        break
             // do nothing for modules and staticDirs
       }
     })
@@ -138,8 +138,8 @@ module.exports = function (Plugins) {
     winston.verbose(`[plugins] Loaded plugin: ${pluginData.id}`)
   }
 
-  function checkVersion (pluginData) {
-    function add () {
+  function checkVersion(pluginData) {
+    function add() {
       if (!Plugins.versionWarning.includes(pluginData.id)) {
         Plugins.versionWarning.push(pluginData.id)
       }
@@ -154,7 +154,7 @@ module.exports = function (Plugins) {
     }
   }
 
-  function registerHooks (pluginData) {
+  function registerHooks(pluginData) {
     try {
       if (!Plugins.libraries[pluginData.id]) {
         Plugins.requireLibrary(pluginData)

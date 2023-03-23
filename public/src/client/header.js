@@ -4,7 +4,7 @@ define('forum/header', [
   'forum/header/unread',
   'forum/header/notifications',
   'forum/header/chat',
-  'alerts'
+  'alerts',
 ], function (unread, notifications, chat, alerts) {
   const module = {}
 
@@ -19,7 +19,7 @@ define('forum/header', [
     handleLogout()
   }
 
-  function handleStatusChange () {
+  function handleStatusChange() {
     $('[component="header/usercontrol"] [data-status]').off('click').on('click', function (e) {
       const status = $(this).attr('data-status')
       socket.emit('user.setStatus', status, function (err) {
@@ -38,7 +38,7 @@ define('forum/header', [
     })
   }
 
-  function createHeaderTooltips () {
+  function createHeaderTooltips() {
     const env = utils.findBootstrapEnvironment()
     if (env === 'xs' || env === 'sm' || utils.isTouchDevice()) {
       return
@@ -47,24 +47,24 @@ define('forum/header', [
       $(this).tooltip({
         placement: 'bottom',
         trigger: 'hover',
-        title: $(this).attr('title')
+        title: $(this).attr('title'),
       })
     })
 
     $('#search-form').tooltip({
       placement: 'bottom',
       trigger: 'hover',
-      title: $('#search-button i').attr('title')
+      title: $('#search-button i').attr('title'),
     })
 
     $('#user_dropdown').tooltip({
       placement: 'bottom',
       trigger: 'hover',
-      title: $('#user_dropdown').attr('title')
+      title: $('#user_dropdown').attr('title'),
     })
   }
 
-  function handleLogout () {
+  function handleLogout() {
     $('#header-menu .container').on('click', '[component="user/logout"]', function () {
       require(['logout'], function (logout) {
         logout()

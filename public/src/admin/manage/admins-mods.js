@@ -1,7 +1,7 @@
 'use strict'
 
 define('admin/manage/admins-mods', [
-  'autocomplete', 'api', 'bootbox', 'alerts', 'categorySelector'
+  'autocomplete', 'api', 'bootbox', 'alerts', 'categorySelector',
 ], function (autocomplete, api, bootbox, alerts, categorySelector) {
   const AdminsMods = {}
 
@@ -81,7 +81,7 @@ define('admin/manage/admins-mods', [
       onSelect: function (selectedCategory) {
         ajaxify.go('admin/manage/admins-mods' + (selectedCategory.cid ? '?cid=' + selectedCategory.cid : ''))
       },
-      localCategories: []
+      localCategories: [],
     })
 
     autocomplete.user($('.moderator-search'), function (ev, ui) {

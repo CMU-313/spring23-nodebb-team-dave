@@ -53,7 +53,7 @@ module.exports = {
   }
 }
 
-async function addBan (uid, key, data) {
+async function addBan(uid, key, data) {
   await db.setObject(key, data)
   await db.sortedSetAdd(`uid:${uid}:bans:timestamp`, data.timestamp, key)
 }

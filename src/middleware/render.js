@@ -13,14 +13,14 @@ const helpers = require('./helpers')
 const relative_path = nconf.get('relative_path')
 
 module.exports = function (middleware) {
-  middleware.processRender = function processRender (req, res, next) {
+  middleware.processRender = function processRender(req, res, next) {
     // res.render post-processing, modified from here: https://gist.github.com/mrlannigan/5051687
     const { render } = res
 
-    res.render = async function renderOverride (template, options, fn) {
+    res.render = async function renderOverride(template, options, fn) {
       const self = this
       const { req } = this
-      async function renderMethod (template, options, fn) {
+      async function renderMethod(template, options, fn) {
         options = options || {}
         if (typeof options === 'function') {
           fn = options
@@ -78,11 +78,11 @@ module.exports = function (middleware) {
         const str = `${results.header +
                     (res.locals.postHeader || '') +
                     results.content
-                }<script id="ajaxify-data" type="application/json">${
-                    optionsString
-                }</script>${
-                    res.locals.preFooter || ''
-                }${results.footer}`
+        }<script id="ajaxify-data" type="application/json">${
+          optionsString
+        }</script>${
+          res.locals.preFooter || ''
+        }${results.footer}`
 
         if (typeof fn !== 'function') {
           self.send(str)
@@ -101,7 +101,7 @@ module.exports = function (middleware) {
     next()
   }
 
-  async function renderContent (render, tpl, req, res, options) {
+  async function renderContent(render, tpl, req, res, options) {
     return new Promise((resolve, reject) => {
       render.call(res, tpl, options, async (err, str) => {
         if (err) reject(err)
@@ -110,7 +110,7 @@ module.exports = function (middleware) {
     })
   }
 
-  async function renderHeaderFooter (method, req, res, options) {
+  async function renderHeaderFooter(method, req, res, options) {
     let str = ''
     if (res.locals.renderHeader) {
       str = await middleware[method](req, res, options)
@@ -122,7 +122,7 @@ module.exports = function (middleware) {
     return await translate(str, getLang(req, res))
   }
 
-  function getLang (req, res) {
+  function getLang(req, res) {
     let language = (res.locals.config && res.locals.config.userLang) || 'en-GB'
     if (res.locals.renderAdminHeader) {
       language = (res.locals.config && res.locals.config.acpLang) || 'en-GB'
@@ -130,7 +130,7 @@ module.exports = function (middleware) {
     return req.query.lang ? validator.escape(String(req.query.lang)) : language
   }
 
-  async function translate (str, language) {
+  async function translate(str, language) {
     const translated = await translator.translate(str, language)
     return translator.unescape(translated)
   }

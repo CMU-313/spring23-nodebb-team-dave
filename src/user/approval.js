@@ -35,7 +35,7 @@ module.exports = function (User) {
     await sendNotificationToAdmins(userData.username)
   }
 
-  async function canQueue (userData) {
+  async function canQueue(userData) {
     await User.isDataValid(userData)
     const usernames = await db.getSortedSetRange('registration:queue', 0, -1)
     if (usernames.includes(userData.username)) {
@@ -49,7 +49,7 @@ module.exports = function (User) {
     }
   }
 
-  async function sendNotificationToAdmins (username) {
+  async function sendNotificationToAdmins(username) {
     const notifObj = await notifications.create({
       type: 'new-register',
       bodyShort: `[[notifications:new_register, ${username}]]`,
@@ -86,7 +86,7 @@ module.exports = function (User) {
     return uid
   }
 
-  async function markNotificationRead (username) {
+  async function markNotificationRead(username) {
     const nid = `new_register:${username}`
     const uids = await groups.getMembers('administrators', 0, -1)
     const promises = uids.map(uid => notifications.markRead(nid, uid))
@@ -98,7 +98,7 @@ module.exports = function (User) {
     await markNotificationRead(username)
   }
 
-  async function removeFromQueue (username) {
+  async function removeFromQueue(username) {
     await Promise.all([
       db.sortedSetRemove('registration:queue', username),
       db.delete(`registration:queue:name:${username}`)
@@ -148,7 +148,7 @@ module.exports = function (User) {
     return results.users
   }
 
-  async function getIPMatchedUsers (user) {
+  async function getIPMatchedUsers(user) {
     const uids = await User.getUidsFromSet(`ip:${user.ip}:uid`, 0, -1)
     user.ipMatch = await User.getUsersFields(uids, ['uid', 'username', 'picture'])
   }

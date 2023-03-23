@@ -256,7 +256,7 @@ Plugins.showInstalled = async function () {
   let pluginPaths = await findNodeBBModules(dirs)
   pluginPaths = pluginPaths.map(dir => path.join(Plugins.nodeModulesPath, dir))
 
-  async function load (file) {
+  async function load(file) {
     try {
       const pluginData = await Plugins.loadPluginInfo(file)
       const isActive = await Plugins.isActive(pluginData.name)
@@ -274,7 +274,7 @@ Plugins.showInstalled = async function () {
   return plugins.filter(Boolean)
 }
 
-async function findNodeBBModules (dirs) {
+async function findNodeBBModules(dirs) {
   const pluginPaths = []
   await Promise.all(dirs.map(async (dirname) => {
     const dirPath = path.join(Plugins.nodeModulesPath, dirname)
@@ -305,7 +305,7 @@ async function findNodeBBModules (dirs) {
   return pluginPaths
 }
 
-async function isDirectory (dirPath) {
+async function isDirectory(dirPath) {
   try {
     const stats = await fs.promises.stat(dirPath)
     return stats.isDirectory()

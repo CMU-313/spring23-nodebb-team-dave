@@ -65,7 +65,7 @@ module.exports = function (Groups) {
     return groupData
   }
 
-  function isSystemGroup (data) {
+  function isSystemGroup(data) {
     return data.system === true || parseInt(data.system, 10) === 1 ||
             Groups.systemGroups.includes(data.name) ||
             Groups.isPrivilegeGroup(data.name)

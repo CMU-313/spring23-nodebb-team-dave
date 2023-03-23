@@ -29,14 +29,14 @@ describe('Topic thumbs', () => {
   let fooCSRF
   let fooUid
   const thumbPaths = [
-        `${nconf.get('upload_path')}/files/test.png`,
-        `${nconf.get('upload_path')}/files/test2.png`,
-        'https://example.org'
+    `${nconf.get('upload_path')}/files/test.png`,
+    `${nconf.get('upload_path')}/files/test2.png`,
+    'https://example.org'
   ]
   const relativeThumbPaths = thumbPaths.map(path => path.replace(nconf.get('upload_path'), ''))
   const uuid = utils.generateUUID()
 
-  function createFiles () {
+  function createFiles() {
     fs.closeSync(fs.openSync(path.resolve(__dirname, '../uploads', thumbPaths[0]), 'w'))
     fs.closeSync(fs.openSync(path.resolve(__dirname, '../uploads', thumbPaths[1]), 'w'))
   }

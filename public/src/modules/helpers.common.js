@@ -24,14 +24,14 @@ module.exports = function (utils, Benchpress, relative_path) {
     userAgentIcons,
     buildAvatar,
     register,
-    __escape: identity
+    __escape: identity,
   }
 
-  function identity (str) {
+  function identity(str) {
     return str
   }
 
-  function displayMenuItem (data, index) {
+  function displayMenuItem(data, index) {
     const item = data.navigation[index]
     if (!item) {
       return false
@@ -52,7 +52,7 @@ module.exports = function (utils, Benchpress, relative_path) {
     return true
   }
 
-  function buildMetaTag (tag) {
+  function buildMetaTag(tag) {
     const name = tag.name ? 'name="' + tag.name + '" ' : ''
     const property = tag.property ? 'property="' + tag.property + '" ' : ''
     const content = tag.content ? 'content="' + tag.content.replace(/\n/g, ' ') + '" ' : ''
@@ -60,28 +60,28 @@ module.exports = function (utils, Benchpress, relative_path) {
     return '<meta ' + name + property + content + '/>\n\t'
   }
 
-  function buildLinkTag (tag) {
+  function buildLinkTag(tag) {
     const attributes = ['link', 'rel', 'as', 'type', 'href', 'sizes', 'title', 'crossorigin']
     const [link, rel, as, type, href, sizes, title, crossorigin] = attributes.map(attr => (tag[attr] ? `${attr}="${tag[attr]}" ` : ''))
 
     return '<link ' + link + rel + as + type + sizes + title + href + crossorigin + '/>\n\t'
   }
 
-  function stringify (obj) {
+  function stringify(obj) {
     // Turns the incoming object into a JSON string
     return JSON.stringify(obj).replace(/&/gm, '&amp;').replace(/</gm, '&lt;').replace(/>/gm, '&gt;')
       .replace(/"/g, '&quot;')
   }
 
-  function escape (str) {
+  function escape(str) {
     return utils.escapeHTML(str)
   }
 
-  function stripTags (str) {
+  function stripTags(str) {
     return utils.stripHTMLTags(str)
   }
 
-  function generateCategoryBackground (category) {
+  function generateCategoryBackground(category) {
     if (!category) {
       return ''
     }
@@ -105,7 +105,7 @@ module.exports = function (utils, Benchpress, relative_path) {
     return style.join('; ') + ';'
   }
 
-  function generateChildrenCategories (category) {
+  function generateChildrenCategories(category) {
     let html = ''
     if (!category || !category.children || !category.children.length) {
       return html
@@ -124,13 +124,13 @@ module.exports = function (utils, Benchpress, relative_path) {
     return html
   }
 
-  function generateTopicClass (topic) {
+  function generateTopicClass(topic) {
     const fields = ['locked', 'pinned', 'deleted', 'unread', 'scheduled']
     return fields.filter(field => !!topic[field]).join(' ')
   }
 
   // Groups helpers
-  function membershipBtn (groupObj) {
+  function membershipBtn(groupObj) {
     if (groupObj.isMember && groupObj.name !== 'administrators') {
       return '<button class="btn btn-danger" data-action="leave" data-group="' + groupObj.displayName + '"' + (groupObj.disableLeave ? ' disabled' : '') + '><i class="fa fa-times"></i> [[groups:membership.leave-group]]</button>'
     }
@@ -145,13 +145,13 @@ module.exports = function (utils, Benchpress, relative_path) {
     return ''
   }
 
-  function spawnPrivilegeStates (member, privileges) {
+  function spawnPrivilegeStates(member, privileges) {
     const states = []
     for (const priv in privileges) {
       if (privileges.hasOwnProperty(priv)) {
         states.push({
           name: priv,
-          state: privileges[priv]
+          state: privileges[priv],
         })
       }
     }
@@ -168,19 +168,19 @@ module.exports = function (utils, Benchpress, relative_path) {
     }).join('')
   }
 
-  function localeToHTML (locale, fallback) {
+  function localeToHTML(locale, fallback) {
     locale = locale || fallback || 'en-GB'
     return locale.replace('_', '-')
   }
 
-  function renderTopicImage (topicObj) {
+  function renderTopicImage(topicObj) {
     if (topicObj.thumb) {
       return '<img src="' + topicObj.thumb + '" class="img-circle user-img" title="' + topicObj.user.username + '" />'
     }
     return '<img component="user/picture" data-uid="' + topicObj.user.uid + '" src="' + topicObj.user.picture + '" class="user-img" title="' + topicObj.user.username + '" />'
   }
 
-  function renderTopicEvents (index, sort) {
+  function renderTopicEvents(index, sort) {
     if (sort === 'most_votes') {
       return ''
     }
@@ -194,7 +194,7 @@ module.exports = function (utils, Benchpress, relative_path) {
     return renderEvents.call(this, events)
   }
 
-  function renderEvents (events) {
+  function renderEvents(events) {
     return events.reduce((html, event) => {
       html += `<li component="topic/event" class="timeline-event" data-topic-event-id="${event.id}" data-topic-event-type="${event.type}">
                 <div class="timeline-badge">
@@ -223,7 +223,7 @@ module.exports = function (utils, Benchpress, relative_path) {
     }, '')
   }
 
-  function renderDigestAvatar (block) {
+  function renderDigestAvatar(block) {
     if (block.teaser) {
       if (block.teaser.user.picture) {
         return '<img style="vertical-align: middle; width: 32px; height: 32px; border-radius: 50%;" src="' + block.teaser.user.picture + '" title="' + block.teaser.user.username + '" />'
@@ -236,59 +236,59 @@ module.exports = function (utils, Benchpress, relative_path) {
     return '<div style="vertical-align: middle; width: 32px; height: 32px; line-height: 32px; font-size: 16px; background-color: ' + block.user['icon:bgColor'] + '; color: white; text-align: center; display: inline-block; border-radius: 50%;">' + block.user['icon:text'] + '</div>'
   }
 
-  function userAgentIcons (data) {
+  function userAgentIcons(data) {
     let icons = ''
 
     switch (data.platform) {
-      case 'Linux':
-        icons += '<i class="fa fa-fw fa-linux"></i>'
-        break
-      case 'Microsoft Windows':
-        icons += '<i class="fa fa-fw fa-windows"></i>'
-        break
-      case 'Apple Mac':
-        icons += '<i class="fa fa-fw fa-apple"></i>'
-        break
-      case 'Android':
-        icons += '<i class="fa fa-fw fa-android"></i>'
-        break
-      case 'iPad':
-        icons += '<i class="fa fa-fw fa-tablet"></i>'
-        break
-      case 'iPod': // intentional fall-through
-      case 'iPhone':
-        icons += '<i class="fa fa-fw fa-mobile"></i>'
-        break
-      default:
-        icons += '<i class="fa fa-fw fa-question-circle"></i>'
-        break
+    case 'Linux':
+      icons += '<i class="fa fa-fw fa-linux"></i>'
+      break
+    case 'Microsoft Windows':
+      icons += '<i class="fa fa-fw fa-windows"></i>'
+      break
+    case 'Apple Mac':
+      icons += '<i class="fa fa-fw fa-apple"></i>'
+      break
+    case 'Android':
+      icons += '<i class="fa fa-fw fa-android"></i>'
+      break
+    case 'iPad':
+      icons += '<i class="fa fa-fw fa-tablet"></i>'
+      break
+    case 'iPod': // intentional fall-through
+    case 'iPhone':
+      icons += '<i class="fa fa-fw fa-mobile"></i>'
+      break
+    default:
+      icons += '<i class="fa fa-fw fa-question-circle"></i>'
+      break
     }
 
     switch (data.browser) {
-      case 'Chrome':
-        icons += '<i class="fa fa-fw fa-chrome"></i>'
-        break
-      case 'Firefox':
-        icons += '<i class="fa fa-fw fa-firefox"></i>'
-        break
-      case 'Safari':
-        icons += '<i class="fa fa-fw fa-safari"></i>'
-        break
-      case 'IE':
-        icons += '<i class="fa fa-fw fa-internet-explorer"></i>'
-        break
-      case 'Edge':
-        icons += '<i class="fa fa-fw fa-edge"></i>'
-        break
-      default:
-        icons += '<i class="fa fa-fw fa-question-circle"></i>'
-        break
+    case 'Chrome':
+      icons += '<i class="fa fa-fw fa-chrome"></i>'
+      break
+    case 'Firefox':
+      icons += '<i class="fa fa-fw fa-firefox"></i>'
+      break
+    case 'Safari':
+      icons += '<i class="fa fa-fw fa-safari"></i>'
+      break
+    case 'IE':
+      icons += '<i class="fa fa-fw fa-internet-explorer"></i>'
+      break
+    case 'Edge':
+      icons += '<i class="fa fa-fw fa-edge"></i>'
+      break
+    default:
+      icons += '<i class="fa fa-fw fa-question-circle"></i>'
+      break
     }
 
     return icons
   }
 
-  function buildAvatar (userObj, size, rounded, classNames, component) {
+  function buildAvatar(userObj, size, rounded, classNames, component) {
     /**
          * userObj requires:
          *   - uid, picture, icon:bgColor, icon:text (getUserField w/ "picture" should return all 4), username
@@ -307,7 +307,7 @@ module.exports = function (utils, Benchpress, relative_path) {
       'alt="' + userObj.username + '"',
       'title="' + userObj.username + '"',
       'data-uid="' + userObj.uid + '"',
-      'loading="lazy"'
+      'loading="lazy"',
     ]
     const styles = []
     classNames = classNames || ''
@@ -337,7 +337,7 @@ module.exports = function (utils, Benchpress, relative_path) {
     return '<span ' + attributes.join(' ') + ' style="' + styles.join(' ') + '">' + userObj['icon:text'] + '</span>'
   }
 
-  function register () {
+  function register() {
     Object.keys(helpers).forEach(function (helperName) {
       Benchpress.registerHelper(helperName, helpers[helperName])
     })

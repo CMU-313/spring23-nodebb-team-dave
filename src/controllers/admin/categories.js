@@ -45,7 +45,7 @@ categoriesController.get = async function (req, res, next) {
 
 categoriesController.getAll = async function (req, res) {
   const rootCid = parseInt(req.query.cid, 10) || 0
-  async function getRootAndChildren () {
+  async function getRootAndChildren() {
     const rootChildren = await categories.getAllCidsFromSet(`cid:${rootCid}:children`)
     const childCids = _.flatten(await Promise.all(rootChildren.map(cid => categories.getChildrenCids(cid))))
     return [rootCid].concat(rootChildren.concat(childCids))
@@ -73,7 +73,7 @@ categoriesController.getAll = async function (req, res) {
   const start = Math.max(0, (page - 1) * meta.config.categoriesPerPage)
   const stop = start + meta.config.categoriesPerPage
 
-  function trim (c) {
+  function trim(c) {
     if (c.children) {
       c.subCategoriesLeft = Math.max(0, c.children.length - c.subCategoriesPerPage)
       c.hasMoreSubCategories = c.children.length > c.subCategoriesPerPage
@@ -104,7 +104,7 @@ categoriesController.getAll = async function (req, res) {
   })
 }
 
-async function buildBreadcrumbs (categoryData, url) {
+async function buildBreadcrumbs(categoryData, url) {
   if (!categoryData) {
     return
   }

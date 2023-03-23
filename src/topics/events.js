@@ -91,7 +91,7 @@ Events.get = async (tid, uid, reverse = false) => {
   return events
 }
 
-async function getUserInfo (uids) {
+async function getUserInfo(uids) {
   uids = uids.filter((uid, idx) => !isNaN(parseInt(uid, 10)) && uids.indexOf(uid) === idx)
   const userData = await user.getUsersFields(uids, ['picture', 'username', 'userslug'])
   const userMap = userData.reduce((memo, cur) => memo.set(cur.uid, cur), new Map())
@@ -102,13 +102,13 @@ async function getUserInfo (uids) {
   return userMap
 }
 
-async function getCategoryInfo (cids) {
+async function getCategoryInfo(cids) {
   const uniqCids = _.uniq(cids)
   const catData = await categories.getCategoriesFields(uniqCids, ['name', 'slug', 'icon', 'color', 'bgColor'])
   return _.zipObject(uniqCids, catData)
 }
 
-async function modifyEvent ({ tid, uid, eventIds, timestamps, events }) {
+async function modifyEvent({ tid, uid, eventIds, timestamps, events }) {
   // Add posts from post queue
   const isPrivileged = await user.isPrivileged(uid)
   if (isPrivileged) {

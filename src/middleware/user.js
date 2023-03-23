@@ -32,8 +32,8 @@ const passportAuthenticateAsync = function (req, res) {
 }
 
 module.exports = function (middleware) {
-  async function authenticate (req, res) {
-    async function finishLogin (req, user) {
+  async function authenticate(req, res) {
+    async function finishLogin(req, user) {
       const loginAsync = util.promisify(req.login).bind(req)
       await loginAsync(user, { keepSessionInfo: true })
       await controllers.authentication.onSuccessfulLogin(req, user.uid)
@@ -111,7 +111,7 @@ module.exports = function (middleware) {
     await ensureSelfOrMethod(user.isPrivileged, req, res, next)
   })
 
-  async function ensureSelfOrMethod (method, req, res, next) {
+  async function ensureSelfOrMethod(method, req, res, next) {
     /*
             The "self" part of this middleware hinges on you having used
             middleware.exposeUid prior to invoking this middleware.
@@ -223,7 +223,7 @@ module.exports = function (middleware) {
     res.status(403).render('403', { title: '[[global:403.title]]' })
   }
 
-  middleware.registrationComplete = async function registrationComplete (req, res, next) {
+  middleware.registrationComplete = async function registrationComplete(req, res, next) {
     // If the user's session contains registration data, redirect the user to complete registration
     if (!req.session.hasOwnProperty('registration')) {
       return setImmediate(next)

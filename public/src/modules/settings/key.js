@@ -23,10 +23,10 @@ define('settings/key', function () {
     191: '/',
     219: '[',
     220: '\\',
-    221: ']'
+    221: ']',
   })
 
-  function Key () {
+  function Key() {
     this.c = false
     this.a = false
     this.s = false
@@ -40,7 +40,7 @@ define('settings/key', function () {
      @param event The event to inspect.
      @returns Key | null The Key-Object the focused element should be set to.
      */
-  function getKey (event) {
+  function getKey(event) {
     const anyModChange = (
       event.ctrlKey !== lastKey.c ||
             event.altKey !== lastKey.a ||
@@ -82,7 +82,7 @@ define('settings/key', function () {
      @param code The key-code.
      @returns String Representation of the given key-code.
      */
-  function convertKeyCodeToChar (code) {
+  function convertKeyCodeToChar(code) {
     code = +code
     if (code === 0) {
       return ''
@@ -102,7 +102,7 @@ define('settings/key', function () {
      @param separator The separator between modification-names and key-char.
      @returns String The string to identify the given key-object the given way.
      */
-  function getKeyString (key, human, short, separator) {
+  function getKeyString(key, human, short, separator) {
     let str = ''
     if (!(key instanceof Key)) {
       return str
@@ -144,7 +144,7 @@ define('settings/key', function () {
      @param str The string to parse.
      @returns Key The Key-Object that got identified by the given string.
      */
-  function getKeyFromString (str) {
+  function getKeyFromString(str) {
     if (str instanceof Key) {
       return str
     }
@@ -154,29 +154,29 @@ define('settings/key', function () {
     for (let i = 0; i < parts.length; i += 1) {
       const part = parts[i]
       switch (part) {
-        case 'C':
-        case 'Ctrl':
-          key.c = true
-          break
-        case 'A':
-        case 'Alt':
-          key.a = true
-          break
-        case 'S':
-        case 'Shift':
-          key.s = true
-          break
-        case 'M':
-        case 'Meta':
-          key.m = true
-          break
-        default: {
-          const num = /\d+/.exec(part)
-          if (num != null) {
-            key.code = num[0]
-          }
-          key.char = convertKeyCodeToChar(key.code)
+      case 'C':
+      case 'Ctrl':
+        key.c = true
+        break
+      case 'A':
+      case 'Alt':
+        key.a = true
+        break
+      case 'S':
+      case 'Shift':
+        key.s = true
+        break
+      case 'M':
+      case 'Meta':
+        key.m = true
+        break
+      default: {
+        const num = /\d+/.exec(part)
+        if (num != null) {
+          key.code = num[0]
         }
+        key.char = convertKeyCodeToChar(key.code)
+      }
       }
     }
     return key
@@ -220,10 +220,10 @@ define('settings/key', function () {
       } else if (empty || (key != null && key.code)) {
         return key
       }
-    }
+    },
   }
 
-  function handleEvent (element, event) {
+  function handleEvent(element, event) {
     event = event || window.event
     event.which = event.which || event.keyCode || event.key
     const key = getKey(event)

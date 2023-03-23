@@ -33,7 +33,7 @@ module.exports = function (Posts) {
     return _.union(...pidsArr)
   }
 
-  async function filterPidsBySingleCid (pids, cid) {
+  async function filterPidsBySingleCid(pids, cid) {
     const isMembers = await db.isSortedSetMembers(`cid:${parseInt(cid, 10)}:pids`, pids)
     return pids.filter((pid, index) => pid && isMembers[index])
   }

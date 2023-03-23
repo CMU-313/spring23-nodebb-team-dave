@@ -174,7 +174,7 @@ postsController.getTopics = async function (req, res, next) {
   await getPostsFromUserSet('account/topics', req, res, next)
 }
 
-async function getPostsFromUserSet (template, req, res, next) {
+async function getPostsFromUserSet(template, req, res, next) {
   const data = templateToData[template]
   const page = Math.max(1, parseInt(req.query.page, 10) || 1)
 
@@ -235,7 +235,7 @@ async function getPostsFromUserSet (template, req, res, next) {
   res.render(template, userData)
 }
 
-async function getItemData (sets, data, req, start, stop) {
+async function getItemData(sets, data, req, start, stop) {
   if (data.getTopics) {
     return await data.getTopics(sets, req, start, stop)
   }
@@ -243,7 +243,7 @@ async function getItemData (sets, data, req, start, stop) {
   return await method(sets, req.uid, start, stop)
 }
 
-async function getItemCount (sets, data, settings) {
+async function getItemCount(sets, data, settings) {
   if (!settings.usePagination) {
     return 0
   }

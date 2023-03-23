@@ -83,7 +83,7 @@ describe('Controllers', () => {
   })
 
   describe('homepage', () => {
-    function hookMethod (hookData) {
+    function hookMethod(hookData) {
       assert(hookData.req)
       assert(hookData.res)
       assert(hookData.next)
@@ -2472,7 +2472,7 @@ describe('Controllers', () => {
     })
 
     it('should load the composer route if disabled by plugin', (done) => {
-      function hookMethod (hookData, callback) {
+      function hookMethod(hookData, callback) {
         hookData.templateData.disabled = true
         callback(null, hookData)
       }

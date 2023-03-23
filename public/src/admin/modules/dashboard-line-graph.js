@@ -2,7 +2,7 @@
 
 define('admin/modules/dashboard-line-graph', ['Chart', 'translator', 'benchpress', 'api', 'hooks', 'bootbox'], function (Chart, translator, Benchpress, api, hooks, bootbox) {
   const Graph = {
-    _current: null
+    _current: null,
   }
   let isMobile = false
 
@@ -32,9 +32,9 @@ define('admin/modules/dashboard-line-graph', ['Chart', 'translator', 'benchpress
               pointHoverBackgroundColor: 'rgba(151,187,205,1)',
               pointBorderColor: '#fff',
               pointHoverBorderColor: 'rgba(151,187,205,1)',
-              data: dataset || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            }
-          ]
+              data: dataset || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+          ],
         }
 
         canvas.width = $(canvas).parent().width()
@@ -47,27 +47,27 @@ define('admin/modules/dashboard-line-graph', ['Chart', 'translator', 'benchpress
           options: {
             responsive: true,
             legend: {
-              display: true
+              display: true,
             },
             scales: {
               yAxes: [{
                 id: 'left-y-axis',
                 ticks: {
                   beginAtZero: true,
-                  precision: 0
+                  precision: 0,
                 },
                 type: 'linear',
                 position: 'left',
                 scaleLabel: {
                   display: true,
-                  labelString: key
-                }
-              }]
+                  labelString: key,
+                },
+              }],
             },
             tooltips: {
-              mode: 'x'
-            }
-          }
+              mode: 'x',
+            },
+          },
         })
 
         if (!dataset) {
@@ -107,9 +107,9 @@ define('admin/modules/dashboard-line-graph', ['Chart', 'translator', 'benchpress
             submit: {
               label: '[[global:search]]',
               className: 'btn-primary',
-              callback: submit
-            }
-          }
+              callback: submit,
+            },
+          },
         }).on('shown.bs.modal', function () {
           const date = new Date()
           const today = date.toISOString().slice(0, 10)
@@ -120,7 +120,7 @@ define('admin/modules/dashboard-line-graph', ['Chart', 'translator', 'benchpress
           modal.find('#endRange').val(targetEl.attr('data-endRange') || today)
         })
 
-        function submit () {
+        function submit() {
           // NEED TO ADD VALIDATION HERE FOR YYYY-MM-DD
           const formData = modal.find('form').serializeObject()
           const validRegexp = /\d{4}-\d{2}-\d{2}/
@@ -179,13 +179,13 @@ define('admin/modules/dashboard-line-graph', ['Chart', 'translator', 'benchpress
         const newHref = $.param({
           units: units || 'hours',
           until,
-          count: amount
+          count: amount,
         })
         apiEl.attr('href', `${config.relative_path}/api/v3/admin/analytics/${ajaxify.data.set}?${newHref}`)
         const url = ajaxify.removeRelativePath(ajaxify.data.url.slice(1))
         ajaxify.updateHistory(`${url}?${newHref}`, true)
         hooks.fire('action:admin.dashboard.updateGraph', {
-          graph: Graph._current
+          graph: Graph._current,
         })
         resolve(Graph._current)
       })

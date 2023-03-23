@@ -86,7 +86,7 @@ process.on('message', async (msg) => {
   }
 })
 
-async function getRoomMessages (uid, roomId) {
+async function getRoomMessages(uid, roomId) {
   const batch = require('../../batch')
   let data = []
   await batch.processSortedSet(`uid:${uid}:chat:room:${roomId}:mids`, async (mids) => {
@@ -100,7 +100,7 @@ async function getRoomMessages (uid, roomId) {
   return data
 }
 
-async function getSetData (set, keyPrefix, uid) {
+async function getSetData(set, keyPrefix, uid) {
   const privileges = require('../../privileges')
   const batch = require('../../batch')
   let data = []

@@ -103,7 +103,7 @@ module.exports = function (middleware) {
     next()
   })
 
-  async function listCodes () {
+  async function listCodes() {
     const defaultLang = meta.config.defaultLang || 'en-GB'
     try {
       const codes = await languages.listCodes()

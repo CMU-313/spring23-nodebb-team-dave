@@ -79,7 +79,7 @@ module.exports = function (Topics) {
   }
 }
 
-function escapeTitle (topicData) {
+function escapeTitle(topicData) {
   if (topicData) {
     if (topicData.title) {
       topicData.title = translator.escape(validator.escape(topicData.title))
@@ -90,7 +90,7 @@ function escapeTitle (topicData) {
   }
 }
 
-function modifyTopic (topic, fields) {
+function modifyTopic(topic, fields) {
   if (!topic) {
     return
   }

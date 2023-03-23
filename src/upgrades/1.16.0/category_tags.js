@@ -11,7 +11,7 @@ module.exports = {
   method: async function () {
     const { progress } = this
 
-    async function getTopicsTags (tids) {
+    async function getTopicsTags(tids) {
       return await db.getSetsMembers(
         tids.map(tid => `topic:${tid}:tags`)
       )

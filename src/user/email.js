@@ -63,8 +63,8 @@ UserEmail.getValidationExpiry = async (uid) => {
 UserEmail.expireValidation = async (uid) => {
   const code = await db.get(`confirm:byUid:${uid}`)
   await db.deleteAll([
-        `confirm:byUid:${uid}`,
-        `confirm:${code}`
+    `confirm:byUid:${uid}`,
+    `confirm:${code}`
   ])
 }
 

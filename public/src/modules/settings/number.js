@@ -12,6 +12,6 @@ define('settings/number', function () {
         return
       }
       return value ? +value : 0
-    }
+    },
   }
 })

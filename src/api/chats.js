@@ -12,7 +12,7 @@ const socketHelpers = require('../socket.io/helpers')
 
 const chatsAPI = module.exports
 
-function rateLimitExceeded (caller) {
+function rateLimitExceeded(caller) {
   const session = caller.request ? caller.request.session : caller.session // socket vs req
   const now = Date.now()
   session.lastChatMessageTime = session.lastChatMessageTime || 0

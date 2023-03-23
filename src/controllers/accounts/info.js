@@ -42,7 +42,7 @@ infoController.get = async function (req, res, next) {
   res.render('account/info', userData)
 }
 
-async function getNotes (userData, start, stop) {
+async function getNotes(userData, start, stop) {
   if (!userData.isAdminOrGlobalModeratorOrModerator) {
     return
   }

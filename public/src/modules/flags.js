@@ -45,7 +45,7 @@ define('flags', ['hooks', 'components', 'api', 'alerts'], function (hooks, compo
       hooks.fire('action:flag.showModal', {
         modalEl: flagModal,
         type: data.type,
-        id: data.id
+        id: data.id,
       })
 
       flagModal.find('#flag-reason-custom').on('keyup blur change', checkFlagButtonEnable)
@@ -54,14 +54,14 @@ define('flags', ['hooks', 'components', 'api', 'alerts'], function (hooks, compo
 
   Flag.resolve = function (flagId) {
     api.put(`/flags/${flagId}`, {
-      state: 'resolved'
+      state: 'resolved',
     }).then(() => {
       alerts.success('[[flags:resolved]]')
       hooks.fire('action:flag.resolved', { flagId })
     }).catch(alerts.error)
   }
 
-  function createFlag (type, id, reason) {
+  function createFlag(type, id, reason) {
     if (!type || !id || !reason) {
       return
     }
@@ -82,7 +82,7 @@ define('flags', ['hooks', 'components', 'api', 'alerts'], function (hooks, compo
     })
   }
 
-  function checkFlagButtonEnable () {
+  function checkFlagButtonEnable() {
     if (flagModal.find('#flag-reason-custom').val()) {
       flagCommit.removeAttr('disabled')
     } else {

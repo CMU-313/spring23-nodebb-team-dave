@@ -10,16 +10,16 @@ const filePath = path.join(__dirname, '../../build/cache-buster')
 let cached
 
 // cache buster is an 11-character, lowercase, alphanumeric string
-function generate () {
+function generate() {
   return (Math.random() * 1e18).toString(32).slice(0, 11)
 }
 
-exports.write = async function write () {
+exports.write = async function write() {
   await mkdirp(path.dirname(filePath))
   await fs.promises.writeFile(filePath, generate())
 }
 
-exports.read = async function read () {
+exports.read = async function read() {
   if (cached) {
     return cached
   }

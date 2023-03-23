@@ -3,7 +3,7 @@
 define('forum/topic/change-owner', [
   'postSelect',
   'autocomplete',
-  'alerts'
+  'alerts',
 ], function (postSelect, autocomplete, alerts) {
   const ChangeOwner = {}
 
@@ -24,7 +24,7 @@ define('forum/topic/change-owner', [
       modal.find('.close,#change_owner_cancel').on('click', closeModal)
       modal.find('#username').on('keyup', checkButtonEnable)
       postSelect.init(onPostToggled, {
-        allowMainPostSelect: true
+        allowMainPostSelect: true,
       })
       showPostsSelected()
 
@@ -43,7 +43,7 @@ define('forum/topic/change-owner', [
     })
   }
 
-  function showPostsSelected () {
+  function showPostsSelected() {
     if (postSelect.pids.length) {
       modal.find('#pids').translateHtml('[[topic:fork_pid_count, ' + postSelect.pids.length + ']]')
     } else {
@@ -51,7 +51,7 @@ define('forum/topic/change-owner', [
     }
   }
 
-  function checkButtonEnable () {
+  function checkButtonEnable() {
     if (toUid && modal.find('#username').length && modal.find('#username').val().length && postSelect.pids.length) {
       commit.removeAttr('disabled')
     } else {
@@ -59,12 +59,12 @@ define('forum/topic/change-owner', [
     }
   }
 
-  function onPostToggled () {
+  function onPostToggled() {
     checkButtonEnable()
     showPostsSelected()
   }
 
-  function changeOwner () {
+  function changeOwner() {
     if (!toUid) {
       return
     }
@@ -78,7 +78,7 @@ define('forum/topic/change-owner', [
     })
   }
 
-  function closeModal () {
+  function closeModal() {
     if (modal) {
       modal.remove()
       modal = null

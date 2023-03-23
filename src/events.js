@@ -90,7 +90,7 @@ events.log = async function (data) {
   await Promise.all([
     db.sortedSetsAdd([
       'events:time',
-            `events:time:${data.type}`
+      `events:time:${data.type}`
     ], data.timestamp, eid),
     db.setObject(`event:${eid}`, data)
   ])
@@ -129,7 +129,7 @@ events.getEvents = async function (filter, start, stop, from, to) {
   return eventsData
 }
 
-async function addUserData (eventsData, field, objectName) {
+async function addUserData(eventsData, field, objectName) {
   const uids = _.uniq(eventsData.map(event => event && event[field]))
 
   if (!uids.length) {

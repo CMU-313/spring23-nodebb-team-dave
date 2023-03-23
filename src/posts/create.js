@@ -71,7 +71,7 @@ module.exports = function (Posts) {
     return result.post
   }
 
-  async function addReplyTo (postData, timestamp) {
+  async function addReplyTo(postData, timestamp) {
     if (!postData.toPid) {
       return
     }

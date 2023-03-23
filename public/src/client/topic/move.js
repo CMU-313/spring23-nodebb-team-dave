@@ -14,7 +14,7 @@ define('forum/topic/move', ['categorySelector', 'alerts', 'hooks'], function (ca
     showModal()
   }
 
-  function showModal () {
+  function showModal() {
     app.parseAndTranslate('partials/move_thread_modal', {}, function (html) {
       modal = html
       modal.on('hidden.bs.modal', function () {
@@ -29,7 +29,7 @@ define('forum/topic/move', ['categorySelector', 'alerts', 'hooks'], function (ca
 
       categorySelector.init(modal.find('[component="category-selector"]'), {
         onSelect: onCategorySelected,
-        privilege: 'moderate'
+        privilege: 'moderate',
       })
 
       modal.find('#move_thread_commit').on('click', onCommitClicked)
@@ -38,12 +38,12 @@ define('forum/topic/move', ['categorySelector', 'alerts', 'hooks'], function (ca
     })
   }
 
-  function onCategorySelected (category) {
+  function onCategorySelected(category) {
     selectedCategory = category
     modal.find('#move_thread_commit').prop('disabled', false)
   }
 
-  function onCommitClicked () {
+  function onCommitClicked() {
     const commitEl = modal.find('#move_thread_commit')
 
     if (!commitEl.prop('disabled') && selectedCategory && selectedCategory.cid) {
@@ -60,7 +60,7 @@ define('forum/topic/move', ['categorySelector', 'alerts', 'hooks'], function (ca
         tids: Move.tids ? Move.tids.slice() : null,
         cid: selectedCategory.cid,
         currentCid: Move.currentCid,
-        onComplete: Move.onComplete
+        onComplete: Move.onComplete,
       }
       if (config.undoTimeout > 0) {
         return alerts.alert({
@@ -75,7 +75,7 @@ define('forum/topic/move', ['categorySelector', 'alerts', 'hooks'], function (ca
           clickfn: function (alert, params) {
             delete params.timeoutfn
             alerts.success('[[topic:topic_move_undone]]')
-          }
+          },
         })
       }
 
@@ -83,7 +83,7 @@ define('forum/topic/move', ['categorySelector', 'alerts', 'hooks'], function (ca
     }
   }
 
-  function moveTopics (data) {
+  function moveTopics(data) {
     hooks.fire('action:topic.move', data)
 
     socket.emit(!data.tids ? 'topics.moveAll' : 'topics.move', data, function (err) {

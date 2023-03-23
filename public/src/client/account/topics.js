@@ -3,7 +3,7 @@
 define('forum/account/topics', [
   'forum/account/header',
   'forum/infinitescroll',
-  'hooks'
+  'hooks',
 ], function (header, infinitescroll, hooks) {
   const AccountTopics = {}
 
@@ -24,7 +24,7 @@ define('forum/account/topics', [
     }
   }
 
-  function loadMore (direction) {
+  function loadMore(direction) {
     if (direction < 0) {
       return
     }
@@ -41,7 +41,7 @@ define('forum/account/topics', [
     })
   }
 
-  function onTopicsLoaded (topics, callback) {
+  function onTopicsLoaded(topics, callback) {
     app.parseAndTranslate(template, 'topics', { topics }, function (html) {
       $('[component="category"]').append(html)
       html.find('.timeago').timeago()

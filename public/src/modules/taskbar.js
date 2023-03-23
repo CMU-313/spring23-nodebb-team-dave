@@ -82,7 +82,7 @@ define('taskbar', ['benchpress', 'translator', 'hooks'], function (Benchpress, t
       module,
       uuid,
       options,
-      element
+      element,
     }
 
     hooks.fire('filter:taskbar.push', data)
@@ -130,7 +130,7 @@ define('taskbar', ['benchpress', 'translator', 'hooks'], function (Benchpress, t
     return taskBtn.hasClass('active')
   }
 
-  function update () {
+  function update() {
     const tasks = taskbar.tasklist.find('li')
 
     if (tasks.length > 0) {
@@ -140,11 +140,11 @@ define('taskbar', ['benchpress', 'translator', 'hooks'], function (Benchpress, t
     }
   }
 
-  function minimizeAll () {
+  function minimizeAll() {
     taskbar.tasklist.find('.active').removeClass('active')
   }
 
-  function createTaskbarItem (data, callback) {
+  function createTaskbarItem(data, callback) {
     translator.translate(data.options.title, function (taskTitle) {
       const title = $('<div></div>').text(taskTitle || 'NodeBB Task').html()
 
@@ -157,7 +157,7 @@ define('taskbar', ['benchpress', 'translator', 'hooks'], function (Benchpress, t
         .attr({
           title,
           'data-module': data.module,
-          'data-uuid': data.uuid
+          'data-uuid': data.uuid,
         })
         .addClass(data.options.state !== undefined ? data.options.state : 'active')
 
@@ -178,18 +178,18 @@ define('taskbar', ['benchpress', 'translator', 'hooks'], function (Benchpress, t
 
   const processUpdate = function (element, key, value) {
     switch (key) {
-      case 'title':
-        element.find('[component="taskbar/title"]').text(value)
-        break
-      case 'icon':
-        element.find('i').attr('class', 'fa fa-' + value)
-        break
-      case 'image':
-        element.find('a').css('background-image', value ? 'url("' + value.replace(/&#x2F;/g, '/') + '")' : '')
-        break
-      case 'background-color':
-        element.find('a').css('background-color', value)
-        break
+    case 'title':
+      element.find('[component="taskbar/title"]').text(value)
+      break
+    case 'icon':
+      element.find('i').attr('class', 'fa fa-' + value)
+      break
+    case 'image':
+      element.find('a').css('background-image', value ? 'url("' + value.replace(/&#x2F;/g, '/') + '")' : '')
+      break
+    case 'background-color':
+      element.find('a').css('background-color', value)
+      break
     }
   }
 

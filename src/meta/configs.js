@@ -18,7 +18,7 @@ const Configs = module.exports
 Meta.config = {}
 
 // called after data is loaded from db
-function deserialize (config) {
+function deserialize(config) {
   const deserialized = {}
   Object.keys(config).forEach((key) => {
     const defaultType = typeof defaults[key]
@@ -56,7 +56,7 @@ function deserialize (config) {
 }
 
 // called before data is saved to db
-function serialize (config) {
+function serialize(config) {
   const serialized = {}
   Object.keys(config).forEach((key) => {
     const defaultType = typeof defaults[key]
@@ -212,7 +212,7 @@ Configs.cookie = {
   }
 }
 
-async function processConfig (data) {
+async function processConfig(data) {
   ensureInteger(data, 'maximumUsernameLength', 1)
   ensureInteger(data, 'minimumUsernameLength', 1)
   ensureInteger(data, 'minimumPasswordLength', 1)
@@ -227,7 +227,7 @@ async function processConfig (data) {
   ])
 }
 
-function ensureInteger (data, field, min) {
+function ensureInteger(data, field, min) {
   if (data.hasOwnProperty(field)) {
     data[field] = parseInt(data[field], 10)
     if (!(data[field] >= min)) {
@@ -236,7 +236,7 @@ function ensureInteger (data, field, min) {
   }
 }
 
-async function saveRenderedCss (data) {
+async function saveRenderedCss(data) {
   if (!data.customCSS) {
     return
   }
@@ -248,7 +248,7 @@ async function saveRenderedCss (data) {
   data.renderedCustomCSS = lessObject.css
 }
 
-async function getLogoSize (data) {
+async function getLogoSize(data) {
   const image = require('../image')
   if (!data['brand:logo']) {
     return
@@ -273,12 +273,12 @@ async function getLogoSize (data) {
   data['brand:emailLogo:width'] = size.width
 }
 
-function updateConfig (config) {
+function updateConfig(config) {
   updateLocalConfig(config)
   pubsub.publish('config:update', config)
 }
 
-function updateLocalConfig (config) {
+function updateLocalConfig(config) {
   Object.assign(Meta.config, config)
 }
 

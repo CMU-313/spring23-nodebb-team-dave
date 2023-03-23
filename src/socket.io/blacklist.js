@@ -19,7 +19,7 @@ SocketBlacklist.addRule = async function (socket, rule) {
   await blacklist(socket, 'addRule', rule)
 }
 
-async function blacklist (socket, method, rule) {
+async function blacklist(socket, method, rule) {
   const isAdminOrGlobalMod = await user.isAdminOrGlobalMod(socket.uid)
   if (!isAdminOrGlobalMod) {
     throw new Error('[[error:no-privileges]]')

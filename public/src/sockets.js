@@ -14,7 +14,7 @@ app = window.app || {};
     reconnectionAttempts: config.maxReconnectionAttempts,
     reconnectionDelay: config.reconnectionDelay,
     transports: config.socketioTransports,
-    path: config.relative_path + '/socket.io'
+    path: config.relative_path + '/socket.io',
   }
 
   window.socket = io(config.websocketAddress, ioParams)
@@ -62,7 +62,7 @@ app = window.app || {};
     socket.connect()
   }
 
-  function addHandlers () {
+  function addHandlers() {
     socket.on('connect', onConnect)
 
     socket.on('disconnect', onDisconnect)
@@ -122,7 +122,7 @@ app = window.app || {};
             clickfn: function () {
               window.location.reload()
             },
-            type: 'warning'
+            type: 'warning',
           })
         })
       }
@@ -134,7 +134,7 @@ app = window.app || {};
     })
   }
 
-  function handleInvalidSession () {
+  function handleInvalidSession() {
     socket.disconnect()
     require(['messages', 'logout'], function (messages, logout) {
       logout(false)
@@ -142,7 +142,7 @@ app = window.app || {};
     })
   }
 
-  function handleSessionMismatch () {
+  function handleSessionMismatch() {
     if (app.flags._login || app.flags._logout) {
       return
     }
@@ -153,7 +153,7 @@ app = window.app || {};
     })
   }
 
-  function onConnect () {
+  function onConnect() {
     if (!reconnecting) {
       hooks.fire('action:connected')
     }
@@ -179,7 +179,7 @@ app = window.app || {};
     }
   }
 
-  function reJoinCurrentRoom () {
+  function reJoinCurrentRoom() {
     if (app.currentRoom) {
       const current = app.currentRoom
       app.currentRoom = ''
@@ -187,7 +187,7 @@ app = window.app || {};
     }
   }
 
-  function onReconnecting () {
+  function onReconnecting() {
     reconnecting = true
     const reconnectEl = $('#reconnect')
     const reconnectAlert = $('#reconnect-alert')
@@ -198,11 +198,11 @@ app = window.app || {};
     }
 
     reconnectEl.addClass('active').removeClass('hide').tooltip({
-      placement: 'bottom'
+      placement: 'bottom',
     })
   }
 
-  function onDisconnect () {
+  function onDisconnect() {
     setTimeout(function () {
       if (socket.disconnected) {
         onReconnecting()
@@ -212,11 +212,11 @@ app = window.app || {};
     hooks.fire('action:disconnected')
   }
 
-  function onEventBanned (data) {
+  function onEventBanned(data) {
     require(['bootbox', 'translator'], function (bootbox, translator) {
-      const message = data.until
-        ? translator.compile('error:user-banned-reason-until', (new Date(data.until).toLocaleString()), data.reason)
-        : '[[error:user-banned-reason, ' + data.reason + ']]'
+      const message = data.until ?
+        translator.compile('error:user-banned-reason-until', (new Date(data.until).toLocaleString()), data.reason) :
+        '[[error:user-banned-reason, ' + data.reason + ']]'
       translator.translate(message, function (message) {
         bootbox.alert({
           title: '[[error:user-banned]]',
@@ -224,13 +224,13 @@ app = window.app || {};
           closeButton: false,
           callback: function () {
             window.location.href = config.relative_path + '/'
-          }
+          },
         })
       })
     })
   }
 
-  function onEventUnbanned () {
+  function onEventUnbanned() {
     require(['bootbox'], function (bootbox) {
       bootbox.alert({
         title: '[[global:alert.unbanned]]',
@@ -238,7 +238,7 @@ app = window.app || {};
         closeButton: false,
         callback: function () {
           window.location.href = config.relative_path + '/'
-        }
+        },
       })
     })
   }

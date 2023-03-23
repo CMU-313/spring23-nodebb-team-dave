@@ -4,7 +4,7 @@ define('handleBack', [
   'components',
   'storage',
   'navigator',
-  'forum/pagination'
+  'forum/pagination',
 ], function (components, storage, navigator, pagination) {
   const handleBack = {}
   let loadTopicsMethod
@@ -17,7 +17,7 @@ define('handleBack', [
 
   handleBack.onBackClicked = onBackClicked
 
-  function saveClickedIndex () {
+  function saveClickedIndex() {
     $('[component="category"]').on('click', '[component="topic/header"]', function () {
       const clickedIndex = $(this).parents('[data-index]').attr('data-index')
       const windowScrollTop = $(window).scrollTop()
@@ -32,7 +32,7 @@ define('handleBack', [
     })
   }
 
-  function onBackClicked (isMarkedUnread) {
+  function onBackClicked(isMarkedUnread) {
     const highlightUnread = isMarkedUnread && ajaxify.data.template.unread
     if (
       ajaxify.data.template.category ||

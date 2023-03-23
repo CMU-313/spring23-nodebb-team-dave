@@ -74,7 +74,7 @@ SocketTopics.getMyNextPostIndex = async function (socket, data) {
     throw new Error('[[error:invalid-data]]')
   }
 
-  async function getTopicPids (index) {
+  async function getTopicPids(index) {
     const topicSet = data.sort === 'most_votes' ? `tid:${data.tid}:posts:votes` : `tid:${data.tid}:posts`
     const reverse = data.sort === 'newest_to_oldest' || data.sort === 'most_votes'
     const cacheKey = `np:s:${topicSet}:r:${String(reverse)}:tid:${data.tid}:pids`
@@ -87,7 +87,7 @@ SocketTopics.getMyNextPostIndex = async function (socket, data) {
     return pids.slice(index - 1)
   }
 
-  async function getUserPids () {
+  async function getUserPids() {
     const cid = await topics.getTopicField(data.tid, 'cid')
     const cacheKey = `np:cid:${cid}:uid:${socket.uid}:pids`
     const userPids = cache.get(cacheKey)

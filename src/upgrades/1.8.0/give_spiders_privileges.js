@@ -37,7 +37,7 @@ module.exports = {
   }
 }
 
-function getGroupPrivileges (cid, callback) {
+function getGroupPrivileges(cid, callback) {
   const tasks = {};
 
   ['groups:find', 'groups:read', 'groups:topics:read'].forEach((privilege) => {

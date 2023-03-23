@@ -18,11 +18,11 @@ define('forum/categories', ['components', 'categorySelector', 'hooks'], function
       privilege: 'find',
       onSelect: function (category) {
         ajaxify.go('/category/' + category.cid)
-      }
+      },
     })
 
     $('.category-header').tooltip({
-      placement: 'bottom'
+      placement: 'bottom',
     })
   }
 
@@ -32,7 +32,7 @@ define('forum/categories', ['components', 'categorySelector', 'hooks'], function
     }
   }
 
-  function renderNewPost (cid, post) {
+  function renderNewPost(cid, post) {
     const category = components.get('categories/category', 'cid', cid)
     const numRecentReplies = category.attr('data-numRecentReplies')
     if (!numRecentReplies || !parseInt(numRecentReplies, 10)) {

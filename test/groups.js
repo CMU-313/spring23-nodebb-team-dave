@@ -160,7 +160,7 @@ describe('Groups', () => {
     })
 
     it('should return all users if no query', (done) => {
-      function createAndJoinGroup (username, email, callback) {
+      function createAndJoinGroup(username, email, callback) {
         async.waterfall([
           function (next) {
             User.create({ username, email }, next)
@@ -711,7 +711,7 @@ describe('Groups', () => {
       const uid = await User.create({ username: 'eviluser' })
       const oldValue = meta.config.allowPrivateGroups
       meta.config.allowPrivateGroups = 0
-      async function test (groupName) {
+      async function test(groupName) {
         let err
         try {
           const slug = await Groups.getGroupField(groupName, 'slug')
@@ -933,7 +933,7 @@ describe('Groups', () => {
     })
 
     it('should reject/accept all memberships requests', async () => {
-      async function requestMembership (uid1, uid2) {
+      async function requestMembership(uid1, uid2) {
         await apiGroups.join({ uid: uid1 }, { slug: 'privatecanjoin', uid: uid1 })
         await apiGroups.join({ uid: uid2 }, { slug: 'privatecanjoin', uid: uid2 })
       }

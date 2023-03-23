@@ -104,8 +104,8 @@ postsAPI.edit = async function (caller, data) {
   const memberData = await groups.getMembersOfGroups([
     'administrators',
     'Global Moderators',
-        `cid:${editResult.topic.cid}:privileges:moderate`,
-        `cid:${editResult.topic.cid}:privileges:groups:moderate`
+    `cid:${editResult.topic.cid}:privileges:moderate`,
+    `cid:${editResult.topic.cid}:privileges:groups:moderate`
   ])
 
   const uids = _.uniq(_.flatten(memberData).concat(String(caller.uid)))
@@ -129,7 +129,7 @@ postsAPI.restore = async function (caller, data) {
   })
 }
 
-async function deleteOrRestore (caller, data, params) {
+async function deleteOrRestore(caller, data, params) {
   if (!data || !data.pid) {
     throw new Error('[[error:invalid-data]]')
   }
@@ -150,7 +150,7 @@ async function deleteOrRestore (caller, data, params) {
   })
 }
 
-async function deleteOrRestoreTopicOf (command, pid, caller) {
+async function deleteOrRestoreTopicOf(command, pid, caller) {
   const topic = await posts.getTopicFields(pid, ['tid', 'cid', 'deleted', 'scheduled'])
   // exempt scheduled topics from being deleted/restored
   if (topic.scheduled) {
@@ -208,7 +208,7 @@ postsAPI.purge = async function (caller, data) {
   }
 }
 
-async function isMainAndLastPost (pid) {
+async function isMainAndLastPost(pid) {
   const [isMain, topicData] = await Promise.all([
     posts.isMain(pid),
     posts.getTopicFields(pid, ['postcount'])
@@ -281,7 +281,7 @@ postsAPI.unendorse = async function (caller, data) {
   return await apiHelpers.postCommand(caller, 'unendorse', 'unendorsed', '', data)
 }
 
-async function diffsPrivilegeCheck (pid, uid) {
+async function diffsPrivilegeCheck(pid, uid) {
   const [deleted, privilegesData] = await Promise.all([
     posts.getPostField(pid, 'deleted'),
     privileges.posts.get([pid], uid)

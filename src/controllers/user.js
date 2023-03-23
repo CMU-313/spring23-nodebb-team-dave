@@ -30,7 +30,7 @@ userController.getUserByEmail = async function (req, res, next) {
   await byType('email', req, res, next)
 }
 
-async function byType (type, req, res, next) {
+async function byType(type, req, res, next) {
   const userData = await userController.getUserDataByField(req.uid, type, req.params[type])
   if (!userData) {
     return next()
@@ -92,7 +92,7 @@ userController.exportProfile = async function (req, res, next) {
 }
 
 // DEPRECATED; Remove in NodeBB v3.0.0
-function sendExport (filename, type, res, next) {
+function sendExport(filename, type, res, next) {
   winston.warn('[users/export] Access via page API is deprecated, use GET /api/v3/users/:uid/exports/:type instead.')
 
   res.sendFile(filename, {

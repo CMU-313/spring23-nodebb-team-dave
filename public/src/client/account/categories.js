@@ -26,7 +26,7 @@ define('forum/account/categories', ['forum/account/header', 'alerts'], function 
     })
   }
 
-  function handleIgnoreWatch (cid) {
+  function handleIgnoreWatch(cid) {
     const category = $('[data-cid="' + cid + '"]')
     category.find('[component="category/watching"], [component="category/ignoring"], [component="category/notwatching"]').on('click', function () {
       const $this = $(this)
@@ -43,7 +43,7 @@ define('forum/account/categories', ['forum/account/header', 'alerts'], function 
     })
   }
 
-  function updateDropdowns (modified_cids, state) {
+  function updateDropdowns(modified_cids, state) {
     modified_cids.forEach(function (cid) {
       const category = $('[data-cid="' + cid + '"]')
       category.find('[component="category/watching/menu"]').toggleClass('hidden', state !== 'watching')

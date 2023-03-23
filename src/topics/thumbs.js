@@ -59,7 +59,7 @@ Thumbs.get = async function (tids) {
   return singular ? response.pop() : response
 }
 
-async function getThumbs (set) {
+async function getThumbs(set) {
   const cached = cache.get(set)
   if (cached !== undefined) {
     return cached.slice()

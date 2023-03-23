@@ -25,40 +25,40 @@ CSS.supportedSkins = [
 const buildImports = {
   client: function (source) {
     return `@import "./theme";\n${source}\n${[
-            '@import "../public/vendor/fontawesome/less/regular.less";',
-            '@import "../public/vendor/fontawesome/less/solid.less";',
-            '@import "../public/vendor/fontawesome/less/brands.less";',
-            '@import "../public/vendor/fontawesome/less/fontawesome.less";',
-            '@import "../public/vendor/fontawesome/less/v4-shims.less";',
-            '@import "../public/vendor/fontawesome/less/nodebb-shims.less";',
-            '@import "../../public/less/jquery-ui.less";',
-            '@import (inline) "../node_modules/@adactive/bootstrap-tagsinput/src/bootstrap-tagsinput.css";',
-            '@import (inline) "../node_modules/cropperjs/dist/cropper.css";',
-            '@import "../../public/less/flags.less";',
-            '@import "../../public/less/generics.less";',
-            '@import "../../public/less/mixins.less";',
-            '@import "../../public/less/global.less";',
-            '@import "../../public/less/modals.less";'
-        ].map(str => str.replace(/\//g, path.sep)).join('\n')}`
+      '@import "../public/vendor/fontawesome/less/regular.less";',
+      '@import "../public/vendor/fontawesome/less/solid.less";',
+      '@import "../public/vendor/fontawesome/less/brands.less";',
+      '@import "../public/vendor/fontawesome/less/fontawesome.less";',
+      '@import "../public/vendor/fontawesome/less/v4-shims.less";',
+      '@import "../public/vendor/fontawesome/less/nodebb-shims.less";',
+      '@import "../../public/less/jquery-ui.less";',
+      '@import (inline) "../node_modules/@adactive/bootstrap-tagsinput/src/bootstrap-tagsinput.css";',
+      '@import (inline) "../node_modules/cropperjs/dist/cropper.css";',
+      '@import "../../public/less/flags.less";',
+      '@import "../../public/less/generics.less";',
+      '@import "../../public/less/mixins.less";',
+      '@import "../../public/less/global.less";',
+      '@import "../../public/less/modals.less";'
+    ].map(str => str.replace(/\//g, path.sep)).join('\n')}`
   },
   admin: function (source) {
     return `${source}\n${[
-            '@import "../public/vendor/fontawesome/less/regular.less";',
-            '@import "../public/vendor/fontawesome/less/solid.less";',
-            '@import "../public/vendor/fontawesome/less/brands.less";',
-            '@import "../public/vendor/fontawesome/less/fontawesome.less";',
-            '@import "../public/vendor/fontawesome/less/v4-shims.less";',
-            '@import "../public/vendor/fontawesome/less/nodebb-shims.less";',
-            '@import "../public/less/admin/admin";',
-            '@import "../public/less/generics.less";',
-            '@import "../../public/less/jquery-ui.less";',
-            '@import (inline) "../node_modules/@adactive/bootstrap-tagsinput/src/bootstrap-tagsinput.css";',
-            '@import (inline) "../public/vendor/mdl/material.css";'
-        ].map(str => str.replace(/\//g, path.sep)).join('\n')}`
+      '@import "../public/vendor/fontawesome/less/regular.less";',
+      '@import "../public/vendor/fontawesome/less/solid.less";',
+      '@import "../public/vendor/fontawesome/less/brands.less";',
+      '@import "../public/vendor/fontawesome/less/fontawesome.less";',
+      '@import "../public/vendor/fontawesome/less/v4-shims.less";',
+      '@import "../public/vendor/fontawesome/less/nodebb-shims.less";',
+      '@import "../public/less/admin/admin";',
+      '@import "../public/less/generics.less";',
+      '@import "../../public/less/jquery-ui.less";',
+      '@import (inline) "../node_modules/@adactive/bootstrap-tagsinput/src/bootstrap-tagsinput.css";',
+      '@import (inline) "../public/vendor/mdl/material.css";'
+    ].map(str => str.replace(/\//g, path.sep)).join('\n')}`
   }
 }
 
-async function filterMissingFiles (filepaths) {
+async function filterMissingFiles(filepaths) {
   const exists = await Promise.all(
     filepaths.map(async (filepath) => {
       const exists = await file.exists(path.join(__dirname, '../../node_modules', filepath))
@@ -71,7 +71,7 @@ async function filterMissingFiles (filepaths) {
   return filepaths.filter((filePath, i) => exists[i])
 }
 
-async function getImports (files, prefix, extension) {
+async function getImports(files, prefix, extension) {
   const pluginDirectories = []
   let source = ''
 
@@ -91,7 +91,7 @@ async function getImports (files, prefix, extension) {
   return source
 }
 
-async function getBundleMetadata (target) {
+async function getBundleMetadata(target) {
   const paths = [
     path.join(__dirname, '../../node_modules'),
     path.join(__dirname, '../../public/less'),
@@ -128,7 +128,7 @@ async function getBundleMetadata (target) {
     target === 'client' ? '' : filterGetImports(plugins.acpLessFiles, '\n@import ".', '.less')
   ])
 
-  async function filterGetImports (files, prefix, extension) {
+  async function filterGetImports(files, prefix, extension) {
     const filteredFiles = await filterMissingFiles(files)
     return await getImports(filteredFiles, prefix, extension)
   }

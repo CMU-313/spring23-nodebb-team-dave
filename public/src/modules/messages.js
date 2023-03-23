@@ -24,7 +24,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
       timeout: 0,
       closefn: () => {
         storage.setItem('email-confirm-dismiss', 1)
-      }
+      },
     }
 
     if (!app.user.email) {
@@ -47,7 +47,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
     }
   }
 
-  function showCookieWarning () {
+  function showCookieWarning() {
     if (!config.cookies.enabled || !navigator.cookieEnabled || app.inAdmin || storage.getItem('cookieconsent') === '1') {
       return
     }
@@ -72,7 +72,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
     })
   }
 
-  function showQueryStringMessages () {
+  function showQueryStringMessages() {
     const params = utils.params({ full: true })
     showWelcomeMessage = params.has('loggedin')
     registerMessage = params.get('register')
@@ -82,7 +82,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
         type: 'success',
         title: '[[global:welcome_back]] ' + app.user.username + '!',
         message: '[[global:you_have_successfully_logged_in]]',
-        timeout: 5000
+        timeout: 5000,
       })
 
       params.delete('loggedin')
@@ -90,7 +90,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
 
     if (registerMessage) {
       bootbox.alert({
-        message: utils.escapeHTML(decodeURIComponent(registerMessage))
+        message: utils.escapeHTML(decodeURIComponent(registerMessage)),
       })
 
       params.delete('register')
@@ -112,7 +112,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
       closeButton: false,
       callback: function () {
         window.location.reload()
-      }
+      },
     })
   }
 
@@ -123,7 +123,7 @@ define('messages', ['bootbox', 'translator', 'storage', 'alerts', 'hooks'], func
       closeButton: false,
       callback: function () {
         window.location.reload()
-      }
+      },
     })
   }
 

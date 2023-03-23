@@ -83,7 +83,7 @@ module.exports = function (Topics) {
     return result
   }
 
-  async function getTids (params) {
+  async function getTids(params) {
     const counts = { '': 0, new: 0, watched: 0, unreplied: 0 }
     const tidsByFilter = { '': [], new: [], watched: [], unreplied: [] }
 
@@ -107,7 +107,7 @@ module.exports = function (Topics) {
       isTopicsFollowed[t.value] = true
     })
     const unreadFollowed = await db.isSortedSetMembers(
-            `uid:${params.uid}:followed_tids`, tids_unread.map(t => t.value)
+      `uid:${params.uid}:followed_tids`, tids_unread.map(t => t.value)
     )
 
     tids_unread.forEach((t, i) => {
@@ -178,7 +178,7 @@ module.exports = function (Topics) {
     }
   }
 
-  async function getCategoryTids (params) {
+  async function getCategoryTids(params) {
     if (plugins.hooks.hasListeners('filter:topics.unread.getCategoryTids')) {
       const result = await plugins.hooks.fire('filter:topics.unread.getCategoryTids', { params, tids: [] })
       return result.tids
@@ -191,7 +191,7 @@ module.exports = function (Topics) {
     return await db.getSortedSetRevRangeByScoreWithScores(keys, 0, -1, '+inf', params.cutoff)
   }
 
-  async function getFollowedTids (params) {
+  async function getFollowedTids(params) {
     let tids = await db.getSortedSetMembers(`uid:${params.uid}:followed_tids`)
     const filterCids = params.cid && params.cid.map(cid => parseInt(cid, 10))
     if (filterCids) {
@@ -203,7 +203,7 @@ module.exports = function (Topics) {
     return data.filter(item => item.score > params.cutoff)
   }
 
-  async function filterTidsThatHaveBlockedPosts (params) {
+  async function filterTidsThatHaveBlockedPosts(params) {
     if (!params.blockedUids.length) {
       return params.tids
     }
@@ -220,7 +220,7 @@ module.exports = function (Topics) {
     }))
   }
 
-  async function doesTidHaveUnblockedUnreadPosts (tid, params) {
+  async function doesTidHaveUnblockedUnreadPosts(tid, params) {
     const { userLastReadTimestamp } = params
     if (!userLastReadTimestamp) {
       return true

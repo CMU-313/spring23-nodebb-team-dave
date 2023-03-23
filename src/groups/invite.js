@@ -65,7 +65,7 @@ module.exports = function (Groups) {
     await Promise.all(uids.map((uid, index) => notifications.push(notificationData[index], uid)))
   }
 
-  async function inviteOrRequestMembership (groupName, uids, type) {
+  async function inviteOrRequestMembership(groupName, uids, type) {
     uids = Array.isArray(uids) ? uids : [uids]
     uids = uids.filter(uid => parseInt(uid, 10) > 0)
     const [exists, isMember, isPending, isInvited] = await Promise.all([
@@ -99,7 +99,7 @@ module.exports = function (Groups) {
     return await checkInvitePending(uids, `group:${groupName}:pending`)
   }
 
-  async function checkInvitePending (uids, set) {
+  async function checkInvitePending(uids, set) {
     const isArray = Array.isArray(uids)
     uids = isArray ? uids : [uids]
     const checkUids = uids.filter(uid => parseInt(uid, 10) > 0)

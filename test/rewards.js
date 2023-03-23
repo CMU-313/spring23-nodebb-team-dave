@@ -63,7 +63,7 @@ describe('rewards', () => {
     })
 
     it('should check condition', (done) => {
-      function method (next) {
+      function method(next) {
         next(null, 1)
       }
       rewards.checkConditionAndRewardUser({

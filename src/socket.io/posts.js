@@ -121,7 +121,7 @@ SocketPosts.reject = async function (socket, data) {
   await logQueueEvent(socket, result, 'reject')
 }
 
-async function logQueueEvent (socket, result, type) {
+async function logQueueEvent(socket, result, type) {
   const eventData = {
     type: `post-queue-${result.type}-${type}`,
     uid: socket.uid,
@@ -149,14 +149,14 @@ SocketPosts.notify = async function (socket, data) {
   }
 }
 
-async function canEditQueue (socket, data, action) {
+async function canEditQueue(socket, data, action) {
   const canEditQueue = await posts.canEditQueue(socket.uid, data, action)
   if (!canEditQueue) {
     throw new Error('[[error:no-privileges]]')
   }
 }
 
-async function sendQueueNotification (type, targetUid, path, notificationText) {
+async function sendQueueNotification(type, targetUid, path, notificationText) {
   const notifData = {
     type,
     nid: `${type}-${targetUid}-${path}`,

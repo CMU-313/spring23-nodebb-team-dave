@@ -61,7 +61,7 @@ module.exports = function (Groups) {
     })
   }
 
-  async function clearGroupTitleIfSet (groupNames, uid) {
+  async function clearGroupTitleIfSet(groupNames, uid) {
     groupNames = groupNames.filter(groupName => groupName !== 'registered-users' && !Groups.isPrivilegeGroup(groupName))
     if (!groupNames.length) {
       return

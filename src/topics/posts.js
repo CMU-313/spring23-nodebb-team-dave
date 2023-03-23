@@ -75,7 +75,7 @@ module.exports = function (Topics) {
     return result.posts
   }
 
-  async function addEventStartEnd (postData, set, reverse, topicData) {
+  async function addEventStartEnd(postData, set, reverse, topicData) {
     if (!postData.length) {
       return
     }
@@ -109,7 +109,7 @@ module.exports = function (Topics) {
     }
     const pids = postData.map(post => post && post.pid)
 
-    async function getPostUserData (field, method) {
+    async function getPostUserData(field, method) {
       const uids = _.uniq(postData.filter(p => p && parseInt(p[field], 10) >= 0).map(p => p[field]))
       const userData = await method(uids)
       return _.zipObject(uids, userData)
@@ -245,7 +245,7 @@ module.exports = function (Topics) {
       const downvotes = parseInt(postData.downvotes, 10) || 0
       const votes = upvotes - downvotes
       await db.sortedSetsAdd([
-                `tid:${tid}:posts`, `tid:${tid}:posts:votes`
+        `tid:${tid}:posts`, `tid:${tid}:posts:votes`
       ], [postData.timestamp, votes], postData.pid)
     }
     await Topics.increasePostCount(tid)
@@ -257,8 +257,8 @@ module.exports = function (Topics) {
 
   Topics.removePostFromTopic = async function (tid, postData) {
     await db.sortedSetsRemove([
-            `tid:${tid}:posts`,
-            `tid:${tid}:posts:votes`
+      `tid:${tid}:posts`,
+      `tid:${tid}:posts:votes`
     ], postData.pid)
     await Topics.decreasePostCount(tid)
     await db.sortedSetIncrBy(`tid:${tid}:posters`, -1, postData.uid)
@@ -292,7 +292,7 @@ module.exports = function (Topics) {
     incrementFieldAndUpdateSortedSet(tid, 'viewcount', 1, ['topics:views', `cid:${cid}:tids:views`])
   }
 
-  async function incrementFieldAndUpdateSortedSet (tid, field, by, set) {
+  async function incrementFieldAndUpdateSortedSet(tid, field, by, set) {
     const value = await db.incrObjectFieldBy(`topic:${tid}`, field, by)
     await db[Array.isArray(set) ? 'sortedSetsAdd' : 'sortedSetAdd'](set, value, tid)
   }
@@ -315,7 +315,7 @@ module.exports = function (Topics) {
     return await db.getObjectField(`topic:${tid}`, 'postcount')
   }
 
-  async function getPostReplies (pids, callerUid) {
+  async function getPostReplies(pids, callerUid) {
     const keys = pids.map(pid => `pid:${pid}:replies`)
     const arrayOfReplyPids = await db.getSortedSetsMembers(keys)
 

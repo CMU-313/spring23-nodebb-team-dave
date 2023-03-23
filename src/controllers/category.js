@@ -141,7 +141,7 @@ categoryController.get = async function (req, res, next) {
   res.render('category', categoryData)
 }
 
-async function buildBreadcrumbs (req, categoryData) {
+async function buildBreadcrumbs(req, categoryData) {
   const breadcrumbs = [
     {
       text: categoryData.name,
@@ -155,7 +155,7 @@ async function buildBreadcrumbs (req, categoryData) {
   }
 }
 
-function addTags (categoryData, res) {
+function addTags(categoryData, res) {
   res.locals.metaTags = [
     {
       name: 'title',

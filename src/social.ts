@@ -9,7 +9,7 @@ import { Network } from './types'
 
 let postSharing: Network[] | null = null
 
-export async function getPostSharing (): Promise<Network[]> {
+export async function getPostSharing(): Promise<Network[]> {
   if (postSharing) {
     return _.cloneDeep(postSharing)
   }
@@ -43,12 +43,12 @@ export async function getPostSharing (): Promise<Network[]> {
   return _.cloneDeep(networks)
 }
 
-export async function getActivePostSharing (): Promise<Network[]> {
+export async function getActivePostSharing(): Promise<Network[]> {
   const networks: Network[] = await getPostSharing()
   return networks.filter(network => network && network.activated)
 }
 
-export async function setActivePostSharingNetworks (networkIDs: string[]): Promise<void> {
+export async function setActivePostSharingNetworks(networkIDs: string[]): Promise<void> {
   postSharing = null
 
   // The next line calls a function in a module that has not been updated to TS yet

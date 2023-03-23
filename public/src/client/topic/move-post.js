@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/topic/move-post', [
-  'components', 'postSelect', 'translator', 'alerts', 'api'
+  'components', 'postSelect', 'translator', 'alerts', 'api',
 ], function (components, postSelect, translator, alerts, api) {
   const MovePost = {}
 
@@ -41,7 +41,7 @@ define('forum/topic/move-post', [
         moveCommit.attr('disabled', true)
         const data = {
           pids: postSelect.pids.slice(),
-          tid: targetTid
+          tid: targetTid,
         }
         if (config.undoTimeout > 0) {
           return alerts.alert({
@@ -57,7 +57,7 @@ define('forum/topic/move-post', [
               delete params.timeoutfn
               alerts.success('[[topic:topic_move_posts_undone]]')
               moveCommit.removeAttr('disabled')
-            }
+            },
           })
         }
 
@@ -66,7 +66,7 @@ define('forum/topic/move-post', [
     })
   }
 
-  function onAjaxifyEnd () {
+  function onAjaxifyEnd() {
     if (!moveModal) {
       return
     }
@@ -83,7 +83,7 @@ define('forum/topic/move-post', [
     checkMoveButtonEnable()
   }
 
-  function getTargetTid () {
+  function getTargetTid() {
     const tidInput = moveModal.find('#topicId')
     if (tidInput.length && tidInput.val()) {
       return tidInput.val()
@@ -91,7 +91,7 @@ define('forum/topic/move-post', [
     return ajaxify.data.template.topic && ajaxify.data.tid
   }
 
-  function showPostsSelected () {
+  function showPostsSelected() {
     if (!moveModal) {
       return
     }
@@ -116,7 +116,7 @@ define('forum/topic/move-post', [
     }
   }
 
-  function checkMoveButtonEnable () {
+  function checkMoveButtonEnable() {
     if (!moveModal) {
       return
     }
@@ -131,17 +131,17 @@ define('forum/topic/move-post', [
     showPostsSelected()
   }
 
-  function onPostToggled () {
+  function onPostToggled() {
     checkMoveButtonEnable()
   }
 
-  function movePosts (data) {
+  function movePosts(data) {
     if (!data.tid) {
       return
     }
 
     Promise.all(data.pids.map(pid => api.put(`/posts/${pid}/move`, {
-      tid: data.tid
+      tid: data.tid,
     }))).then(() => {
       data.pids.forEach(function (pid) {
         components.get('post', 'pid', pid).fadeOut(500, function () {
@@ -153,7 +153,7 @@ define('forum/topic/move-post', [
     }).catch(alerts.error)
   }
 
-  function closeMoveModal () {
+  function closeMoveModal() {
     if (moveModal) {
       moveModal.remove()
       moveModal = null

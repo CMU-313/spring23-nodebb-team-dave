@@ -41,7 +41,7 @@ Topics.reply = async (req, res) => {
   }
 }
 
-async function lockPosting (req, error) {
+async function lockPosting(req, error) {
   const id = req.uid > 0 ? req.uid : req.sessionID
   const value = `posting${id}`
   const count = await db.incrObjectField('locks', value)
@@ -209,7 +209,7 @@ Topics.reorderThumbs = async (req, res) => {
   helpers.formatApiResponse(200, res)
 }
 
-async function checkThumbPrivileges ({ tid, uid, res }) {
+async function checkThumbPrivileges({ tid, uid, res }) {
   // req.params.tid could be either a tid (pushing a new thumb to an existing topic)
   // or a post UUID (a new topic being composed)
   const isUUID = validator.isUUID(tid)

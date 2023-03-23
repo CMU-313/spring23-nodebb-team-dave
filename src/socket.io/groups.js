@@ -37,7 +37,7 @@ SocketGroups.addMember = async (socket, data) => {
   })
 }
 
-async function isOwner (socket, data) {
+async function isOwner(socket, data) {
   if (typeof data.groupName !== 'string') {
     throw new Error('[[error:invalid-group-name]]')
   }
@@ -56,7 +56,7 @@ async function isOwner (socket, data) {
   }
 }
 
-async function isInvited (socket, data) {
+async function isInvited(socket, data) {
   if (typeof data.groupName !== 'string') {
     throw new Error('[[error:invalid-group-name]]')
   }
@@ -94,7 +94,7 @@ SocketGroups.rejectAll = async (socket, data) => {
   await acceptRejectAll(SocketGroups.reject, socket, data)
 }
 
-async function acceptRejectAll (method, socket, data) {
+async function acceptRejectAll(method, socket, data) {
   if (typeof data.groupName !== 'string') {
     throw new Error('[[error:invalid-group-name]]')
   }
@@ -221,7 +221,7 @@ SocketGroups.loadMoreMembers = async (socket, data) => {
   }
 }
 
-async function canSearchMembers (uid, groupName) {
+async function canSearchMembers(uid, groupName) {
   const [isHidden, isMember, hasAdminPrivilege, isGlobalMod, viewGroups] = await Promise.all([
     groups.isHidden(groupName),
     groups.isMember(uid, groupName),
@@ -263,7 +263,7 @@ SocketGroups.cover.remove = async (socket, data) => {
   })
 }
 
-async function canModifyGroup (uid, groupName) {
+async function canModifyGroup(uid, groupName) {
   if (typeof groupName !== 'string') {
     throw new Error('[[error:invalid-group-name]]')
   }
@@ -279,7 +279,7 @@ async function canModifyGroup (uid, groupName) {
   }
 }
 
-function logGroupEvent (socket, event, additional) {
+function logGroupEvent(socket, event, additional) {
   events.log({
     type: event,
     uid: socket.uid,

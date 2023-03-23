@@ -53,7 +53,7 @@ privsGlobal.init = async () => {
 }
 
 privsGlobal.list = async function () {
-  async function getLabels () {
+  async function getLabels() {
     const labels = Array.from(_privilegeMap.values()).map(data => data.label)
     return await utils.promiseParallel({
       users: plugins.hooks.fire('filter:privileges.global.list_human', labels.slice()),

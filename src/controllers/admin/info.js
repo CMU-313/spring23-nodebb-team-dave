@@ -62,7 +62,7 @@ pubsub.on('sync:node:info:end', (data) => {
   info[data.id] = data.data
 })
 
-async function getNodeInfo () {
+async function getNodeInfo() {
   const data = {
     process: {
       port: nconf.get('port'),
@@ -105,7 +105,7 @@ async function getNodeInfo () {
   return data
 }
 
-function getCpuUsage () {
+function getCpuUsage() {
   const newUsage = process.cpuUsage()
   const diff = (newUsage.user + newUsage.system) - (previousUsage.user + previousUsage.system)
   const now = Date.now()
@@ -115,7 +115,7 @@ function getCpuUsage () {
   return result.toFixed(2)
 }
 
-function humanReadableUptime (seconds) {
+function humanReadableUptime(seconds) {
   if (seconds < 60) {
     return `${Math.floor(seconds)}s`
   } else if (seconds < 3600) {
@@ -126,8 +126,8 @@ function humanReadableUptime (seconds) {
   return `${Math.floor(seconds / (60 * 60 * 24))}d`
 }
 
-async function getGitInfo () {
-  function get (cmd, callback) {
+async function getGitInfo() {
+  function get(cmd, callback) {
     exec(cmd, (err, stdout) => {
       if (err) {
         winston.error(err.stack)

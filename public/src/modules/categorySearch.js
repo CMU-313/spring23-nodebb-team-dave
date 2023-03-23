@@ -29,7 +29,7 @@ define('categorySearch', ['alerts'], function (alerts) {
         searchEl.removeClass('hidden')
       }
 
-      function doSearch () {
+      function doSearch() {
         const val = searchEl.find('input').val()
         if (val.length > 1 || (!val && !categoriesList)) {
           loadList(val, function (categories) {
@@ -66,7 +66,7 @@ define('categorySearch', ['alerts'], function (alerts) {
       searchEl.find('input').off('keyup')
     })
 
-    function loadList (search, callback) {
+    function loadList(search, callback) {
       socket.emit('categories.categorySearch', {
         search,
         query: utils.params(),
@@ -74,7 +74,7 @@ define('categorySearch', ['alerts'], function (alerts) {
         selectedCids: options.selectedCids,
         privilege: options.privilege,
         states: options.states,
-        showLinks: options.showLinks
+        showLinks: options.showLinks,
       }, function (err, categories) {
         if (err) {
           return alerts.error(err)
@@ -83,11 +83,11 @@ define('categorySearch', ['alerts'], function (alerts) {
       })
     }
 
-    function renderList (categories) {
+    function renderList(categories) {
       app.parseAndTranslate(options.template, {
         categoryItems: categories.slice(0, 200),
         selectedCategory: ajaxify.data.selectedCategory,
-        allCategoriesUrl: ajaxify.data.allCategoriesUrl
+        allCategoriesUrl: ajaxify.data.allCategoriesUrl,
       }, function (html) {
         el.find('[component="category/list"]')
           .replaceWith(html.find('[component="category/list"]'))

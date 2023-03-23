@@ -61,7 +61,7 @@ module.exports = function (SocketUser) {
     await doExport(socket, data, 'uploads')
   }
 
-  async function doExport (socket, data, type) {
+  async function doExport(socket, data, type) {
     sockets.warnDeprecated(socket, 'POST /api/v3/users/:uid/exports/:type')
 
     if (!socket.uid) {

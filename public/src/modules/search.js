@@ -2,7 +2,7 @@
 
 define('search', ['translator', 'storage', 'hooks', 'alerts'], function (translator, storage, hooks, alerts) {
   const Search = {
-    current: {}
+    current: {},
   }
 
   Search.init = function (searchOptions) {
@@ -23,7 +23,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
     $('#search-form').off('submit').on('submit', function () {
       searchInput.blur()
     })
-    searchInput.off('blur').on('blur', function dismissSearch () {
+    searchInput.off('blur').on('blur', function dismissSearch() {
       setTimeout(function () {
         if (!searchInput.is(':focus')) {
           searchFields.addClass('hidden')
@@ -35,19 +35,19 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
 
     const searchElements = {
       inputEl: searchInput,
-      resultEl: quickSearchContainer
+      resultEl: quickSearchContainer,
     }
 
     Search.enableQuickSearch({
       searchOptions,
-      searchElements
+      searchElements,
     })
 
     searchButton.off('click').on('click', function (e) {
       if (!config.loggedIn && !app.user.privileges['search:content']) {
         alerts.alert({
           message: '[[error:search-requires-login]]',
-          timeout: 3000
+          timeout: 3000,
         })
         ajaxify.go('login')
         return false
@@ -65,7 +65,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
       data.in = searchOptions.in
       hooks.fire('action:search.submit', {
         searchOptions: data,
-        searchElements
+        searchElements,
       })
       Search.query(data, function () {
         input.val('')
@@ -86,7 +86,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
     let oldValue = inputEl.val()
     const filterCategoryEl = quickSearchResults.find('.filter-category')
 
-    function updateCategoryFilterName () {
+    function updateCategoryFilterName() {
       if (ajaxify.data.template.category && ajaxify.data.cid) {
         translator.translate('[[search:search-in-category, ' + ajaxify.data.name + ']]', function (translated) {
           const name = $('<div></div>').html(translated).text()
@@ -96,7 +96,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
       filterCategoryEl.toggleClass('hidden', !(ajaxify.data.template.category && ajaxify.data.cid))
     }
 
-    function doSearch () {
+    function doSearch() {
       options.searchOptions = Object.assign({}, searchOptions)
       options.searchOptions.term = inputEl.val()
       updateCategoryFilterName()
@@ -138,7 +138,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
           Search.highlightMatches(options.searchOptions.term, highlightEls)
           hooks.fire('action:search.quick.complete', {
             data,
-            options
+            options,
           })
         })
       })
@@ -231,7 +231,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
     })
   }
 
-  function createQueryString (data) {
+  function createQueryString(data) {
     const searchIn = data.in || 'titles'
     const postedBy = data.by || ''
     let term = data.term.replace(/^[ ?#]*/, '')
@@ -243,7 +243,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
 
     const query = {
       term,
-      in: searchIn
+      in: searchIn,
     }
 
     if (data.matchWords) {
@@ -290,7 +290,7 @@ define('search', ['translator', 'storage', 'hooks', 'alerts'], function (transla
 
     hooks.fire('action:search.createQueryString', {
       query,
-      data
+      data,
     })
 
     return decodeURIComponent($.param(query))

@@ -15,7 +15,7 @@ module.exports = function (Categories) {
     return cids
   }
 
-  async function updateCategory (cid, modifiedFields) {
+  async function updateCategory(cid, modifiedFields) {
     const exists = await Categories.exists(cid)
     if (!exists) {
       return
@@ -42,7 +42,7 @@ module.exports = function (Categories) {
     plugins.hooks.fire('action:category.update', { cid, modified: category })
   }
 
-  async function updateCategoryField (cid, key, value) {
+  async function updateCategoryField(cid, key, value) {
     if (key === 'parentCid') {
       return await updateParent(cid, value)
     } else if (key === 'tagWhitelist') {
@@ -59,7 +59,7 @@ module.exports = function (Categories) {
     }
   }
 
-  async function updateParent (cid, newParent) {
+  async function updateParent(cid, newParent) {
     newParent = parseInt(newParent, 10) || 0
     if (parseInt(cid, 10) === newParent) {
       throw new Error('[[error:cant-set-self-as-parent]]')
@@ -80,14 +80,14 @@ module.exports = function (Categories) {
     ])
 
     cache.del([
-            `cid:${oldParent}:children`,
-            `cid:${newParent}:children`,
-            `cid:${oldParent}:children:all`,
-            `cid:${newParent}:children:all`
+      `cid:${oldParent}:children`,
+      `cid:${newParent}:children`,
+      `cid:${oldParent}:children:all`,
+      `cid:${newParent}:children:all`
     ])
   }
 
-  async function updateTagWhitelist (cid, tags) {
+  async function updateTagWhitelist(cid, tags) {
     tags = tags.split(',').map(tag => utils.cleanUpTag(tag, meta.config.maximumTagLength))
       .filter(Boolean)
     await db.delete(`cid:${cid}:tag:whitelist`)
@@ -96,12 +96,12 @@ module.exports = function (Categories) {
     cache.del(`cid:${cid}:tag:whitelist`)
   }
 
-  async function updateOrder (cid, order) {
+  async function updateOrder(cid, order) {
     const parentCid = await Categories.getCategoryField(cid, 'parentCid')
     await db.sortedSetsAdd('categories:cid', order, cid)
 
     const childrenCids = await db.getSortedSetRange(
-            `cid:${parentCid}:children`, 0, -1
+      `cid:${parentCid}:children`, 0, -1
     )
 
     const currentIndex = childrenCids.indexOf(String(cid))
@@ -115,9 +115,9 @@ module.exports = function (Categories) {
 
     // recalculate orders from array indices
     await db.sortedSetAdd(
-            `cid:${parentCid}:children`,
-            childrenCids.map((cid, index) => index + 1),
-            childrenCids
+      `cid:${parentCid}:children`,
+      childrenCids.map((cid, index) => index + 1),
+      childrenCids
     )
 
     await db.setObjectBulk(
@@ -126,8 +126,8 @@ module.exports = function (Categories) {
 
     cache.del([
       'categories:cid',
-            `cid:${parentCid}:children`,
-            `cid:${parentCid}:children:all`
+      `cid:${parentCid}:children`,
+      `cid:${parentCid}:children:all`
     ])
   }
 
@@ -136,7 +136,7 @@ module.exports = function (Categories) {
     await Categories.setCategoryField(cid, 'descriptionParsed', parsedDescription)
   }
 
-  async function updateName (cid, newName) {
+  async function updateName(cid, newName) {
     const oldName = await Categories.getCategoryField(cid, 'name')
     await db.sortedSetRemove('categories:name', `${oldName.slice(0, 200).toLowerCase()}:${cid}`)
     await db.sortedSetAdd('categories:name', 0, `${newName.slice(0, 200).toLowerCase()}:${cid}`)

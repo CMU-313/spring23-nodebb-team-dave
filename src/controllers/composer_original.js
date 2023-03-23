@@ -59,7 +59,7 @@ exports.post = async function (req, res) {
   if (!data.content) {
     return helpers.noScriptErrors(req, res, '[[error:invalid-data]]', 400)
   }
-  async function queueOrPost (postFn, data) {
+  async function queueOrPost(postFn, data) {
     const shouldQueue = await posts.shouldQueue(req.uid, data)
     if (shouldQueue) {
       delete data.req

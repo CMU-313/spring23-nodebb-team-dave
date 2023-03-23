@@ -62,7 +62,7 @@ module.exports = function (Categories) {
     return searchResult
   }
 
-  async function findCids (query, hardCap) {
+  async function findCids(query, hardCap) {
     if (!query || String(query).length < 2) {
       return []
     }
@@ -74,7 +74,7 @@ module.exports = function (Categories) {
     return data.map(data => parseInt(data.split(':').pop(), 10))
   }
 
-  async function getChildrenCids (cids, uid) {
+  async function getChildrenCids(cids, uid) {
     const childrenCids = await Promise.all(cids.map(cid => Categories.getChildrenCids(cid)))
     return await privileges.categories.filterCids('find', _.flatten(childrenCids), uid)
   }

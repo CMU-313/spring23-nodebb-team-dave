@@ -91,7 +91,7 @@ module.exports = function (Topics) {
     return result.teasers
   }
 
-  function calcTeaserIndex (teaserPost, postCountInTopic, sortNewToOld) {
+  function calcTeaserIndex(teaserPost, postCountInTopic, sortNewToOld) {
     if (teaserPost === 'first') {
       return 1
     }
@@ -102,11 +102,11 @@ module.exports = function (Topics) {
     return postCountInTopic
   }
 
-  function replaceImgWithAltText (str) {
+  function replaceImgWithAltText(str) {
     return String(str).replace(/<img .*?alt="(.*?)"[^>]*>/gi, '$1')
   }
 
-  async function handleBlocks (uid, teasers) {
+  async function handleBlocks(uid, teasers) {
     const blockedUids = await user.blocks.list(uid)
     if (!blockedUids.length) {
       return teasers
@@ -120,7 +120,7 @@ module.exports = function (Topics) {
     }))
   }
 
-  async function getPreviousNonBlockedPost (postData, blockedUids) {
+  async function getPreviousNonBlockedPost(postData, blockedUids) {
     let isBlocked = false
     let prevPost = postData
     const postsPerIteration = 5
@@ -128,7 +128,7 @@ module.exports = function (Topics) {
     let stop = start + postsPerIteration - 1
     let checkedAllReplies = false
 
-    function checkBlocked (post) {
+    function checkBlocked(post) {
       const isPostBlocked = blockedUids.includes(parseInt(post.uid, 10))
       prevPost = !isPostBlocked ? post : prevPost
       return isPostBlocked

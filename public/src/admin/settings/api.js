@@ -18,13 +18,13 @@ define('admin/settings/api', ['settings', 'alerts', 'hooks'], function (settings
     })
   }
 
-  function saveSettings () {
+  function saveSettings() {
     settings.save('core.api', $('.core-api-settings'), function () {
       alerts.alert({
         type: 'success',
         alert_id: 'core.api-saved',
         title: 'Settings Saved',
-        timeout: 5000
+        timeout: 5000,
       })
       ajaxify.refresh()
     })

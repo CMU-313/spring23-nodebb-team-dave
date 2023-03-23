@@ -130,7 +130,7 @@ module.exports = function (Posts) {
     ])
   }
 
-  async function postDiffLoad (pid, since, uid) {
+  async function postDiffLoad(pid, since, uid) {
     // Retrieves all diffs made since `since` and replays them to reconstruct what the post looked like at `since`
     const [post, diffs] = await Promise.all([
       Posts.getPostSummaryByPids([pid], uid, { parse: false }),
@@ -153,7 +153,7 @@ module.exports = function (Posts) {
     return post[0]
   }
 
-  function getValidatedTimestamp (timestamp) {
+  function getValidatedTimestamp(timestamp) {
     timestamp = parseInt(timestamp, 10)
 
     if (isNaN(timestamp)) {
@@ -163,7 +163,7 @@ module.exports = function (Posts) {
     return timestamp
   }
 
-  function applyPatch (content, aDiff) {
+  function applyPatch(content, aDiff) {
     if (aDiff && aDiff.patch) {
       const result = diff.applyPatch(content, aDiff.patch, {
         fuzzFactor: 1

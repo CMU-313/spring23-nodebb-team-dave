@@ -7,7 +7,7 @@ define('forum/chats/search', ['components', 'api', 'alerts'], function (componen
     components.get('chat/search').on('keyup', utils.debounce(doSearch, 250))
   }
 
-  function doSearch () {
+  function doSearch() {
     const username = components.get('chat/search').val()
     if (!username) {
       return $('[component="chat/search/list"]').empty()
@@ -16,12 +16,12 @@ define('forum/chats/search', ['components', 'api', 'alerts'], function (componen
     api.get('/api/users', {
       query: username,
       searchBy: 'username',
-      paginate: false
+      paginate: false,
     }).then(displayResults)
       .catch(alerts.error)
   }
 
-  function displayResults (data) {
+  function displayResults(data) {
     const chatsListEl = $('[component="chat/search/list"]')
     chatsListEl.empty()
 
@@ -41,11 +41,11 @@ define('forum/chats/search', ['components', 'api', 'alerts'], function (componen
     chatsListEl.parent().toggleClass('open', true)
   }
 
-  function displayUser (chatsListEl, userObj) {
-    function createUserImage () {
-      return (userObj.picture
-        ? '<img src="' + userObj.picture + '" title="' + userObj.username + '" />'
-        : '<div class="user-icon" style="background-color: ' + userObj['icon:bgColor'] + '">' + userObj['icon:text'] + '</div>') +
+  function displayUser(chatsListEl, userObj) {
+    function createUserImage() {
+      return (userObj.picture ?
+        '<img src="' + userObj.picture + '" title="' + userObj.username + '" />' :
+        '<div class="user-icon" style="background-color: ' + userObj['icon:bgColor'] + '">' + userObj['icon:text'] + '</div>') +
                 '<i class="fa fa-circle status ' + userObj.status + '"></i> ' + userObj.username
     }
 
@@ -57,7 +57,7 @@ define('forum/chats/search', ['components', 'api', 'alerts'], function (componen
     return chatEl
   }
 
-  function onUserClick (chatEl, userObj) {
+  function onUserClick(chatEl, userObj) {
     chatEl.on('click', function () {
       socket.emit('modules.chats.hasPrivateChat', userObj.uid, function (err, roomId) {
         if (err) {

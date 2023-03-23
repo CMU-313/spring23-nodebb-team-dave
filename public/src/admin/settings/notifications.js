@@ -1,7 +1,7 @@
 'use strict'
 
 define('admin/settings/notifications', [
-  'autocomplete'
+  'autocomplete',
 ], function (autocomplete) {
   const Notifications = {}
 

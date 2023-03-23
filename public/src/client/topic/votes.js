@@ -1,7 +1,7 @@
 'use strict'
 
 define('forum/topic/votes', [
-  'components', 'translator', 'api', 'hooks', 'bootbox', 'alerts'
+  'components', 'translator', 'api', 'hooks', 'bootbox', 'alerts',
 ], function (components, translator, api, hooks, bootbox, alerts) {
   const Votes = {}
 
@@ -9,7 +9,7 @@ define('forum/topic/votes', [
     components.get('topic').on('mouseenter', '[data-pid] [component="post/vote-count"]', loadDataAndCreateTooltip)
   }
 
-  function loadDataAndCreateTooltip (e) {
+  function loadDataAndCreateTooltip(e) {
     e.stopPropagation()
 
     const $this = $(this)
@@ -29,8 +29,8 @@ define('forum/topic/votes', [
     return false
   }
 
-  function createTooltip (el, data) {
-    function doCreateTooltip (title) {
+  function createTooltip(el, data) {
+    function doCreateTooltip(title) {
       el.attr('title', title).tooltip('fixTitle').tooltip('show')
       el.parent().find('.tooltip').css('display', '')
     }
@@ -58,7 +58,7 @@ define('forum/topic/votes', [
     const method = currentState ? 'del' : 'put'
     const pid = post.attr('data-pid')
     api[method](`/posts/${pid}/vote`, {
-      delta
+      delta,
     }, function (err) {
       if (err) {
         if (!app.user.uid) {
@@ -70,7 +70,7 @@ define('forum/topic/votes', [
       hooks.fire('action:post.toggleVote', {
         pid,
         delta,
-        unvote: method === 'del'
+        unvote: method === 'del',
       })
     })
 
@@ -93,7 +93,7 @@ define('forum/topic/votes', [
           title: '[[global:voters]]',
           message: html,
           className: 'vote-modal',
-          show: true
+          show: true,
         })
 
         dialog.on('click', function () {

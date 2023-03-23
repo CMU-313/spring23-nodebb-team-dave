@@ -6,11 +6,11 @@ define('share', ['hooks'], function (hooks) {
   module.addShareHandlers = function (name) {
     const baseUrl = window.location.protocol + '//' + window.location.host
 
-    function openShare (url, urlToPost, width, height) {
+    function openShare(url, urlToPost, width, height) {
       window.open(url + encodeURIComponent(baseUrl + config.relative_path + urlToPost), '_blank', 'width=' + width + ',height=' + height + ',scrollbars=no,status=no')
       hooks.fire('action:share.open', {
         url,
-        urlToPost
+        urlToPost,
       })
       return false
     }
@@ -41,11 +41,11 @@ define('share', ['hooks'], function (hooks) {
     hooks.fire('action:share.addHandlers', { openShare })
   }
 
-  function addHandler (selector, callback) {
+  function addHandler(selector, callback) {
     $('#content').off('click', selector).on('click', selector, callback)
   }
 
-  function getPostUrl (clickedElement) {
+  function getPostUrl(clickedElement) {
     const pid = parseInt(clickedElement.parents('[data-pid]').attr('data-pid'), 10)
     return '/post' + (pid ? '/' + (pid) : '')
   }

@@ -64,7 +64,7 @@ uploadsController.get = async function (req, res, next) {
   }
 }
 
-function buildBreadcrumbs (currentFolder) {
+function buildBreadcrumbs(currentFolder) {
   const crumbs = []
   const parts = currentFolder.replace(nconf.get('upload_path'), '').split(path.sep)
   let currentPath = ''
@@ -72,9 +72,9 @@ function buildBreadcrumbs (currentFolder) {
     const dir = path.join(currentPath, part)
     crumbs.push({
       text: part || 'Uploads',
-      url: part
-        ? (`${nconf.get('relative_path')}/admin/manage/uploads?dir=${dir}`)
-        : `${nconf.get('relative_path')}/admin/manage/uploads`
+      url: part ?
+        (`${nconf.get('relative_path')}/admin/manage/uploads?dir=${dir}`) :
+        `${nconf.get('relative_path')}/admin/manage/uploads`
     })
     currentPath = dir
   })
@@ -82,11 +82,11 @@ function buildBreadcrumbs (currentFolder) {
   return crumbs
 }
 
-async function filesToData (currentDir, files) {
+async function filesToData(currentDir, files) {
   return await Promise.all(files.map(file => getFileData(currentDir, file)))
 }
 
-async function getFileData (currentDir, file) {
+async function getFileData(currentDir, file) {
   const pathToFile = path.join(currentDir, file)
   const stat = await fs.promises.stat(pathToFile)
   let filesInDir = []
@@ -215,7 +215,7 @@ uploadsController.uploadOgImage = async function (req, res, next) {
   await upload('og:image', req, res, next)
 }
 
-async function upload (name, req, res, next) {
+async function upload(name, req, res, next) {
   const uploadedFile = req.files.files[0]
 
   if (validateUpload(res, uploadedFile, allowedImageTypes)) {
@@ -224,7 +224,7 @@ async function upload (name, req, res, next) {
   }
 }
 
-function validateUpload (res, uploadedFile, allowedTypes) {
+function validateUpload(res, uploadedFile, allowedTypes) {
   if (!allowedTypes.includes(uploadedFile.type)) {
     file.delete(uploadedFile.path)
     res.json({ error: `[[error:invalid-image-type, ${allowedTypes.join('&#44; ')}]]` })
@@ -234,7 +234,7 @@ function validateUpload (res, uploadedFile, allowedTypes) {
   return true
 }
 
-async function uploadImage (filename, folder, uploadedFile, req, res, next) {
+async function uploadImage(filename, folder, uploadedFile, req, res, next) {
   let imageData
   try {
     if (plugins.hooks.hasListeners('filter:uploadImage')) {

@@ -117,7 +117,7 @@ module.exports = function (Topics) {
     plugins.hooks.fire('action:post.move', { uid: callerUid, post: postData, tid })
   }
 
-  async function updateCategory (postData, toTid) {
+  async function updateCategory(postData, toTid) {
     const topicData = await Topics.getTopicsFields([postData.tid, toTid], ['cid', 'pinned'])
 
     if (!topicData[0].cid || !topicData[1].cid) {
@@ -135,9 +135,9 @@ module.exports = function (Topics) {
       return
     }
     const removeFrom = [
-            `cid:${topicData[0].cid}:pids`,
-            `cid:${topicData[0].cid}:uid:${postData.uid}:pids`,
-            `cid:${topicData[0].cid}:uid:${postData.uid}:pids:votes`
+      `cid:${topicData[0].cid}:pids`,
+      `cid:${topicData[0].cid}:uid:${postData.uid}:pids`,
+      `cid:${topicData[0].cid}:uid:${postData.uid}:pids:votes`
     ]
     const tasks = [
       db.incrObjectFieldBy(`category:${topicData[0].cid}`, 'post_count', -1),

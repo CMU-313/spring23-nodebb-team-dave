@@ -47,9 +47,9 @@ define('admin/advanced/errors', ['bootbox', 'alerts', 'Chart'], function (bootbo
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(186,139,175,1)',
-            data: ajaxify.data.analytics['not-found']
-          }
-        ]
+            data: ajaxify.data.analytics['not-found'],
+          },
+        ],
       },
       toobusy: {
         labels: dailyLabels,
@@ -62,10 +62,10 @@ define('admin/advanced/errors', ['bootbox', 'alerts', 'Chart'], function (bootbo
             pointHoverBackgroundColor: '#fff',
             pointBorderColor: '#fff',
             pointHoverBorderColor: 'rgba(151,187,205,1)',
-            data: ajaxify.data.analytics.toobusy
-          }
-        ]
-      }
+            data: ajaxify.data.analytics.toobusy,
+          },
+        ],
+      },
     }
 
     notFoundCanvas.width = $(notFoundCanvas).parent().width()
@@ -77,16 +77,16 @@ define('admin/advanced/errors', ['bootbox', 'alerts', 'Chart'], function (bootbo
       options: {
         responsive: true,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
     })
 
     new Chart(tooBusyCanvas.getContext('2d'), {
@@ -95,16 +95,16 @@ define('admin/advanced/errors', ['bootbox', 'alerts', 'Chart'], function (bootbo
       options: {
         responsive: true,
         legend: {
-          display: false
+          display: false,
         },
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
+              beginAtZero: true,
+            },
+          }],
+        },
+      },
     })
   }
 

@@ -19,7 +19,7 @@ if (process.platform === 'win32') {
   packageManagerExecutable += '.cmd'
 }
 
-async function getModuleVersions (modules) {
+async function getModuleVersions(modules) {
   const versionHash = {}
   const batch = require('../batch')
   await batch.processArray(modules, async (moduleNames) => {
@@ -37,7 +37,7 @@ async function getModuleVersions (modules) {
   return versionHash
 }
 
-async function getInstalledPlugins () {
+async function getInstalledPlugins() {
   let [deps, bundled] = await Promise.all([
     fs.promises.readFile(paths.currentPackage, { encoding: 'utf-8' }),
     fs.promises.readFile(paths.installPackage, { encoding: 'utf-8' })
@@ -66,13 +66,13 @@ async function getInstalledPlugins () {
   return await getModuleVersions(checklist)
 }
 
-async function getCurrentVersion () {
+async function getCurrentVersion() {
   let pkg = await fs.promises.readFile(paths.installPackage, { encoding: 'utf-8' })
   pkg = JSON.parse(pkg)
   return pkg.version
 }
 
-async function getSuggestedModules (nbbVersion, toCheck) {
+async function getSuggestedModules(nbbVersion, toCheck) {
   let body = await request({
     method: 'GET',
     url: `https://packages.nodebb.org/api/v1/suggest?version=${nbbVersion}&package[]=${toCheck.join('&package[]=')}`,
@@ -84,7 +84,7 @@ async function getSuggestedModules (nbbVersion, toCheck) {
   return body
 }
 
-async function checkPlugins () {
+async function checkPlugins() {
   process.stdout.write('Checking installed plugins and themes for updates... ')
   const [plugins, nbbVersion] = await Promise.all([
     getInstalledPlugins(),
@@ -118,7 +118,7 @@ async function checkPlugins () {
   return upgradable
 }
 
-async function upgradePlugins () {
+async function upgradePlugins() {
   try {
     const found = await checkPlugins()
     if (found && found.length) {

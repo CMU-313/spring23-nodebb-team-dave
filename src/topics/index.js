@@ -67,19 +67,19 @@ Topics.getTopicsByTids = async function (tids, options) {
     uid = options.uid
   }
 
-  async function loadTopics () {
+  async function loadTopics() {
     const topics = await Topics.getTopicsData(tids)
     const uids = _.uniq(topics.map(t => t && t.uid && t.uid.toString()).filter(v => utils.isNumber(v)))
     const cids = _.uniq(topics.map(t => t && t.cid && t.cid.toString()).filter(v => utils.isNumber(v)))
     const guestTopics = topics.filter(t => t && t.uid === 0)
 
-    async function loadGuestHandles () {
+    async function loadGuestHandles() {
       const mainPids = guestTopics.map(t => t.mainPid)
       const postData = await posts.getPostsFields(mainPids, ['handle'])
       return postData.map(p => p.handle)
     }
 
-    async function loadShowfullnameSettings () {
+    async function loadShowfullnameSettings() {
       if (meta.config.hideFullname) {
         return uids.map(() => ({ showfullname: false }))
       }
@@ -138,9 +138,9 @@ Topics.getTopicsByTids = async function (tids, options) {
       topic.isOwner = topic.uid === parseInt(uid, 10)
       topic.ignored = isIgnored[i]
       topic.unread = parseInt(uid, 10) <= 0 || (!hasRead[i] && !isIgnored[i])
-      topic.bookmark = sortNewToOld
-        ? Math.max(1, topic.postcount + 2 - bookmarks[i])
-        : Math.min(topic.postcount, bookmarks[i] + 1)
+      topic.bookmark = sortNewToOld ?
+        Math.max(1, topic.postcount + 2 - bookmarks[i]) :
+        Math.min(topic.postcount, bookmarks[i] + 1)
       topic.unreplied = !topic.teaser
 
       topic.icons = []
@@ -217,14 +217,14 @@ Topics.getTopicWithPosts = async function (topicData, set, uid, start, stop, rev
   return result.topic
 }
 
-async function getDeleter (topicData) {
+async function getDeleter(topicData) {
   if (!parseInt(topicData.deleterUid, 10)) {
     return null
   }
   return await user.getUserFields(topicData.deleterUid, ['username', 'userslug', 'picture'])
 }
 
-async function getMerger (topicData) {
+async function getMerger(topicData) {
   if (!parseInt(topicData.mergerUid, 10)) {
     return null
   }
@@ -257,7 +257,7 @@ Topics.getMainPosts = async function (tids, uid) {
   return await getMainPosts(mainPids, uid)
 }
 
-async function getMainPosts (mainPids, uid) {
+async function getMainPosts(mainPids, uid) {
   let postData = await posts.getPostsByPids(mainPids, uid)
   postData = await user.blocks.filter(uid, postData)
   postData.forEach((post) => {

@@ -63,7 +63,7 @@ module.exports = function (Posts) {
     return postData
   }
 
-  async function addMetaData (postData) {
+  async function addMetaData(postData) {
     if (!postData) {
       return
     }
@@ -97,7 +97,7 @@ module.exports = function (Posts) {
     return result.shouldQueue
   }
 
-  async function isCategoryQueueEnabled (data) {
+  async function isCategoryQueueEnabled(data) {
     const type = getType(data)
     const cid = await getCid(type, data)
     if (!cid) {
@@ -106,7 +106,7 @@ module.exports = function (Posts) {
     return await categories.getCategoryField(cid, 'postQueue')
   }
 
-  function getType (data) {
+  function getType(data) {
     if (data.hasOwnProperty('tid')) {
       return 'reply'
     } else if (data.hasOwnProperty('cid')) {
@@ -115,7 +115,7 @@ module.exports = function (Posts) {
     throw new Error('[[error:invalid-type]]')
   }
 
-  async function removeQueueNotification (id) {
+  async function removeQueueNotification(id) {
     await notifications.rescind(`post-queue-${id}`)
     const data = await getParsedObject(id)
     if (!data) {
@@ -126,7 +126,7 @@ module.exports = function (Posts) {
     uids.forEach(uid => user.notifications.pushCount(uid))
   }
 
-  async function getNotificationUids (cid) {
+  async function getNotificationUids(cid) {
     const results = await Promise.all([
       groups.getMembersOfGroups(['administrators', 'Global Moderators']),
       categories.getModeratorUids([cid])
@@ -175,7 +175,7 @@ module.exports = function (Posts) {
     }
   }
 
-  async function parseBodyLong (cid, type, data) {
+  async function parseBodyLong(cid, type, data) {
     const url = nconf.get('url')
     const [content, category, userData] = await Promise.all([
       plugins.hooks.fire('filter:parse.raw', data.content),
@@ -202,7 +202,7 @@ module.exports = function (Posts) {
     })
   }
 
-  async function getCid (type, data) {
+  async function getCid(type, data) {
     if (type === 'topic') {
       return data.cid
     } else if (type === 'reply') {
@@ -211,7 +211,7 @@ module.exports = function (Posts) {
     return null
   }
 
-  async function canPost (type, data) {
+  async function canPost(type, data) {
     const cid = await getCid(type, data)
     const typeToPrivilege = {
       topic: 'topics:create',
@@ -246,7 +246,7 @@ module.exports = function (Posts) {
     return result.data
   }
 
-  async function removeFromQueue (id) {
+  async function removeFromQueue(id) {
     await removeQueueNotification(id)
     await db.sortedSetRemove('post:queue', id)
     await db.delete(`post:queue:${id}`)
@@ -276,7 +276,7 @@ module.exports = function (Posts) {
     return await getParsedObject(id)
   }
 
-  async function getParsedObject (id) {
+  async function getParsedObject(id) {
     const data = await db.getObject(`post:queue:${id}`)
     if (!data) {
       return null
@@ -286,13 +286,13 @@ module.exports = function (Posts) {
     return data
   }
 
-  async function createTopic (data) {
+  async function createTopic(data) {
     const result = await topics.post(data)
     socketHelpers.notifyNew(data.uid, 'newTopic', { posts: [result.postData], topic: result.topicData })
     return result
   }
 
-  async function createReply (data) {
+  async function createReply(data) {
     const postData = await topics.reply(data)
     const result = {
       posts: [postData],

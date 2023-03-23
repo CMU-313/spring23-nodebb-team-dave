@@ -9,7 +9,7 @@ define('forum/topic/posts', [
   'components',
   'translator',
   'hooks',
-  'helpers'
+  'helpers',
 ], function (pagination, infinitescroll, postTools, images, navigator, components, translator, hooks, helpers) {
   const Posts = { }
 
@@ -68,7 +68,7 @@ define('forum/topic/posts', [
     })
   }
 
-  function updatePostCounts (posts) {
+  function updatePostCounts(posts) {
     for (let i = 0; i < posts.length; i += 1) {
       const cmp = components.get('user/postcount', posts[i].uid)
       cmp.html(parseInt(cmp.attr('data-postcount'), 10) + 1)
@@ -76,7 +76,7 @@ define('forum/topic/posts', [
     }
   }
 
-  function updatePostIndices (posts) {
+  function updatePostIndices(posts) {
     if (config.topicPostSort === 'newest_to_oldest') {
       posts[0].index = 1
       components.get('post').not('[data-index=0]').each(function () {
@@ -86,8 +86,8 @@ define('forum/topic/posts', [
     }
   }
 
-  function onNewPostPagination (data) {
-    function scrollToPost () {
+  function onNewPostPagination(data) {
+    function scrollToPost() {
       scrollToPostIfSelf(data.posts[0])
     }
 
@@ -114,7 +114,7 @@ define('forum/topic/posts', [
     }
   }
 
-  function updatePagination () {
+  function updatePagination() {
     $.get(config.relative_path + '/api/topic/pagination/' + ajaxify.data.tid, { page: ajaxify.data.pagination.currentPage }, function (paginationData) {
       app.parseAndTranslate('partials/paginator', paginationData, function (html) {
         $('[component="pagination"]').after(html).remove()
@@ -122,7 +122,7 @@ define('forum/topic/posts', [
     })
   }
 
-  function onNewPostInfiniteScroll (data) {
+  function onNewPostInfiniteScroll(data) {
     const direction = (config.topicPostSort === 'oldest_to_newest' || config.topicPostSort === 'most_votes') ? 1 : -1
 
     const isPreviousPostAdded = $('[component="post"][data-index="' + (data.posts[0].index - 1) + '"]').length
@@ -142,19 +142,19 @@ define('forum/topic/posts', [
     })
   }
 
-  function scrollToPostIfSelf (post) {
+  function scrollToPostIfSelf(post) {
     if (post.selfPost && ajaxify.data.scrollToMyPost) {
       navigator.scrollBottom(post.index)
     }
   }
 
-  function createNewPosts (data, repliesSelector, direction, userScrolled, callback) {
+  function createNewPosts(data, repliesSelector, direction, userScrolled, callback) {
     callback = callback || function () {}
     if (!data || (data.posts && !data.posts.length)) {
       return callback()
     }
 
-    function removeAlreadyAddedPosts () {
+    function removeAlreadyAddedPosts() {
       const newPosts = $('[component="post"].new')
 
       if (newPosts.length === data.posts.length) {
@@ -266,7 +266,7 @@ define('forum/topic/posts', [
       after: after + (direction > 0 ? 1 : 0),
       count: config.postsPerPage,
       direction,
-      topicPostSort: config.topicPostSort
+      topicPostSort: config.topicPostSort,
     }, function (data, done) {
       indicatorEl.fadeOut()
 
@@ -312,7 +312,7 @@ define('forum/topic/posts', [
     })
   }
 
-  function addNecroPostMessage () {
+  function addNecroPostMessage() {
     const necroThreshold = ajaxify.data.necroThreshold * 24 * 60 * 60 * 1000
     if (!necroThreshold || (config.topicPostSort !== 'newest_to_oldest' && config.topicPostSort !== 'oldest_to_newest')) {
       return
@@ -355,7 +355,7 @@ define('forum/topic/posts', [
     })
   }
 
-  function hideDuplicateSignatures (posts) {
+  function hideDuplicateSignatures(posts) {
     if (ajaxify.data['signatures:hideDuplicates']) {
       posts.each((index, el) => {
         const signatureEl = $(el).find('[component="post/signature"]')
@@ -369,13 +369,13 @@ define('forum/topic/posts', [
     }
   }
 
-  function removeNecroPostMessages (removedPostEls) {
+  function removeNecroPostMessages(removedPostEls) {
     removedPostEls.each((index, el) => {
       $(`[data-necro-post-index="${$(el).attr('data-index')}"]`).remove()
     })
   }
 
-  function handlePrivateUploads (posts) {
+  function handlePrivateUploads(posts) {
     if (app.user.uid || !ajaxify.data.privateUploads) {
       return
     }
@@ -420,7 +420,7 @@ define('forum/topic/posts', [
     }
   }
 
-  function hidePostToolsForDeletedPosts (posts) {
+  function hidePostToolsForDeletedPosts(posts) {
     posts.each(function () {
       if ($(this).hasClass('deleted')) {
         postTools.toggle($(this).attr('data-pid'), true)

@@ -22,13 +22,13 @@ module.exports = {
       await Promise.all(subset.map(async (flagObj) => {
         const methods = []
         switch (flagObj.type) {
-          case 'post':
-            methods.push(posts.setPostField.bind(posts, flagObj.targetId, 'flagId', flagObj.flagId))
-            break
+        case 'post':
+          methods.push(posts.setPostField.bind(posts, flagObj.targetId, 'flagId', flagObj.flagId))
+          break
 
-          case 'user':
-            methods.push(user.setUserField.bind(user, flagObj.targetId, 'flagId', flagObj.flagId))
-            break
+        case 'user':
+          methods.push(user.setUserField.bind(user, flagObj.targetId, 'flagId', flagObj.flagId))
+          break
         }
 
         methods.push(

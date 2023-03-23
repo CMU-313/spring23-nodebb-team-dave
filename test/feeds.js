@@ -48,17 +48,17 @@ describe('feeds', () => {
 
   it('should 404', (done) => {
     const feedUrls = [
-            `${nconf.get('url')}/topic/${tid}.rss`,
-            `${nconf.get('url')}/category/${cid}.rss`,
-            `${nconf.get('url')}/topics.rss`,
-            `${nconf.get('url')}/recent.rss`,
-            `${nconf.get('url')}/top.rss`,
-            `${nconf.get('url')}/popular.rss`,
-            `${nconf.get('url')}/popular/day.rss`,
-            `${nconf.get('url')}/recentposts.rss`,
-            `${nconf.get('url')}/category/${cid}/recentposts.rss`,
-            `${nconf.get('url')}/user/foo/topics.rss`,
-            `${nconf.get('url')}/tags/nodebb.rss`
+      `${nconf.get('url')}/topic/${tid}.rss`,
+      `${nconf.get('url')}/category/${cid}.rss`,
+      `${nconf.get('url')}/topics.rss`,
+      `${nconf.get('url')}/recent.rss`,
+      `${nconf.get('url')}/top.rss`,
+      `${nconf.get('url')}/popular.rss`,
+      `${nconf.get('url')}/popular/day.rss`,
+      `${nconf.get('url')}/recentposts.rss`,
+      `${nconf.get('url')}/category/${cid}/recentposts.rss`,
+      `${nconf.get('url')}/user/foo/topics.rss`,
+      `${nconf.get('url')}/tags/nodebb.rss`
     ]
     async.eachSeries(feedUrls, (url, next) => {
       request(url, (err, res) => {

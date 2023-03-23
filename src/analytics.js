@@ -57,14 +57,14 @@ Analytics.init = async function () {
   }
 }
 
-function publishLocalAnalytics () {
+function publishLocalAnalytics() {
   pubsub.publish('analytics:publish', {
     local
   })
   local = _.cloneDeep(empty)
 }
 
-function incrementProperties (obj1, obj2) {
+function incrementProperties(obj1, obj2) {
   for (const [key, value] of Object.entries(obj2)) {
     if (typeof value === 'object') {
       incrementProperties(obj1[key], value)

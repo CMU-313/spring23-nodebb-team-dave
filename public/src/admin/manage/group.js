@@ -9,7 +9,7 @@ define('admin/manage/group', [
   'slugify',
   'api',
   'bootbox',
-  'alerts'
+  'alerts',
 ], function (memberList, iconSelect, translator, categorySelector, groupSearch, slugify, api, bootbox, alerts) {
   const Groups = {}
 
@@ -63,7 +63,7 @@ define('admin/manage/group', [
       onSelect: function (selectedCategory) {
         navigateToCategory(selectedCategory.cid)
       },
-      showLinks: true
+      showLinks: true,
     })
 
     const cidSelector = categorySelector.init($('.member-post-cids-selector [component="category-selector"]'), {
@@ -73,7 +73,7 @@ define('admin/manage/group', [
         cids = cids.filter((cid, index, array) => array.indexOf(cid) === index)
         $('#memberPostCids').val(cids.join(','))
         cidSelector.selectCategory(0)
-      }
+      },
     })
 
     groupSearch.init($('[component="group-selector"]'))
@@ -96,7 +96,7 @@ define('admin/manage/group', [
         hidden: $('#group-hidden').is(':checked'),
         memberPostCids: $('#memberPostCids').val(),
         disableJoinRequests: $('#group-disableJoinRequests').is(':checked'),
-        disableLeave: $('#group-disableLeave').is(':checked')
+        disableLeave: $('#group-disableLeave').is(':checked'),
       }).then(() => {
         const newName = $('#change-group-name').val()
 
@@ -111,7 +111,7 @@ define('admin/manage/group', [
     })
   }
 
-  function setupGroupMembersMenu () {
+  function setupGroupMembersMenu() {
     $('[component="groups/members"]').on('click', '[data-action]', function () {
       const btnEl = $(this)
       const userRow = btnEl.parents('[data-uid]')
@@ -121,29 +121,29 @@ define('admin/manage/group', [
       const action = btnEl.attr('data-action')
 
       switch (action) {
-        case 'toggleOwnership':
-          api[isOwner ? 'del' : 'put'](`/groups/${ajaxify.data.group.slug}/ownership/${uid}`, {}).then(() => {
-            ownerFlagEl.toggleClass('invisible')
-          }).catch(alerts.error)
-          break
+      case 'toggleOwnership':
+        api[isOwner ? 'del' : 'put'](`/groups/${ajaxify.data.group.slug}/ownership/${uid}`, {}).then(() => {
+          ownerFlagEl.toggleClass('invisible')
+        }).catch(alerts.error)
+        break
 
-        case 'kick':
-          bootbox.confirm('[[admin/manage/groups:edit.confirm-remove-user]]', function (confirm) {
-            if (!confirm) {
-              return
-            }
-            api.del('/groups/' + ajaxify.data.group.slug + '/membership/' + uid).then(() => {
-              userRow.slideUp().remove()
-            }).catch(alerts.error)
-          })
-          break
-        default:
-          break
+      case 'kick':
+        bootbox.confirm('[[admin/manage/groups:edit.confirm-remove-user]]', function (confirm) {
+          if (!confirm) {
+            return
+          }
+          api.del('/groups/' + ajaxify.data.group.slug + '/membership/' + uid).then(() => {
+            userRow.slideUp().remove()
+          }).catch(alerts.error)
+        })
+        break
+      default:
+        break
       }
     })
   }
 
-  function navigateToCategory (cid) {
+  function navigateToCategory(cid) {
     if (cid) {
       const url = 'admin/manage/privileges/' + cid + '?group=' + ajaxify.data.group.nameEncoded
       if (app.flags && app.flags._unsaved === true) {

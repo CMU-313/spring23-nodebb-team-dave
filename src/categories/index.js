@@ -185,7 +185,7 @@ Categories.filterTagWhitelist = function (tagWhitelist, isAdminOrMod) {
   return tagWhitelist
 }
 
-function calculateTopicPostCount (category) {
+function calculateTopicPostCount(category) {
   if (!category) {
     return
   }
@@ -223,7 +223,7 @@ Categories.getChildren = async function (cids, uid) {
   return categories.map(c => c && c.children)
 }
 
-async function getChildrenTree (category, uid) {
+async function getChildrenTree(category, uid) {
   let childrenCids = await Categories.getChildrenCids(category.cid)
   childrenCids = await privileges.categories.filterCids('find', childrenCids, uid)
   childrenCids = childrenCids.filter(cid => parseInt(category.cid, 10) !== parseInt(cid, 10))
@@ -258,7 +258,7 @@ Categories.getParentCids = async function (currentCid) {
 
 Categories.getChildrenCids = async function (rootCid) {
   let allCids = []
-  async function recursive (keys) {
+  async function recursive(keys) {
     let childrenCids = await db.getSortedSetRange(keys, 0, -1)
 
     childrenCids = childrenCids.filter(cid => !allCids.includes(parseInt(cid, 10)))
@@ -337,7 +337,7 @@ Categories.getTree = function (categories, parentCid) {
       }
     }
   })
-  function sortTree (tree) {
+  function sortTree(tree) {
     tree.sort((a, b) => {
       if (a.order !== b.order) {
         return a.order - b.order
@@ -366,14 +366,14 @@ Categories.buildForSelectAll = async function (fields) {
   return await getSelectData(cids, fields)
 }
 
-async function getSelectData (cids, fields) {
+async function getSelectData(cids, fields) {
   const categoryData = await Categories.getCategoriesData(cids)
   const tree = Categories.getTree(categoryData)
   return Categories.buildForSelectCategories(tree, fields)
 }
 
 Categories.buildForSelectCategories = function (categories, fields, parentCid) {
-  function recursive (category, categoriesData, level, depth) {
+  function recursive(category, categoriesData, level, depth) {
     const bullet = level ? '&bull; ' : ''
     category.value = category.cid
     category.level = level

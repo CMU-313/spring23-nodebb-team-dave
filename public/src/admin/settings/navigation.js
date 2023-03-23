@@ -7,7 +7,7 @@ define('admin/settings/navigation', [
   'alerts',
   'jquery-ui/widgets/draggable',
   'jquery-ui/widgets/droppable',
-  'jquery-ui/widgets/sortable'
+  'jquery-ui/widgets/sortable',
 ], function (translator, iconSelect, Benchpress, alerts) {
   const navigation = {}
   let available
@@ -19,11 +19,11 @@ define('admin/settings/navigation', [
       connectToSortable: '#active-navigation',
       helper: 'clone',
       distance: 10,
-      stop: drop
+      stop: drop,
     })
 
     $('#active-navigation').sortable().droppable({
-      accept: $('#available li .drag-item')
+      accept: $('#available li .drag-item'),
     })
 
     $('#enabled').on('click', '.iconPicker', function () {
@@ -52,7 +52,7 @@ define('admin/settings/navigation', [
     $('#save').on('click', save)
   }
 
-  function onSelect () {
+  function onSelect() {
     const clickedIndex = $(this).attr('data-index')
     $('#active-navigation li').removeClass('active')
     $(this).addClass('active')
@@ -66,16 +66,16 @@ define('admin/settings/navigation', [
     return false
   }
 
-  function drop (ev, ui) {
+  function drop(ev, ui) {
     const id = ui.helper.attr('data-id')
     const el = $('#active-navigation [data-id="' + id + '"]')
-    const data = id === 'custom'
-      ? {
-          iconClass: 'fa-navicon',
-          groups: available[0].groups,
-          enabled: true
-        }
-      : available[id]
+    const data = id === 'custom' ?
+      {
+        iconClass: 'fa-navicon',
+        groups: available[0].groups,
+        enabled: true,
+      } :
+      available[id]
 
     data.index = (parseInt($('#enabled').children().last().attr('data-index'), 10) || 0) + 1
     data.title = translator.escape(data.title)
@@ -97,7 +97,7 @@ define('admin/settings/navigation', [
     })
   }
 
-  function save () {
+  function save() {
     const nav = []
 
     const indices = []
@@ -114,7 +114,7 @@ define('admin/settings/navigation', [
         if (data[input.name]) {
           if (!Array.isArray(data[input.name])) {
             data[input.name] = [
-              data[input.name]
+              data[input.name],
             ]
           }
           data[input.name].push(input.value)
@@ -135,14 +135,14 @@ define('admin/settings/navigation', [
     })
   }
 
-  function remove () {
+  function remove() {
     const index = $(this).parents('[data-index]').attr('data-index')
     $('#active-navigation [data-index="' + index + '"]').remove()
     $('#enabled [data-index="' + index + '"]').remove()
     return false
   }
 
-  function toggle () {
+  function toggle() {
     const btn = $(this)
     const disabled = btn.hasClass('btn-success')
     const index = btn.parents('[data-index]').attr('data-index')

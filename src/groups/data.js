@@ -65,7 +65,7 @@ module.exports = function (Groups) {
   }
 }
 
-function modifyGroup (group, fields) {
+function modifyGroup(group, fields) {
   if (group) {
     db.parseIntFields(group, intFields, fields)
 
@@ -97,7 +97,7 @@ function modifyGroup (group, fields) {
   }
 }
 
-function escapeGroupData (group) {
+function escapeGroupData(group) {
   if (group) {
     group.nameEncoded = encodeURIComponent(group.name)
     group.displayName = validator.escape(String(group.name))

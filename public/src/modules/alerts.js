@@ -23,7 +23,7 @@ define('alerts', ['translator', 'components', 'hooks'], function (translator, co
       title: '[[global:alert.success]]',
       message,
       type: 'success',
-      timeout: timeout || 5000
+      timeout: timeout || 5000,
     })
   }
 
@@ -41,7 +41,7 @@ define('alerts', ['translator', 'components', 'hooks'], function (translator, co
       title: '[[global:alert.error]]',
       message,
       type: 'danger',
-      timeout: timeout || 10000
+      timeout: timeout || 10000,
     })
   }
 
@@ -49,7 +49,7 @@ define('alerts', ['translator', 'components', 'hooks'], function (translator, co
     $('#alert_button_' + id).remove()
   }
 
-  function createNew (params) {
+  function createNew(params) {
     app.parseAndTranslate('alert', params, function (html) {
       let alert = $('#' + params.alert_id)
       if (alert.length) {
@@ -87,7 +87,7 @@ define('alerts', ['translator', 'components', 'hooks'], function (translator, co
     })
   }
 
-  function updateAlert (alert, params) {
+  function updateAlert(alert, params) {
     alert.find('strong').translateHtml(params.title)
     alert.find('p').translateHtml(params.message)
     alert.attr('class', 'alert alert-dismissable alert-' + params.type + ' clearfix')
@@ -113,13 +113,13 @@ define('alerts', ['translator', 'components', 'hooks'], function (translator, co
     }
   }
 
-  function fadeOut (alert) {
+  function fadeOut(alert) {
     alert.fadeOut(500, function () {
       $(this).remove()
     })
   }
 
-  function startTimeout (alert, params) {
+  function startTimeout(alert, params) {
     const timeout = params.timeout
 
     const timeoutId = setTimeout(function () {

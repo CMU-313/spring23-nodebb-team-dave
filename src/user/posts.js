@@ -13,7 +13,7 @@ module.exports = function (User) {
     await isReady(uid, cid, 'lastqueuetime')
   }
 
-  async function isReady (uid, cid, field) {
+  async function isReady(uid, cid, field) {
     if (parseInt(uid, 10) === 0) {
       return
     }
@@ -71,8 +71,8 @@ module.exports = function (User) {
 
   User.addPostIdToUser = async function (postData) {
     await db.sortedSetsAdd([
-            `uid:${postData.uid}:posts`,
-            `cid:${postData.cid}:uid:${postData.uid}:pids`
+      `uid:${postData.uid}:posts`,
+      `cid:${postData.cid}:uid:${postData.uid}:pids`
     ], postData.timestamp, postData.pid)
     await User.updatePostCount(postData.uid)
   }
@@ -102,7 +102,7 @@ module.exports = function (User) {
     return await incrementUserFieldAndSetBy(uid, 'flags', 'users:flags', value)
   }
 
-  async function incrementUserFieldAndSetBy (uid, field, set, value) {
+  async function incrementUserFieldAndSetBy(uid, field, set, value) {
     value = parseInt(value, 10)
     if (!value || !field || !(parseInt(uid, 10) > 0)) {
       return

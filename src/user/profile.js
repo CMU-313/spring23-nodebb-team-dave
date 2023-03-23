@@ -72,7 +72,7 @@ module.exports = function (User) {
     ])
   }
 
-  async function validateData (callerUid, data) {
+  async function validateData(callerUid, data) {
     await isEmailValid(data)
     await isUsernameAvailable(data, data.uid)
     await isWebsiteValid(callerUid, data)
@@ -84,7 +84,7 @@ module.exports = function (User) {
     isGroupTitleValid(data)
   }
 
-  async function isEmailValid (data) {
+  async function isEmailValid(data) {
     if (!data.email) {
       return
     }
@@ -95,7 +95,7 @@ module.exports = function (User) {
     }
   }
 
-  async function isUsernameAvailable (data, uid) {
+  async function isUsernameAvailable(data, uid) {
     if (!data.username) {
       return
     }
@@ -140,7 +140,7 @@ module.exports = function (User) {
   }
   User.checkUsername = async username => isUsernameAvailable({ username })
 
-  async function isWebsiteValid (callerUid, data) {
+  async function isWebsiteValid(callerUid, data) {
     if (!data.website) {
       return
     }
@@ -150,7 +150,7 @@ module.exports = function (User) {
     await User.checkMinReputation(callerUid, data.uid, 'min:rep:website')
   }
 
-  async function isAboutMeValid (callerUid, data) {
+  async function isAboutMeValid(callerUid, data) {
     if (!data.aboutme) {
       return
     }
@@ -161,7 +161,7 @@ module.exports = function (User) {
     await User.checkMinReputation(callerUid, data.uid, 'min:rep:aboutme')
   }
 
-  async function isSignatureValid (callerUid, data) {
+  async function isSignatureValid(callerUid, data) {
     if (!data.signature) {
       return
     }
@@ -172,19 +172,19 @@ module.exports = function (User) {
     await User.checkMinReputation(callerUid, data.uid, 'min:rep:signature')
   }
 
-  function isFullnameValid (data) {
+  function isFullnameValid(data) {
     if (data.fullname && (validator.isURL(data.fullname) || data.fullname.length > 255)) {
       throw new Error('[[error:invalid-fullname]]')
     }
   }
 
-  function isLocationValid (data) {
+  function isLocationValid(data) {
     if (data.location && (validator.isURL(data.location) || data.location.length > 255)) {
       throw new Error('[[error:invalid-location]]')
     }
   }
 
-  function isBirthdayValid (data) {
+  function isBirthdayValid(data) {
     if (!data.birthday) {
       return
     }
@@ -195,8 +195,8 @@ module.exports = function (User) {
     }
   }
 
-  function isGroupTitleValid (data) {
-    function checkTitle (title) {
+  function isGroupTitleValid(data) {
+    function checkTitle(title) {
       if (title === 'registered-users' || groups.isPrivilegeGroup(title)) {
         throw new Error('[[error:invalid-group-title]]')
       }
@@ -231,7 +231,7 @@ module.exports = function (User) {
     }
   }
 
-  async function updateEmail (uid, newEmail) {
+  async function updateEmail(uid, newEmail) {
     let oldEmail = await User.getUserField(uid, 'email')
     oldEmail = oldEmail || ''
     if (oldEmail === newEmail) {
@@ -247,7 +247,7 @@ module.exports = function (User) {
     }
   }
 
-  async function updateUsername (uid, newUsername) {
+  async function updateUsername(uid, newUsername) {
     if (!newUsername) {
       return
     }
@@ -266,7 +266,7 @@ module.exports = function (User) {
     await db.sortedSetAdd('username:sorted', 0, `${newUsername.toLowerCase()}:${uid}`)
   }
 
-  async function updateUidMapping (field, uid, value, oldValue) {
+  async function updateUidMapping(field, uid, value, oldValue) {
     if (value === oldValue) {
       return
     }
@@ -277,7 +277,7 @@ module.exports = function (User) {
     }
   }
 
-  async function updateFullname (uid, newFullname) {
+  async function updateFullname(uid, newFullname) {
     const fullname = await User.getUserField(uid, 'fullname')
     await updateUidMapping('fullname', uid, newFullname, fullname)
     if (newFullname !== fullname) {

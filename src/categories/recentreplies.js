@@ -95,7 +95,7 @@ module.exports = function (Categories) {
     bubbleUpChildrenPosts(categoryData)
   }
 
-  async function getTopics (tids, uid) {
+  async function getTopics(tids, uid) {
     const topicData = await topics.getTopicsFields(
       tids,
       ['tid', 'mainPid', 'slug', 'title', 'teaserPid', 'cid', 'postcount']
@@ -128,7 +128,7 @@ module.exports = function (Categories) {
     return teasers.filter(Boolean)
   }
 
-  function assignTopicsToCategories (categories, topics) {
+  function assignTopicsToCategories(categories, topics) {
     categories.forEach((category) => {
       if (category) {
         category.posts = topics
@@ -140,7 +140,7 @@ module.exports = function (Categories) {
     topics.forEach((t) => { t.parentCids = undefined })
   }
 
-  function bubbleUpChildrenPosts (categoryData) {
+  function bubbleUpChildrenPosts(categoryData) {
     categoryData.forEach((category) => {
       if (category) {
         if (category.posts.length) {
@@ -157,7 +157,7 @@ module.exports = function (Categories) {
     })
   }
 
-  function getPostsRecursive (category, posts) {
+  function getPostsRecursive(category, posts) {
     if (Array.isArray(category.posts)) {
       category.posts.forEach(p => posts.push(p))
     }
@@ -198,7 +198,7 @@ module.exports = function (Categories) {
     }, { batch: 500 })
   }
 
-  async function updatePostCount (tid, oldCid, newCid) {
+  async function updatePostCount(tid, oldCid, newCid) {
     const postCount = await topics.getTopicField(tid, 'postcount')
     if (!postCount) {
       return

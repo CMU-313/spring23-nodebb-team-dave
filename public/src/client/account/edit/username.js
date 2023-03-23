@@ -1,18 +1,18 @@
 'use strict'
 
 define('forum/account/edit/username', [
-  'forum/account/header', 'api', 'slugify', 'alerts'
+  'forum/account/header', 'api', 'slugify', 'alerts',
 ], function (header, api, slugify, alerts) {
   const AccountEditUsername = {}
 
   AccountEditUsername.init = function () {
     header.init()
 
-    $('#submitBtn').on('click', function updateUsername () {
+    $('#submitBtn').on('click', function updateUsername() {
       const userData = {
         uid: $('#inputUID').val(),
         username: $('#inputNewUsername').val(),
-        password: $('#inputCurrentPassword').val()
+        password: $('#inputCurrentPassword').val(),
       }
 
       if (!userData.username) {

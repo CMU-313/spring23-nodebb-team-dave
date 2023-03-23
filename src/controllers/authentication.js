@@ -20,7 +20,7 @@ const sockets = require('../socket.io')
 
 const authenticationController = module.exports
 
-async function registerAndLoginUser (req, res, userData) {
+async function registerAndLoginUser(req, res, userData) {
   if (!userData.hasOwnProperty('email')) {
     userData.updateEmail = true
   }
@@ -127,7 +127,7 @@ authenticationController.register = async function (req, res) {
   }
 }
 
-async function addToApprovalQueue (req, userData) {
+async function addToApprovalQueue(req, userData) {
   userData.ip = req.ip
   await user.addToApprovalQueue(userData)
   let message = '[[register:registration-added-to-queue]]'
@@ -276,7 +276,7 @@ authenticationController.login = async (req, res, next) => {
   }
 }
 
-function continueLogin (strategy, req, res, next) {
+function continueLogin(strategy, req, res, next) {
   passport.authenticate(strategy, async (err, userData, info) => {
     if (err) {
       plugins.hooks.fire('action:login.continue', { req, strategy, userData, error: err })
@@ -317,9 +317,9 @@ function continueLogin (strategy, req, res, next) {
       await authenticationController.doLogin(req, userData.uid)
       let destination
       if (req.session.returnTo) {
-        destination = req.session.returnTo.startsWith('http')
-          ? req.session.returnTo
-          : nconf.get('relative_path') + req.session.returnTo
+        destination = req.session.returnTo.startsWith('http') ?
+          req.session.returnTo :
+          nconf.get('relative_path') + req.session.returnTo
         delete req.session.returnTo
       } else {
         destination = `${nconf.get('relative_path')}/`
@@ -330,7 +330,7 @@ function continueLogin (strategy, req, res, next) {
   })(req, res, next)
 }
 
-function redirectAfterLogin (req, res, destination) {
+function redirectAfterLogin(req, res, destination) {
   if (req.body.noscript === 'true') {
     res.redirect(`${destination}?loggedin`)
   } else {
@@ -490,7 +490,7 @@ authenticationController.logout = async function (req, res, next) {
   }
 }
 
-async function getBanError (uid) {
+async function getBanError(uid) {
   try {
     const banInfo = await user.getLatestBanInfo(uid)
 

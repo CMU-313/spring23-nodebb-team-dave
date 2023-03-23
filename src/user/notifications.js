@@ -32,7 +32,7 @@ UserNotifications.get = async function (uid) {
   })
 }
 
-async function filterNotifications (nids, filter) {
+async function filterNotifications(nids, filter) {
   if (!filter) {
     return nids
   }
@@ -43,8 +43,8 @@ async function filterNotifications (nids, filter) {
 
 UserNotifications.getAll = async function (uid, filter) {
   let nids = await db.getSortedSetRevRange([
-        `uid:${uid}:notifications:unread`,
-        `uid:${uid}:notifications:read`
+    `uid:${uid}:notifications:unread`,
+    `uid:${uid}:notifications:read`
   ], 0, -1)
   nids = _.uniq(nids)
   const exists = await db.isSortedSetMembers('notifications', nids)
@@ -61,14 +61,14 @@ UserNotifications.getAll = async function (uid, filter) {
   return await filterNotifications(nids, filter)
 }
 
-async function deleteUserNids (nids, uid) {
+async function deleteUserNids(nids, uid) {
   await db.sortedSetRemove([
-        `uid:${uid}:notifications:read`,
-        `uid:${uid}:notifications:unread`
+    `uid:${uid}:notifications:read`,
+    `uid:${uid}:notifications:unread`
   ], nids)
 }
 
-async function getNotificationsFromSet (set, uid, start, stop) {
+async function getNotificationsFromSet(set, uid, start, stop) {
   const nids = await db.getSortedSetRevRange(set, start, stop)
   return await UserNotifications.getNotifications(nids, uid)
 }
@@ -164,8 +164,8 @@ UserNotifications.deleteAll = async function (uid) {
     return
   }
   await db.deleteAll([
-        `uid:${uid}:notifications:unread`,
-        `uid:${uid}:notifications:read`
+    `uid:${uid}:notifications:unread`,
+    `uid:${uid}:notifications:read`
   ])
 }
 

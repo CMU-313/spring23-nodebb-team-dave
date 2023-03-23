@@ -62,7 +62,7 @@ postgresModule.init = async function () {
   }
 }
 
-async function checkUpgrade (client) {
+async function checkUpgrade(client) {
   const res = await client.query(`
 SELECT EXISTS(SELECT *
                 FROM "information_schema"."columns"
@@ -291,7 +291,7 @@ PARALLEL SAFE`)
 postgresModule.createSessionStore = async function (options) {
   const meta = require('../meta')
 
-  function done (db) {
+  function done(db) {
     const sessionStore = require('connect-pg-simple')(session)
     return new sessionStore({
       pool: db,

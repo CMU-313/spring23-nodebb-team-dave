@@ -188,7 +188,7 @@ helpers.copyFile = function (source, target, callback) {
   })
   rd.pipe(wr)
 
-  function done (err) {
+  function done(err) {
     if (!cbCalled) {
       callback(err)
       cbCalled = true

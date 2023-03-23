@@ -19,12 +19,12 @@ module.exports = function (Groups) {
     const keys = []
     groupNames.forEach((groupName) => {
       keys.push(
-                `group:${groupName}`,
-                `group:${groupName}:members`,
-                `group:${groupName}:pending`,
-                `group:${groupName}:invited`,
-                `group:${groupName}:owners`,
-                `group:${groupName}:member:pids`
+        `group:${groupName}`,
+        `group:${groupName}:members`,
+        `group:${groupName}:pending`,
+        `group:${groupName}:invited`,
+        `group:${groupName}:owners`,
+        `group:${groupName}:member:pids`
       )
     })
     const sets = groupNames.map(groupName => `${groupName.toLowerCase()}:${groupName}`)
@@ -45,7 +45,7 @@ module.exports = function (Groups) {
     plugins.hooks.fire('action:groups.destroy', { groups: groupsData })
   }
 
-  async function removeGroupsFromPrivilegeGroups (groupNames) {
+  async function removeGroupsFromPrivilegeGroups(groupNames) {
     await batch.processSortedSet('groups:createtime', async (otherGroups) => {
       const privilegeGroups = otherGroups.filter(group => Groups.isPrivilegeGroup(group))
       const keys = privilegeGroups.map(group => `group:${group}:members`)

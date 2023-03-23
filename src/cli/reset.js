@@ -59,16 +59,16 @@ exports.reset = async function (options) {
   if (!tasks.length) {
     console.log([
       chalk.yellow('No arguments passed in, so nothing was reset.\n'),
-            `Use ./nodebb reset ${chalk.red('{-t|-p|-w|-s|-a}')}`,
-            '    -t\tthemes',
-            '    -p\tplugins',
-            '    -w\twidgets',
-            '    -s\tsettings',
-            '    -a\tall of the above',
-            '',
-            'Plugin and theme reset flags (-p & -t) can take a single argument',
-            '    e.g. ./nodebb reset -p nodebb-plugin-mentions, ./nodebb reset -t nodebb-theme-persona',
-            '         Prefix is optional, e.g. ./nodebb reset -p markdown, ./nodebb reset -t persona'
+      `Use ./nodebb reset ${chalk.red('{-t|-p|-w|-s|-a}')}`,
+      '    -t\tthemes',
+      '    -p\tplugins',
+      '    -w\twidgets',
+      '    -s\tsettings',
+      '    -a\tall of the above',
+      '',
+      'Plugin and theme reset flags (-p & -t) can take a single argument',
+      '    e.g. ./nodebb reset -p nodebb-plugin-mentions, ./nodebb reset -t nodebb-theme-persona',
+      '         Prefix is optional, e.g. ./nodebb reset -p markdown, ./nodebb reset -t persona'
     ].join('\n'))
 
     process.exit(0)
@@ -88,13 +88,13 @@ exports.reset = async function (options) {
   }
 }
 
-async function resetSettings () {
+async function resetSettings() {
   await privileges.global.give(['groups:local:login'], 'registered-users')
   winston.info('[reset] registered-users given login privilege')
   winston.info('[reset] Settings reset to default')
 }
 
-async function resetTheme (themeId) {
+async function resetTheme(themeId) {
   try {
     await fs.promises.access(path.join(paths.nodeModules, themeId, 'package.json'))
   } catch (err) {
@@ -104,11 +104,11 @@ async function resetTheme (themeId) {
   await resetThemeTo(themeId)
 }
 
-async function resetThemes () {
+async function resetThemes() {
   await resetThemeTo('nodebb-theme-persona')
 }
 
-async function resetThemeTo (themeId) {
+async function resetThemeTo(themeId) {
   await meta.themes.set({
     type: 'local',
     id: themeId
@@ -117,7 +117,7 @@ async function resetThemeTo (themeId) {
   winston.info(`[reset] Theme reset to ${themeId} and default skin`)
 }
 
-async function resetPlugin (pluginId) {
+async function resetPlugin(pluginId) {
   try {
     if (nconf.get('plugins:active')) {
       winston.error('Cannot reset plugins while plugin state is set in the configuration (config.json, environmental variables or terminal arguments), please modify the configuration instead')
@@ -141,7 +141,7 @@ async function resetPlugin (pluginId) {
   }
 }
 
-async function resetPlugins () {
+async function resetPlugins() {
   if (nconf.get('plugins:active')) {
     winston.error('Cannot reset plugins while plugin state is set in the configuration (config.json, environmental variables or terminal arguments), please modify the configuration instead')
     process.exit(1)
@@ -150,7 +150,7 @@ async function resetPlugins () {
   winston.info('[reset] All Plugins De-activated')
 }
 
-async function resetWidgets () {
+async function resetWidgets() {
   await plugins.reload()
   await widgets.reset()
   winston.info('[reset] All Widgets moved to Draft Zone')

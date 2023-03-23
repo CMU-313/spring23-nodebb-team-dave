@@ -33,7 +33,7 @@ describe('User', () => {
 
   const plugins = require('../src/plugins')
 
-  async function dummyEmailerHook (data) {
+  async function dummyEmailerHook(data) {
     // pretend to handle sending emails
   }
   before((done) => {
@@ -133,7 +133,7 @@ describe('User', () => {
 
     it('should error if username is already taken or rename user', async () => {
       let err
-      async function tryCreate (data) {
+      async function tryCreate(data) {
         try {
           return await User.create(data)
         } catch (_err) {
@@ -158,7 +158,7 @@ describe('User', () => {
 
     it('should error if email is already taken', async () => {
       let err
-      async function tryCreate (data) {
+      async function tryCreate(data) {
         try {
           return await User.create(data)
         } catch (_err) {
@@ -775,7 +775,7 @@ describe('User', () => {
     })
 
     it('should return private data if field is whitelisted', (done) => {
-      function filterMethod (data, callback) {
+      function filterMethod(data, callback) {
         data.whitelist.push('another_secret')
         callback(null, data)
       }
@@ -2648,7 +2648,7 @@ describe('User', () => {
       done()
     })
 
-    async function assertPrivacy ({ expectVisible, jar, v3Api, emailOnly }) {
+    async function assertPrivacy({ expectVisible, jar, v3Api, emailOnly }) {
       const path = v3Api ? `v3/users/${hidingUser.uid}` : `user/${hidingUser.username}`
       const response = await requestAsync(`${nconf.get('url')}/api/${path}`, { json: true, jar })
       const { response: userData } = v3Api ? response : { response }

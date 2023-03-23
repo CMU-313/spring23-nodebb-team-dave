@@ -32,11 +32,11 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
       search.enableQuickSearch({
         searchElements: {
           inputEl: modal.find('.topic-search-input'),
-          resultEl: modal.find('.quick-search-container')
+          resultEl: modal.find('.quick-search-container'),
         },
         searchOptions: {
-          in: 'titles'
-        }
+          in: 'titles',
+        },
       })
       modal.on('click', '[data-tid]', function () {
         if ($(this).attr('data-tid')) {
@@ -64,7 +64,7 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
     }).catch(alerts.error)
   }
 
-  function onTopicClicked (ev) {
+  function onTopicClicked(ev) {
     if (!modal) {
       return
     }
@@ -76,7 +76,7 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
     return false
   }
 
-  function mergeTopics (btn) {
+  function mergeTopics(btn) {
     btn.attr('disabled', true)
     const tids = Object.keys(selectedTids)
     const options = {}
@@ -96,7 +96,7 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
     })
   }
 
-  function showTopicsSelected () {
+  function showTopicsSelected() {
     if (!modal) {
       return
     }
@@ -112,7 +112,7 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
     if (tids.length) {
       app.parseAndTranslate('partials/merge_topics_modal', {
         config,
-        topics
+        topics,
       }, function (html) {
         modal.find('.topics-section').html(html.find('.topics-section').html())
         modal.find('.merge-main-topic-select').html(html.find('.merge-main-topic-select').html())
@@ -122,7 +122,7 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
     }
   }
 
-  function checkButtonEnable () {
+  function checkButtonEnable() {
     if (Object.keys(selectedTids).length) {
       mergeBtn.removeAttr('disabled')
     } else {
@@ -130,7 +130,7 @@ define('forum/topic/merge', ['search', 'alerts', 'api'], function (search, alert
     }
   }
 
-  function closeModal () {
+  function closeModal() {
     if (modal) {
       modal.remove()
       modal = null

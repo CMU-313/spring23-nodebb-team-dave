@@ -21,7 +21,7 @@ const viewsPath = nconf.get('views_dir')
 
 const Templates = module.exports
 
-async function processImports (paths, templatePath, source) {
+async function processImports(paths, templatePath, source) {
   const regex = /<!-- IMPORT (.+?) -->/
 
   const matches = source.match(regex)
@@ -44,7 +44,7 @@ async function processImports (paths, templatePath, source) {
 }
 Templates.processImports = processImports
 
-async function getTemplateDirs (activePlugins) {
+async function getTemplateDirs(activePlugins) {
   const pluginTemplates = activePlugins.map((id) => {
     if (themeNamePattern.test(id)) {
       return nconf.get('theme_templates_path')
@@ -79,7 +79,7 @@ async function getTemplateDirs (activePlugins) {
   return templateDirs.filter(Boolean)
 }
 
-async function getTemplateFiles (dirs) {
+async function getTemplateFiles(dirs) {
   const buckets = await Promise.all(dirs.map(async (dir) => {
     let files = await file.walk(dir)
     files = files.filter(path => path.endsWith('.tpl')).map(file => ({
@@ -99,7 +99,7 @@ async function getTemplateFiles (dirs) {
   return dict
 }
 
-async function compileTemplate (filename, source) {
+async function compileTemplate(filename, source) {
   let paths = await file.walk(viewsPath)
   paths = _.fromPairs(paths.map((p) => {
     const relative = path.relative(viewsPath, p).replace(/\\/g, '/')
@@ -112,7 +112,7 @@ async function compileTemplate (filename, source) {
 }
 Templates.compileTemplate = compileTemplate
 
-async function compile () {
+async function compile() {
   const _rimraf = util.promisify(rimraf)
 
   await _rimraf(viewsPath)
