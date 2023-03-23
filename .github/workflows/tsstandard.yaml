@@ -1,12 +1,12 @@
-name: ts-standard
+name: TS-standard
 
 on:
   push:
     branches:
-      - ts_standrd_tool
+      - main
   pull_request:
     branches:
-      - ts_standrd_tool
+      - main
 jobs:
   format:
     runs-on: ubuntu-latest
