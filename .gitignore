@@ -82,3 +82,6 @@ theme/*.sublime-workspace
 theme/.idea
 theme/.vscode
 theme/node_modules/
+
+# Python ignore
+career-model/__pycache__/
