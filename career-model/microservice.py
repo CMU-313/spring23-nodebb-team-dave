@@ -1,15 +1,20 @@
 from typing import Union
-
 from fastapi import FastAPI
+from pydantic import BaseModel
+from predict import predict
 
 app = FastAPI()
 
+class StudentData(BaseModel):
+    student_id: str
+    major: str
+    age: str
+    gender: str 
+    gpa: str
+    extra_curricular: str
+    num_programming_languages: str
+    num_past_internships: str
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.post("/predict")
+async def process_student_data(studentData: StudentData):
+    return predict(studentData)
