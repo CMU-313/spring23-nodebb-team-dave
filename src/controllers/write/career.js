@@ -20,8 +20,18 @@ Career.register = async (req, res) => {
             num_past_internships: userData.num_past_internships,
         };
 
-        userCareerData.prediction = Math.round(Math.random()); // TODO: Change this line to do call and retrieve actual candidate success prediction from the model instead of using a random number
+        // Call the microservice and retrieve the prediction
+        try {
+            const response = await axios.post('http://career-model-microservice.fly.dev/predict', userCareerData);
+            const prediction = response.data.prediction;
+            userCareerData.prediction = prediction;
+          } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'An error occurred while calling the ML microservice' });
+          }
 
+        userCareerData.prediction = prediction;
+        
         await user.setCareerData(req.uid, userCareerData);
         db.sortedSetAdd('users:career', req.uid, req.uid);
         res.json({});
