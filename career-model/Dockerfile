@@ -8,6 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY microservice.py .
 
+COPY model.pkl .
+
 COPY predict.py .
 
 EXPOSE 8000
