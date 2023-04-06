@@ -3,6 +3,7 @@
 const helpers = require('../helpers');
 const user = require('../../user');
 const db = require('../../database');
+const axios = require('axios');
 
 const Career = module.exports;
 
@@ -22,15 +23,13 @@ Career.register = async (req, res) => {
 
         // Call the microservice and retrieve the prediction
         try {
-            const response = await axios.post('http://career-model-microservice.fly.dev/predict', userCareerData);
-            const prediction = response.data.prediction;
+            const response = await axios.post('https://career-microservice.fly.dev/predict', userCareerData);
+            const prediction = response.data.good_employee;
             userCareerData.prediction = prediction;
           } catch (err) {
             console.error(err);
             return res.status(500).json({ error: 'An error occurred while calling the ML microservice' });
           }
-
-        userCareerData.prediction = prediction;
         
         await user.setCareerData(req.uid, userCareerData);
         db.sortedSetAdd('users:career', req.uid, req.uid);
