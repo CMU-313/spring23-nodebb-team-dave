@@ -32,17 +32,17 @@ Write.reload = async (params) => {
     next()
   })
 
-    router.use('/api/v3/users', require('./users')());
-    router.use('/api/v3/groups', require('./groups')());
-    router.use('/api/v3/categories', require('./categories')());
-    router.use('/api/v3/topics', require('./topics')());
-    router.use('/api/v3/posts', require('./posts')());
-    router.use('/api/v3/chats', require('./chats')());
-    router.use('/api/v3/flags', require('./flags')());
-    router.use('/api/v3/admin', require('./admin')());
-    router.use('/api/v3/files', require('./files')());
-    router.use('/api/v3/utilities', require('./utilities')());
-    router.use('/api/v3/career', require('./career')());
+  router.use('/api/v3/users', require('./users')());
+  router.use('/api/v3/groups', require('./groups')());
+  router.use('/api/v3/categories', require('./categories')());
+  router.use('/api/v3/topics', require('./topics')());
+  router.use('/api/v3/posts', require('./posts')());
+  router.use('/api/v3/chats', require('./chats')());
+  router.use('/api/v3/flags', require('./flags')());
+  router.use('/api/v3/admin', require('./admin')());
+  router.use('/api/v3/files', require('./files')());
+  router.use('/api/v3/utilities', require('./utilities')());
+  router.use('/api/v3/career', require('./career')());
 
   router.get('/api/v3/ping', writeControllers.utilities.ping.get)
   router.post('/api/v3/ping', middleware.authenticateRequest, middleware.ensureLoggedIn, writeControllers.utilities.ping.post)
