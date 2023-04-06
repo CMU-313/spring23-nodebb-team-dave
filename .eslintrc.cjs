@@ -48,7 +48,8 @@ module.exports = {
   rules: {
     indent: ['error', 2],
     semi: 'off',
-    'comma-dangle': 'off'
+    'comma-dangle': 'off',
+    'import/no-unresolved': 'off'
   },
   overrides: [
     {
