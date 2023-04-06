@@ -9,6 +9,13 @@ This model should eventually be connected with the career page within NodeBB to 
 1. (Optional) Set up a [virtual environment](https://docs.python.org/3/library/venv.html) for Python
 2. Run `pip install -r requirements.txt` to install all dependencies
 
+## Setting up Python microservice
+In terminal, run 
+```
+cd career-model
+uvicorn microservice:app --host 0.0.0.0 --port 8000
+```
+
 ## Running the Model
 The file `predict.py` contains a function `predict` which, given a student application input, returns a prediction whether the student would be a good employee. 
 
@@ -47,9 +54,5 @@ The `predict` function takes in a student info dictionary that contains the foll
 ## Function Outputs
 The `predict` function returns a prediction result dictionary containing the following:
 
-<<<<<<< HEAD
 - `good_employee`: numpy.int64, 1 if the student is predicted to be a good employee, 0 otherwise. 
     - **Dev Note:** If needed, this value is castable to an int via `.item()`
-=======
-- `good_employee`: int, 1 if the student is predicted to be a good employee, 0 otherwise
->>>>>>> e35563f9... Initial development for career feature
