@@ -133,6 +133,7 @@
         "coveralls": "3.1.1",
         "eslint": "^8.31.0",
         "eslint-config-nodebb": "0.2.1",
+        "eslint-import-resolver-alias": "^1.1.2",
         "eslint-plugin-import": "2.26.0",
         "grunt": "1.5.3",
         "grunt-contrib-watch": "1.1.0",
