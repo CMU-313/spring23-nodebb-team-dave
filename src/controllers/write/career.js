@@ -20,12 +20,9 @@ Career.register = async (req, res) => {
       num_past_internships: userData.num_past_internships,
     };
 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
     const requestOptions = {
       method: 'POST',
-      headers: headers,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userCareerData),
       redirect: 'follow'
     };
