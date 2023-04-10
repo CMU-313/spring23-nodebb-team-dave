@@ -5,7 +5,7 @@ post:
   description: This operation registers a student to the career page
   requestBody:
     required: true
-    contine:
+    content:
       application/json:
         schema:
           type: object
@@ -29,6 +29,13 @@ post:
   responses:
     '200':
       description: User registered successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties: {}
+    '500':
+      description: Error occurred during registering
       content:
         application/json:
           schema:
