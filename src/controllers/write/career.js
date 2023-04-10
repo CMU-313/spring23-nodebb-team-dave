@@ -20,17 +20,21 @@ Career.register = async (req, res) => {
       num_past_internships: userData.num_past_internships,
     };
 
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: userCareerData,
+      headers: headers,
+      body: JSON.stringify(userCareerData),
       redirect: 'follow'
     };
 
     // Call the microservice and retrieve the prediction
     try {
       const response = await fetch('https://career-microservice.fly.dev/predict', requestOptions)
-      userCareerData.prediction = response.data.good_employee
+                            .then(response => response.json());
+      userCareerData.prediction = response.good_employee
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'An error occurred while calling the ML microservice' });
