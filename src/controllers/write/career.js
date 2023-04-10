@@ -1,6 +1,5 @@
 'use strict';
 
-const axios = require('axios');
 const helpers = require('../helpers');
 const user = require('../../user');
 const db = require('../../database');
@@ -21,11 +20,19 @@ Career.register = async (req, res) => {
       num_past_internships: userData.num_past_internships,
     };
 
+    var requestOptions = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: userCareerData,
+      redirect: 'follow'
+    };
+
     // Call the microservice and retrieve the prediction
     try {
-      const response = await axios.post('https://career-microservice.fly.dev/predict', userCareerData);
-      const prediction = response.data.good_employee;
-      userCareerData.prediction = prediction;
+      const response = fetch("https://career-microservice.fly.dev/predict", requestOptions)
+      .then(response => userCareerData.prediction = response.data.good_employee)
+      .catch(error => console.log('error', error));;
+
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'An error occurred while calling the ML microservice' });
