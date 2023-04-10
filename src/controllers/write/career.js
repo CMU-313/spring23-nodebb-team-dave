@@ -21,7 +21,7 @@ Career.register = async (req, res) => {
     };
 
     const headers = new Headers();
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
 
     const requestOptions = {
       method: 'POST',
@@ -33,7 +33,7 @@ Career.register = async (req, res) => {
     // Call the microservice and retrieve the prediction
     try {
       const response = await fetch('https://career-microservice.fly.dev/predict', requestOptions)
-                            .then(response => response.json());
+        .then(response => response.json());
       userCareerData.prediction = response.good_employee
     } catch (err) {
       console.error(err);
