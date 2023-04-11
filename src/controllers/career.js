@@ -10,7 +10,7 @@ careerController.get = async function (req, res) {
 
   const accountType = userData.accounttype;
   let careerData = {};
-  console.log("Authenticating...")
+  console.log('Authenticating...');
   if (accountType === 'recruiter') {
     careerData.allData = await user.getAllCareerData();
   } else {
@@ -21,7 +21,7 @@ careerController.get = async function (req, res) {
       careerData.newAccount = true;
     }
   }
-  console.log("User access granted.")
+  console.log('User access granted.');
 
   careerData.accountType = accountType;
   careerData.breadcrumbs = helpers.buildBreadcrumbs([{ text: 'Career', url: '/career' }]);
