@@ -46,6 +46,9 @@ def predict(student):
     
     student = student.dict(by_alias=True)
     query = pd.DataFrame(student, index=[0])
-    prediction = clf.predict(query) # TODO: Error handling ??
+    prediction = clf.predict(query)
+
+    if(prediction !=0 and prediction != 1):
+        print("Error, prediction is not 0 or 1")
 
     return { 'good_employee': prediction[0].item() }
