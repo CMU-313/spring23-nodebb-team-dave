@@ -1,8 +1,29 @@
-'use strict'
+'use strict';
+
+const user = require('../user');
+const helpers = require('./helpers');
 
 const careerController = module.exports
 
 careerController.get = async function (req, res) {
-  const careerData = {}
-  res.render('career', careerData)
-}
+  const userData = await user.getUserFields(req.uid, ['accounttype']);
+
+  const accountType = userData.accounttype;
+  let careerData = {};
+  console.log('Authenticating...');
+  if (accountType === 'recruiter') {
+    careerData.allData = await user.getAllCareerData();
+  } else {
+    const userCareerData = await user.getCareerData(req.uid);
+    if (userCareerData) {
+      careerData = userCareerData;
+    } else {
+      careerData.newAccount = true;
+    }
+  }
+  console.log('User access granted.');
+
+  careerData.accountType = accountType;
+  careerData.breadcrumbs = helpers.buildBreadcrumbs([{ text: 'Career', url: '/career' }]);
+  res.render('career', careerData);
+};

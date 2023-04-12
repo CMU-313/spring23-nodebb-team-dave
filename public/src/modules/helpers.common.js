@@ -24,8 +24,10 @@ module.exports = function (utils, Benchpress, relative_path) {
     userAgentIcons,
     buildAvatar,
     register,
+    getPredictionColor,
+    formatPrediction,
     __escape: identity,
-  }
+  };
 
   function identity(str) {
     return str
@@ -333,8 +335,17 @@ module.exports = function (utils, Benchpress, relative_path) {
       return '<img ' + attributes.join(' ') + ' src="' + userObj.picture + '" style="' + styles.join(' ') + '" />'
     }
 
-    styles.push('background-color: ' + userObj['icon:bgColor'] + ';')
-    return '<span ' + attributes.join(' ') + ' style="' + styles.join(' ') + '">' + userObj['icon:text'] + '</span>'
+    styles.push('background-color: ' + userObj['icon:bgColor'] + ';');
+    return '<span ' + attributes.join(' ') + ' style="' + styles.join(' ') + '">' + userObj['icon:text'] + '</span>';
+  }
+
+  function getPredictionColor(prediction) {
+    if (prediction === 1) return `"background-color: rgb(0, 255, 0);"`
+    return `"background-color: rgb(255, 0, 0);"`
+  }
+
+  function formatPrediction(prediction) {
+    return prediction;
   }
 
   function register() {
@@ -343,5 +354,6 @@ module.exports = function (utils, Benchpress, relative_path) {
     })
   }
 
-  return helpers
-}
+  return helpers;
+};
+
